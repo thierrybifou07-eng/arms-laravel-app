@@ -54,7 +54,6 @@ return new class extends Migration
             $table->foreignId('floor_id')
                 ->constrained()
                 ->cascadeOnDelete();
-
             $table->foreignId('room_status_id')
                 ->constrained('room_statuses')
                 ->restrictOnDelete();
