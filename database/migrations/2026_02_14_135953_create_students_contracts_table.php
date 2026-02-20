@@ -17,8 +17,9 @@ return new class extends Migration
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('surname');
+            $table->string('given_name');
+            $table->string('middlename')->nullable();
             $table->string('identification_number')->unique();
             $table->string('phone')->unique();
             $table->timestamps();
