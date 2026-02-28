@@ -101,16 +101,16 @@ return new class extends Migration
         // Roles
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50)->unique();
-            $table->string('description')->nullable();
+            $table->string('name',50)->unique(); // exple student, manager, admin etc
+            $table->string('label');            // showing name
             $table->timestamps();
         });
 
         // Permissions
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100)->unique();
-            $table->string('description')->nullable();
+            $table->string('name',50)->unique(); // exple create a residence
+            $table->string('label');
             $table->timestamps();
         });
     }
