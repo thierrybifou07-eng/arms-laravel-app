@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('phone')->unique()->nullable();
             $table->foreignId('user_status_id')
                 ->constrained()
-                ->restrictOnDelete()->default(1);
+                ->restrictOnDelete();
         });
     }
 
