@@ -24,13 +24,13 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RolePermissionSeeder::class,
         ]);
-        // Select status pending by default
-        $pendingId = UserStatus::getIdByCode(UserStatus::PENDING);
+        // Select status active by default
+        $activeId = UserStatus::getIdByCode(UserStatus::ACTIVE);
 
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'user_status_id' => $pendingId,
+            'user_status_id' => $activeId,
         ]);
 
     }

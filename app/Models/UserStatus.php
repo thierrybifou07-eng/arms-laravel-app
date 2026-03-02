@@ -17,6 +17,7 @@ class UserStatus extends Model
     public const DISABLED = 'disabled';
 
     //create the function(undefinded here) to call in the dbseeder
+    
     public static function getIdByCode(string $code): int
     {
         return static::where('code',$code)->value('id');
