@@ -28,7 +28,7 @@ return new class extends Migration
         });
         Schema::create('payments_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('payment_event_type_id')
+            $table->foreignId('event_payment_type_id')
                 ->constrained()
                 ->restrictOnDelete();
             $table->foreignId('payment_id')

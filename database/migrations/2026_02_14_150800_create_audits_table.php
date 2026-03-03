@@ -17,7 +17,7 @@ return new class extends Migration
             ->nullable()
                 ->constrained()
                 ->nullOnDelete();
-            $table->foreignId('audit_action_type_id')
+            $table->foreignId('audit_type_id')
                 ->constrained()
                 ->restrictOnDelete();
             $table->morphs('auditable');
