@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\UserStatus;
 
 class UserStatusSeeder extends Seeder
 {
@@ -15,21 +13,21 @@ class UserStatusSeeder extends Seeder
     {
         $statuses = [
             ['code' => 'pending',
-             'label' => 'Pending Activation',
-             'created_at'=>now(),
-             'updated_at'=>now()],
+                'label' => 'Pending Activation',
+                'created_at' => now(),
+                'updated_at' => now()],
             ['code' => 'active',
-             'label' => 'Active Account',
-             'created_at'=>now(),
-             'updated_at'=>now()],
+                'label' => 'Active Account',
+                'created_at' => now(),
+                'updated_at' => now()],
             ['code' => 'suspended',
-             'label' => 'Suspended Account',
-             'created_at'=>now(),
-             'updated_at'=>now()],
+                'label' => 'Suspended Account',
+                'created_at' => now(),
+                'updated_at' => now()],
             ['code' => 'disabled',
-            'label' => 'Disabled Account',
-            'created_at'=>now(),
-            'updated_at'=>now()],
+                'label' => 'Disabled Account',
+                'created_at' => now(),
+                'updated_at' => now()],
         ];
         foreach ($statuses as $status) {
             \App\Models\UserStatus::create($status);
