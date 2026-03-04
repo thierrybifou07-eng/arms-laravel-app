@@ -16,7 +16,8 @@ class UserSeeder extends Seeder
         $studentRoleId = Role::getIdByName(Role::SUPER_ADMIN);
         $activateId = \App\Models\UserStatus::where('code', 'active')->first()->id;
         $users =
-            ['name' => 'admin',
+            ['firstname' => 'admin',
+                'lastname' => 'admin',
                 'email' => 'admin@gmail.com',
                 'phone' => '+237 697 147 114',
                 'password' => '12345678',
@@ -24,7 +25,8 @@ class UserSeeder extends Seeder
             ];
         User::create(
             [
-                'name' => $users['name'],
+                'firstname' => $users['firstname'],
+                'lastname' => $users['lastname'],
                 'email' => $users['email'],
                 'phone' => $users['phone'],
                 'password' => $users['password'],

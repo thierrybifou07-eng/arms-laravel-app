@@ -7,6 +7,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/super_admin/dashboard', function () {
+    return view('super_admin.dashboard');
+})->middleware(['auth', 'verified', 'role:super_admin'])->name('super_admin.dashboard');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

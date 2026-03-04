@@ -18,7 +18,8 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'firstname',
+        'lastname',
         'email',
         'phone',
         'password',
@@ -57,5 +58,10 @@ class User extends Authenticatable
     public function userStatus()
     {
         return $this->belongsTo(\App\Models\UserStatus::class);
+    }
+    // create the hasRole method for the middleware
+    public function hasRole(string $roleName):bool
+    {
+        return $this->roles()->where('name',$roleName)->exists();
     }
 }
