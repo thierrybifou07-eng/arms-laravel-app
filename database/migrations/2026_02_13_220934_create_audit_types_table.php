@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // Audit Action Type
-        Schema::create('audit_action_types', function (Blueprint $table) {
+        Schema::create('audit_types', function (Blueprint $table) {
             $table->id();
             $table->string('code', 30)->unique();
             $table->string('label', 100);
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('audit_action_types');
+        Schema::dropIfExists('audit_types');
     }
 };

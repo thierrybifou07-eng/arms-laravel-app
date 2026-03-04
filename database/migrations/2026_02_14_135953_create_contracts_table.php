@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('middlename')->nullable();
             $table->string('identification_number')->unique();
             $table->string('phone')->unique();
+            $table->string('email')->unique()->nullable();
             $table->timestamps();
         });
         Schema::create('contracts', function (Blueprint $table) {
