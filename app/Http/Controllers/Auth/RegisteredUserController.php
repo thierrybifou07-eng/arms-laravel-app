@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Role;
 use App\Models\UserStatus;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -37,6 +38,7 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
         $activateId=UserStatus::getIdByCode(UserStatus::ACTIVE);
+        $studentRoleId=Role::getIdByName(Role::STUDENT);
 
         $user = User::create([
             'name' => $request->name,
@@ -45,7 +47,7 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'user_status_id' => $activateId, // Assuming active is the default status
         ]);
-
+        $user->roles()->attach($studentRoleId);
         event(new Registered($user));
 
         Auth::login($user);

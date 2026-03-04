@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Role;
+use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
 {
@@ -13,17 +12,27 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-            $roles=[
-            ['name'=>'super_admin','label'=>'Residences Administrator'],
-            ['name'=>'admin','label'=>'Residence Manager'],
-            ['name'=>'staff','label'=>'Staff Member'],
-            ['name'=>'payment_validator','label'=>'Payment Validator'],
-            ['name'=>'student','label'=>'Student'],
+        $roles = [
+            ['name' => 'super_admin', 'label' => 'Residences Administrator',
+                'created_at' => now(),
+                'updated_at' => now()],
+            ['name' => 'admin', 'label' => 'Residence Manager',
+                'created_at' => now(),
+                'updated_at' => now()],
+            ['name' => 'staff', 'label' => 'Staff Member',
+                'created_at' => now(),
+                'updated_at' => now()],
+            ['name' => 'payment_validator', 'label' => 'Payment Validator',
+                'created_at' => now(),
+                'updated_at' => now()],
+            ['name' => 'student', 'label' => 'Student',
+                'created_at' => now(),
+                'updated_at' => now()],
         ];
-        foreach($roles as $role){
+        foreach ($roles as $role) {
             Role::updateOrCreate(
-                ['name'=>$role['name']],
-                ['label'=>$role['label']]
+                ['name' => $role['name']],
+                ['label' => $role['label']]
             );
         }
     }
