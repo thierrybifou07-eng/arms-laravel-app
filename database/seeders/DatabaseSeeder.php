@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\UserStatus;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Foundation\Auth\User as AuthUser;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,10 +18,20 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
+        $this->call([
+
+            UserStatusSeeder::class,
+            UserSeeder::class,
+        ]);
+        // Select status active by default
+        $activeId = UserStatus::getIdByCode(UserStatus::ACTIVE);
 
         User::factory()->create([
-            'name' => 'Test User',
+            'firstname' => 'Test User',
+            'lastname' => 'Test Lastname',
             'email' => 'test@example.com',
+            'user_status_id' => $activeId,
         ]);
+
     }
 }
