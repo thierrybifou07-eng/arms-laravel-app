@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Permission;
 use App\Models\Role;
+use Illuminate\Database\Seeder;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -14,10 +13,10 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $superAdmin=Role::where('name','super_admin')->first();
-        $admin=Role::where('name','admin')->first();
-        $staff=Role::where('name','staff')->first();
-        $allPermissions=Permission::all();
+        $superAdmin = Role::where('name', 'super_admin')->first();
+        $admin = Role::where('name', 'admin')->first();
+        $staff = Role::where('name', 'staff')->first();
+        $allPermissions = Permission::all();
 
         // Assign all permissions to Super Admin
 
@@ -27,22 +26,44 @@ class RolePermissionSeeder extends Seeder
 
         $admin->permissions()->sync(
             Permission::whereIn('name',
-            [
-            'manage_buildings',
-            'manage_rooms',
-            'assign_rooms',
-            'view_reports',
-            'validate_payments'
-            ])->pluck('id')
+                [
+                    // Administration
+                    'manage_users',
+                    // Residences
+                    'view_residences',
+                    'create_residence',
+                    'update_residence',
+                    'delete_residence',
+                    // Rooms
+                    'view_rooms',
+                    'create_room',
+                    'update_room',
+                    'assign_room',
+                    'delete_room',
+                    // Contracts
+                    'view_contracts',
+                    'create_contract',
+                    'update_contract',
+                    'terminate_contract',
+                    // Payments
+                    'record_payments',
+                    'validate_payment',
+                    'cancel_payment',
+                    // Reports
+                    'view_reports',
+                    'view_residence_report',
+                    'view building report',
+
+                ])->pluck('id')
         );
 
         // Assign specific permissions to Staff
 
         $staff->permissions()->sync(
             Permission::whereIn('name',
-            [
-            'validate_payments'
-            ])->pluck('id')
+                [
+                    'validate_payments',
+                ])->pluck('id')
         );
     }
 }
