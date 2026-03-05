@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('audit_logs', function (Blueprint $table) {
+        Schema::create('audits', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')
             ->nullable()
                 ->constrained()
                 ->nullOnDelete();
-            $table->foreignId('audit_action_type_id')
+            $table->foreignId('audit_type_id')
                 ->constrained()
                 ->restrictOnDelete();
             $table->morphs('auditable');
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('audit_logs');
+        Schema::dropIfExists('audits');
     }
 };

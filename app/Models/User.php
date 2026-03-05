@@ -18,9 +18,12 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'firstname',
+        'lastname',
         'email',
+        'phone',
         'password',
+        'user_status_id',
     ];
 
     /**
@@ -44,5 +47,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    //  belongs to 'cause the fk is in the users table
+    public function userStatus()
+    {
+        return $this->belongsTo(\App\Models\UserStatus::class);
+    }
+    // create the hasRole method for the middleware
+    public function hasRole(string $roleName):bool
+    {
+        return $this->roles()->where('name',$roleName)->exists();
     }
 }
