@@ -39,7 +39,6 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
         $activateId=UserStatus::getIdByCode(UserStatus::ACTIVE);
-        $studentRoleId=Role::getIdByName(Role::STUDENT);
 
         $user = User::create([
             'firstname' => $request->firstname,
@@ -48,7 +47,7 @@ class RegisteredUserController extends Controller
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
             'user_status_id' => $activateId, // Assuming active is the default status
-        ])->roles()->attach($studentRoleId);  // Attach the student role
+        ]);
 
 
         event(new Registered($user));

@@ -48,12 +48,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-        //Assigning role to many users
-
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class);
-    }
     //  belongs to 'cause the fk is in the users table
     public function userStatus()
     {

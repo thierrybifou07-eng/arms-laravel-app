@@ -21,9 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
 
             UserStatusSeeder::class,
-            RoleSeeder::class,
-            PermissionSeeder::class,
-            RolePermissionSeeder::class,
             UserSeeder::class,
         ]);
         // Select status active by default

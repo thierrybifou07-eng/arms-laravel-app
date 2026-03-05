@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +12,6 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $studentRoleId = Role::getIdByName(Role::SUPER_ADMIN);
         $activateId = \App\Models\UserStatus::where('code', 'active')->first()->id;
         $users =
             ['firstname' => 'admin',
@@ -32,6 +30,6 @@ class UserSeeder extends Seeder
                 'password' => $users['password'],
                 'user_status_id' => $users['user_status_id'],
             ]
-        )->roles()->attach($studentRoleId);
+        );
     }
 }
