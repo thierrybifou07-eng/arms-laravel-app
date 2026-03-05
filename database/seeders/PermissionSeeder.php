@@ -16,6 +16,11 @@ class PermissionSeeder extends Seeder
 
             // Administration
             ['name' => 'manage_users', 'label' => 'Manage users'],
+            ['name' => 'create_role', 'label' => 'Create role'],
+            ['name' => 'update_role', 'label' => 'Update role'],
+            ['name' => 'delete_role', 'label' => 'Delete role'],
+            ['name' => 'assign_permission', 'label' => 'assign permission'],
+            ['name' => 'assign_role', 'label' => 'assign role'],
 
             // Residences
             ['name' => 'view_residences', 'label' => 'View residences'],
