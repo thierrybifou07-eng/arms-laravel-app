@@ -57,8 +57,8 @@ return new class extends Migration
             $table->foreignId('room_status_id')
                 ->constrained('room_statuses')
                 ->restrictOnDelete();
-            $table->string('name');
             $table->string('number');
+            $table->decimal('rent',10,2);
             $table->integer('capacity');
             $table->timestamps();
         });

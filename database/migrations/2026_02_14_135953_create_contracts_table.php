@@ -39,7 +39,6 @@ return new class extends Migration
             $table->foreignId('room_id')
                 ->constrained()
                 ->restrictOnDelete();
-            $table->decimal('amount', 10, 2);
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();
