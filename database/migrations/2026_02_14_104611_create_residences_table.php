@@ -46,7 +46,7 @@ return new class extends Migration
                 ->constrained('floor_statuses')->restrictOnDelete();
             $table->integer('number');
             $table->integer('capacity');
-            $table->unique(['buildind_id', 'number']);
+            $table->unique(['building_id', 'number']);
             $table->timestamps();
         });
         Schema::create('rooms', function (Blueprint $table) {
