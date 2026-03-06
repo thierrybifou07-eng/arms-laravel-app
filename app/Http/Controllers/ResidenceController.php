@@ -15,7 +15,7 @@ class ResidenceController extends Controller
     {
         $residence = Residence::with('status')->paginate(10);
 
-        return view('residences_system.residences.index', compact('residences'));
+        return view('residences.index', compact('residences'));
     }
 
     /**
@@ -25,7 +25,7 @@ class ResidenceController extends Controller
     {
         $statuses = ResidenceStatus::all();
 
-        return view('residences_system.residences.create', compact('statuses'));
+        return view('residences.create', compact('statuses'));
     }
 
     /**
@@ -51,7 +51,7 @@ class ResidenceController extends Controller
      */
     public function show(string $id, Residence $residence)
     {
-        return view('residences_system.residences.show', compact('residence'));
+        return view('residences.show', compact('residence'));
     }
 
     /**
@@ -61,7 +61,7 @@ class ResidenceController extends Controller
     {
         $statuses = ResidenceStatus::all();
 
-        return view('residences_system.residences.edit', compact('residence', 'statuses'));
+        return view('residences.edit', compact('residence', 'statuses'));
 
     }
 
