@@ -21,7 +21,14 @@ class DatabaseSeeder extends Seeder
         $this->call([
 
             UserStatusSeeder::class,
+            RoleSeeder::class,
+            PermissionSeeder::class,
+            RolePermissionSeeder::class,
             UserSeeder::class,
+            ResidenceStatusSeeder::class,
+            BuildingStatusSeeder::class,
+            FloorStatusSeeder::class,
+            RoomStatusSeeder::class,
         ]);
         // Select status active by default
         $activeId = UserStatus::getIdByCode(UserStatus::ACTIVE);

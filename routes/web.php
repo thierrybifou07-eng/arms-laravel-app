@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\BuildingFloorController;
+use App\Http\Controllers\FloorRoomController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ResidenceBuildingController;
+use App\Http\Controllers\ResidenceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -19,8 +23,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-/* Route::middleware(['auth','permission:create_residence'])->get('/residences/create', function (){
+Route::middleware(['auth', 'permission:create_residence'])->get('/residences/create', function () {
     return view('residence.create');
-}); */
-
+});
+Route::middleware(['auth', 'role:admin'])->resource('residences', ResidenceController::class)->scoped();
+Route::middleware(['auth', 'role:admin'])->resource('residences.buildings', ResidenceBuildingController::class)->scoped();
+Route::middleware(['auth', 'role:admin'])->resource('buildings.floors', BuildingFloorController::class)->scoped();
+Route::middleware(['auth', 'role:admin'])->resource('floors.rooms', FloorRoomController::class)->scoped();
 require __DIR__.'/auth.php';

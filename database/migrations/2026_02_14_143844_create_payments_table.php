@@ -22,7 +22,8 @@ return new class extends Migration
             $table->foreignId('payment_status_id')
                 ->constrained()
                 ->restrictOnDelete();
-            $table->decimal('amount', 10, 2);
+            $table->decimal('expected_amount', 10, 2);
+            $table->decimal('paid_amount', 10, 2);
             $table->date('payment_date');
             $table->timestamps();
         });
