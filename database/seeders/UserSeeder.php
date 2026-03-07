@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use App\Models\Role;
 use App\Models\User;
-use App\Models\UserStatus;
+use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
@@ -13,22 +13,25 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        $SuperAdminRoleId = Role::getIdByName(Role::SUPER_ADMIN);
         $activateId = \App\Models\UserStatus::where('code', 'active')->first()->id;
-        $users = 
-            ['name' => 'admin',
+        $users =
+            ['firstname' => 'admin',
+                'lastname' => 'admin',
                 'email' => 'admin@gmail.com',
                 'phone' => '+237 697 147 114',
                 'password' => '12345678',
                 'user_status_id' => $activateId,
-                ];
+            ];
         User::create(
             [
-                'name'=>$users['name'],
-                'email'=>$users['email'],
-                'phone'=>$users['phone'],
-                'password'=>$users['password'],
-                'user_status_id'=>$users['user_status_id'],
+                'firstname' => $users['firstname'],
+                'lastname' => $users['lastname'],
+                'email' => $users['email'],
+                'phone' => $users['phone'],
+                'password' => $users['password'],
+                'user_status_id' => $users['user_status_id'],
             ]
-        );
+        )->roles()->attach($SuperAdminRoleId);
     }
 }

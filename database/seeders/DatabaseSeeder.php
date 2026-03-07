@@ -25,12 +25,17 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RolePermissionSeeder::class,
             UserSeeder::class,
+            ResidenceStatusSeeder::class,
+            BuildingStatusSeeder::class,
+            FloorStatusSeeder::class,
+            RoomStatusSeeder::class,
         ]);
         // Select status active by default
         $activeId = UserStatus::getIdByCode(UserStatus::ACTIVE);
 
         User::factory()->create([
-            'name' => 'Test User',
+            'firstname' => 'Test User',
+            'lastname' => 'Test Lastname',
             'email' => 'test@example.com',
             'user_status_id' => $activeId,
         ]);

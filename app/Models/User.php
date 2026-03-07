@@ -18,7 +18,8 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'firstname',
+        'lastname',
         'email',
         'phone',
         'password',
@@ -47,15 +48,31 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-        //Assigning role to many users
+    // Assigning role to many users
 
     public function roles()
     {
         return $this->belongsToMany(Role::class);
     }
+
     //  belongs to 'cause the fk is in the users table
     public function userStatus()
     {
         return $this->belongsTo(\App\Models\UserStatus::class);
+    }
+
+    // create the hasRole method for the middleware
+    public function hasRole(string $roleName): bool
+    {
+        return $this->roles()->where('name', $roleName)->exists();
+    }
+
+    // Assign hasPermission method for the middleware
+    public function hasPermission(string $permission): bool
+    {
+        return $this->roles()->whereHas('permission', function ($query) use ($permission) {
+            $query->where('name', $permission);
+
+        })->exists();
     }
 }

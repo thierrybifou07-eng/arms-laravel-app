@@ -13,9 +13,6 @@ return new class extends Migration
     {
         Schema::create('residences', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-                ->constrained('users')
-                ->restrictOnDelete();
             $table->foreignId('residence_status_id')
                 ->constrained('residence_statuses')
                 ->restrictOnDelete();
@@ -37,17 +34,20 @@ return new class extends Migration
             $table->string('name');
             $table->string('address')->nullable();
             $table->integer('capacity');
+            $table->unique(['residence_id', 'name']);
             $table->timestamps();
         });
         Schema::create('floors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('building_id')
                 ->constrained()
-                ->cascadeOnDelete(); 
+                ->cascadeOnDelete();
             $table->foreignId('floor_status_id')
-                ->constrained('floor_statuses');
-            $table->string('number');
+                ->constrained('floor_statuses')->restrictOnDelete();
+            $table->integer('number');
             $table->integer('capacity');
+            $table->unique(['building_id', 'number']);
+            $table->timestamps();
         });
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
@@ -57,9 +57,10 @@ return new class extends Migration
             $table->foreignId('room_status_id')
                 ->constrained('room_statuses')
                 ->restrictOnDelete();
-            $table->string('name');
             $table->string('number');
-            $table->integer('capacity');
+            $table->decimal('rent', 10, 2);
+            $table->integer('capacity')->nullable();
+            $table->unique(['floor_id', 'number']);
             $table->timestamps();
         });
     }
