@@ -62,7 +62,7 @@
                     <div class="card-body">
                         <!-- Logo -->
                         <div class="app-brand justify-content-center">
-                            <a href="index.html" class="app-brand-link gap-2">
+                            <a href="{{ url('/') }}" class="app-brand-link gap-2">
                                 <span class="app-brand-logo demo">
                                     <span class="text-primary">
                                         <svg width="25" viewBox="0 0 25 42" version="1.1"
@@ -114,7 +114,7 @@
                                         </svg>
                                     </span>
                                 </span>
-                                <span class="app-brand-text demo text-heading fw-bold">Sneat</span>
+                                <span class="app-brand-text demo text-heading fw-bold">ArmS</span>
                             </a>
                         </div>
                         @yield('content')

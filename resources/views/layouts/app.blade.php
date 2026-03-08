@@ -256,6 +256,14 @@
 
                         <!-- /Search -->
 
+                        <ul class="navbar-nav flex-row align-items-center ms-md-auto">
+                            <!-- Place this tag where you want the button to render. -->
+                            <li class="nav-item lh-1 me-4">
+                                <a class="github-button"
+                                    href="https://github.com/themeselection/sneat-bootstrap-html-admin-template-free"
+                                    data-icon="octicon-star" data-size="large" data-show-count="true"
+                                    aria-label="Star themeselection/sneat-html-admin-template-free on GitHub">{{ Auth::user()->name }}</a>
+                            </li>
 
 
 
@@ -752,22 +760,17 @@
                                         <div class="dropdown-divider my-1"></div>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="pages-pricing.html"> <i
-                                                class="icon-base bx bx-dollar icon-md me-3"></i><span>Pricing</span>
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                            onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                                            <i class="icon-base bx bx-power-off icon-md me-3"></i><span>Log Out</span>
                                         </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="pages-faq.html"> <i
-                                                class="icon-base bx bx-help-circle icon-md me-3"></i><span>FAQ</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <div class="dropdown-divider my-1"></div>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="auth-login-cover.html" target="_blank"> <i
-                                                class="icon-base bx bx-power-off icon-md me-3"></i><span>Log Out</span>
-                                        </a>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                            class="d-none">
+                                            @method('')
+                                            @csrf
+                                        </form>
+
                                     </li>
                                 </ul>
                             </li>
