@@ -5,6 +5,7 @@ use App\Http\Controllers\FloorRoomController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResidenceBuildingController;
 use App\Http\Controllers\ResidenceController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -30,4 +31,7 @@ Route::middleware(['auth', 'role:super_admin'])->resource('residences', Residenc
 Route::middleware(['auth', 'role:admin'])->resource('residences.buildings', ResidenceBuildingController::class)->scoped();
 Route::middleware(['auth', 'role:admin'])->resource('buildings.floors', BuildingFloorController::class)->scoped();
 Route::middleware(['auth', 'role:admin'])->resource('floors.rooms', FloorRoomController::class)->scoped();
+
+
+Route::middleware(['auth', 'role:super_admin'])->resource('users', UserController::class)->scoped();
 require __DIR__.'/auth.php';
