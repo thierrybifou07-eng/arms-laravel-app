@@ -24,6 +24,7 @@ class PermissionSeeder extends Seeder
 
             // Residences
             ['name' => 'view_residences', 'label' => 'View residences'],
+            ['name' => 'assign_residences', 'label' => 'Assign residences'],
             ['name' => 'create_residence', 'label' => 'Create residence'],
             ['name' => 'update_residence', 'label' => 'Update residence'],
             ['name' => 'delete_residence', 'label' => 'Delete rooms'],
