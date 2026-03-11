@@ -24,9 +24,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::middleware(['auth', 'permission:create_residence'])->get('/residences/create', function () {
-    return view('residence.create');
-});
 Route::middleware(['auth', 'role:super_admin'])->resource('residences', ResidenceController::class)->scoped();
 Route::middleware(['auth', 'role:admin'])->resource('residences.buildings', ResidenceBuildingController::class)->scoped();
 Route::middleware(['auth', 'role:admin'])->resource('buildings.floors', BuildingFloorController::class)->scoped();

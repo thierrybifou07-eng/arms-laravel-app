@@ -29,11 +29,21 @@ class RolePermissionSeeder extends Seeder
                 [
                     // Administration
                     'manage_users',
+                    'create_role',
+                    'update_role',
+                    'delete_role',
+                    'assign_permission',
+                    'assign_role',
                     // Residences
                     'view_residences',
                     'create_residence',
                     'update_residence',
                     'delete_residence',
+                    // Buildings
+                    'view_buidingss',
+                    'create_buidings',
+                    'update_buidings',
+                    'delete_buidings',
                     // Rooms
                     'view_rooms',
                     'create_room',
@@ -52,7 +62,7 @@ class RolePermissionSeeder extends Seeder
                     // Reports
                     'view_reports',
                     'view_residence_report',
-                    'view building report',
+                    'view_building_report'
 
                 ])->pluck('id')
         );
@@ -62,7 +72,7 @@ class RolePermissionSeeder extends Seeder
         $staff->permissions()->sync(
             Permission::whereIn('name',
                 [
-                    'validate_payments',
+                    'validate_payment',
                 ])->pluck('id')
         );
     }
