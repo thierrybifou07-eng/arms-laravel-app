@@ -122,7 +122,7 @@
 
                 <ul class="menu-inner py-1">
                     <!-- Dashboards -->
-                    <li class="menu-item active open">
+                    <li class="menu-item active">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-home-smile"></i>
                             <div class="text-truncate" data-i18n="Dashboards">Dashboard</div>
@@ -166,68 +166,31 @@
                         </ul>
                     </li>
                     <!-- Residences -->
-                    <li class="menu-item active open">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-home-smile"></i>
-                            <div class="text-truncate" data-i18n="Dashboards">Residences</div>
-                            <span class="badge rounded-pill bg-danger ms-auto">5</span>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item active">
-                                <a href="{{ route('residences.create') }}" class="menu-link">
-                                    <div class="text-truncate" data-i18n="Analytics">Residence</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/html/vertical-menu-template/dashboards-crm.html"
-                                    target="_blank" class="menu-link">
-                                    <div class="text-truncate" data-i18n="CRM">Bâtiments</div>
-
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/html/vertical-menu-template/app-ecommerce-dashboard.html"
-                                    target="_blank" class="menu-link">
-                                    <div class="text-truncate" data-i18n="eCommerce">Paliers</div>
-
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/html/vertical-menu-template/app-logistics-dashboard.html"
-                                    target="_blank" class="menu-link">
-                                    <div class="text-truncate" data-i18n="Logistics">Studios</div>
-
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/html/vertical-menu-template/app-academy-dashboard.html"
-                                    target="_blank" class="menu-link">
-                                    <div class="text-truncate" data-i18n="Academy">Residents</div>
-
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
                     <!-- Academy menu start -->
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon icon-base bx bx-book-open"></i>
-                            <div data-i18n="Academy">Academy</div>
+                            <div data-i18n="Academy">Residences</div>
                         </a>
                         <ul class="menu-sub">
                             <li class="menu-item">
-                                <a href="app-academy-dashboard.html" class="menu-link">
-                                    <div data-i18n="Dashboard">Dashboard</div>
+                                <a href="{{ route('residences.index') }}" class="menu-link">
+                                    <div data-i18n="Dashboard">Residence</div>
                                 </a>
                             </li>
                             <li class="menu-item">
                                 <a href="app-academy-course.html" class="menu-link">
-                                    <div data-i18n="My Course">My Course</div>
+                                    <div data-i18n="My Course">Building</div>
                                 </a>
                             </li>
                             <li class="menu-item">
                                 <a href="app-academy-course-details.html" class="menu-link">
-                                    <div data-i18n="Course Details">Course Details</div>
+                                    <div data-i18n="Course Details">Floor</div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="app-academy-course-details.html" class="menu-link">
+                                    <div data-i18n="Course Details">Rooms</div>
                                 </a>
                             </li>
                         </ul>
@@ -1162,7 +1125,7 @@
                 <footer class="content-footer footer bg-footer-theme">
                     <div class="container-xxl">
                         <div
-                            class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column">
+                            class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column mb-0">
                             <div class="mb-2 mb-md-0">
                                 &#169;
                                 <script>

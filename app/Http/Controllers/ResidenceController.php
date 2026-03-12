@@ -33,6 +33,8 @@ class ResidenceController extends Controller
      */
     public function store(Request $request)
     {
+        $activateId = ResidenceStatus::getIdByCode(ResidenceStatus::ACTIVE);
+
         $validated = $request->validate([
 
             'residence_status_id' => ['required', 'exists:residence_statuses,id'],
@@ -41,7 +43,8 @@ class ResidenceController extends Controller
             'capacity' => ['required', 'integer', 'min:1'],
 
         ]);
-        Residence::create($validated);
+
+        Residence::create($validated)->roles()->attach($activateId);
 
         return redirect()->route('residences.index')->with('success', 'La residence à bien été créée');
     }
@@ -90,7 +93,8 @@ class ResidenceController extends Controller
     public function destroy(string $id, Residence $residence)
     {
         $residence->delete();
-                return redirect()->route('residences.index')->with('success', 'La residence à bien été supprimée');
+
+        return redirect()->route('residences.index')->with('success', 'La residence à bien été supprimée');
 
     }
 }

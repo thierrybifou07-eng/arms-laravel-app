@@ -31,16 +31,16 @@
                                     {{ $permission->updated_at }}
                                 </td>
                                 <td>
-                                    <div class="demo-inline-spacing d-flex end">
+                                    <div class="demo-inline-spacing">
                                         <button type="button" class="btn btn-outline-dark">
                                             <a class="active" href="{{ route('permissions.show', $permission) }}">
-                                                View
-                                            </a>
+                                                
+                                            </a>View
                                         </button>
                                         <button type="button" class="btn btn-outline-warning">
                                             <a href="{{ route('permissions.edit', $permission) }}">
-                                                Edit
-                                            </a>
+                                                
+                                            </a>Edit
                                         </button>
                                     </div>
                                 </td>
