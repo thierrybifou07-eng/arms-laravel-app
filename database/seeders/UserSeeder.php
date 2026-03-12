@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
                 'lastname' => 'admin',
                 'email' => 'admin@gmail.com',
                 'phone' => '+237 697 147 114',
-                'password' => '12345678',
+                'password' => bcrypt('12345678'),
                 'user_status_id' => $activateId,
             ];
         User::create(

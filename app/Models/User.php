@@ -70,7 +70,7 @@ class User extends Authenticatable
     // Assign hasPermission method for the middleware
     public function hasPermission(string $permission): bool
     {
-        return $this->roles()->whereHas('permission', function ($query) use ($permission) {
+        return $this->roles()->whereHas('permissions', function ($query) use ($permission) {
             $query->where('name', $permission);
 
         })->exists();
