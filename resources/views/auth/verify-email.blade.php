@@ -26,7 +26,15 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </form>
+
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+
+            <button type="submit" class="btn btn-link btn-sm text-decoration-none">
+                {{ __('Log Out') }}
+            </button>
+        </form>
     </div>
 </div>
 @endsection

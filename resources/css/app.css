@@ -1,3 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+/* Custom styles can be added here */
+body {
+    background-color: #f8f9fa;
+}
