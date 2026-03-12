@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="card m-5 p-5">
+<div class="card m-5">
 
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -9,8 +9,8 @@
         </div>
     @endif
     @if ($users->count() > 0)
-        <div class="table-responsive text-nowrap">
-            <table class="table table-hover">
+        <div class="text-nowrap">
+            <table class="table-responsive table table-hover">
                 <thead class="table-dark">
                     <tr>
                         <th>First Name</th>

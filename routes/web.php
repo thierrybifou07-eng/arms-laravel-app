@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\BuildingFloorController;
 use App\Http\Controllers\FloorRoomController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResidenceBuildingController;
 use App\Http\Controllers\ResidenceController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,4 +33,7 @@ Route::middleware(['auth', 'role:admin'])->resource('floors.rooms', FloorRoomCon
 
 
 Route::middleware(['auth', 'role:super_admin'])->resource('users', UserController::class)->scoped();
+Route::middleware(['auth', 'role:super_admin'])->resource('roles', RoleController::class)->scoped();
+Route::middleware(['auth', 'role:super_admin'])->resource('permissions', PermissionController::class)->scoped();
+
 require __DIR__.'/auth.php';
