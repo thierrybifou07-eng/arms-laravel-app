@@ -1,3 +1,4 @@
-<div>
-    <!-- It always seems impossible until it is done. - Nelson Mandela -->
-</div>
+@extends('layouts.app')
+@section('content')
+
+@endsection

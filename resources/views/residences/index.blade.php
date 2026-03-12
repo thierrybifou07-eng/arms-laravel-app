@@ -14,12 +14,13 @@
                     <thead class="table-dark">
                         <tr>
                             <th>Name</th>
+                            <th>City</th>
                             <th>Address</th>
                             <th>Capacity</th>
-                            <th>Creted Date</th>
+                            <th>Created Date</th>
                             <th>Updated Date</th>
                             <th>Status</th>
-                            <th class="text-end">Actions</th>
+                            <th class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
@@ -27,6 +28,9 @@
                             <tr>
                                 <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
                                     <span>{{ $residence->name }}</span>
+                                </td>
+                                <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
+                                    <span>{{ $residence->city }}</span>
                                 </td>
                                 <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
                                     <span>{{ $residence->address }}</span>
@@ -40,26 +44,29 @@
                                     {{ $residence->updated_at }}
                                 </td>
                                 <td>
-                                    @if ($residence->residenceStatus)
-                                        <span
-                                            class="badge bg-label-primary me-1">{{ $residence->residenceStatus->label ?? 'UnKnown' }}</span>
-                                    @else
-                                        <span class="badge bg-label-info me-1">No Status</span>
-                                    @endif
+                                    <span class="badge bg-label-primary me-1">{{ $residence->status->label }}</span>
 
                                 </td>
                                 <td>
-                                    <div class="demo-inline-spacing">
-                                        <button type="button" class="btn btn-outline-dark">
-                                            <a class="active" href="{{ route('residences.show', $residence) }}">
+                                    <div class="flex-md-row flex-column">
 
-                                            </a>View
-                                        </button>
-                                        <button type="button" class="btn btn-outline-warning">
-                                            <a href="{{ route('residences.edit', $residence) }}">
+                                        <a class="btn btn-outline-dark" class="active"
+                                            href="{{ route('residences.show', $residence) }}">
+                                            View
+                                        </a>
 
-                                            </a>Edit
-                                        </button>
+
+                                        <a class="btn btn-outline-warning"
+                                            href="{{ route('residences.edit', $residence) }}">
+                                            Edit
+                                        </a>
+
+
+                                        <a class="btn btn-outline-danger"
+                                            href="{{ route('residences.destroy', $residence) }}">
+                                            Delete
+                                        </a>
+
                                     </div>
                                 </td>
 
@@ -72,11 +79,11 @@
         @else
             <div class="text-center py-5">
                 <div class="demo-inline-spacing mx-5">
- 
-                        <a class="btn rounded-pill btn-primary" href="{{ route('residences.create') }}">
+
+                    <a class="btn rounded-pill btn-primary" href="{{ route('residences.create') }}">
                         No residence found, create one. </a>
-                       
-               
+
+
                 </div>
             </div>
         @endif

@@ -10,6 +10,7 @@ class Residence extends Model
     protected $fillable = [
         'residence_status_id',
         'name',
+        'city',
         'address',
         'capacity',
     ];

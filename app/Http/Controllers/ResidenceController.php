@@ -33,18 +33,17 @@ class ResidenceController extends Controller
      */
     public function store(Request $request)
     {
-        $activateId = ResidenceStatus::getIdByCode(ResidenceStatus::ACTIVE);
-
         $validated = $request->validate([
 
             'residence_status_id' => ['required', 'exists:residence_statuses,id'],
             'name' => ['required', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
             'capacity' => ['required', 'integer', 'min:1'],
 
         ]);
 
-        Residence::create($validated)->roles()->attach($activateId);
+        Residence::create($validated);
 
         return redirect()->route('residences.index')->with('success', 'La residence à bien été créée');
     }
@@ -77,6 +76,7 @@ class ResidenceController extends Controller
 
             'residence_status_id' => ['required', 'exists:residence_statuses,id'],
             'name' => ['required', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
             'capacity' => ['required', 'integer', 'min:1'],
 
