@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content')
-<div class="card m-5">
+<div class="col-xxl-12">
+<div class="card my-5">
 
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -55,17 +56,28 @@
                                 
                             </td>
                             <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                        data-bs-toggle="dropdown"><i
-                                            class="icon-base bx bx-dots-vertical-rounded"></i></button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="{{ route('users.show', $user) }}"><i
-                                                class="icon-base bx bx-edit-alt me-1"></i> View</a>
-                                        <a class="dropdown-item" href="{{ route('users.edit', $user) }}"><i
-                                                class="icon-base bx bx-trash me-1"></i> Edit</a>
-                                    </div>
-                                </div>
+                                                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-secondary dropdown-toggle"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                Make
+                                            </button>
+                                            <ul class="dropdown-menu" style="">
+                                                <li><a class="dropdown-item"
+                                                        href="{{ route('users.show', $user) }}">
+                                                        <i class="icon-base bx bx-show-alt me-1"></i>view</a></li>
+                                                <li><a class="dropdown-item"
+                                                        href="{{ route('users.edit', $user) }}"><i
+                                                            class="icon-base bx bx-edit me-1"></i> Edit</a></li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li><a class="dropdown-item"
+                                                        href="{{ route('users.destroy', $user) }}"><i
+                                                            class="icon-base bx bx-trash me-1"></i> Delete</a></li>
+                                                <li>
+                                            </ul>
+                                        </div>
+     
                             </td>
                         </tr>
                     @endforeach
@@ -77,5 +89,6 @@
             <h5>No users found</h5>
         </div>
     @endif
+</div>
 </div>
 @endsection

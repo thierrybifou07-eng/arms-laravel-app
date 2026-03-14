@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Building;
+use App\Models\BuildingStatus;
 use App\Models\Residence;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class ResidenceBuildingController extends Controller
     {
         $buildings = $residence->buildings()->with('status')->get();
 
-        return view('buildings.index', compact('residences', 'buildings'));
+        return view('buildings.index', compact('residence', 'buildings'));
     }
 
     /**
@@ -23,7 +24,9 @@ class ResidenceBuildingController extends Controller
      */
     public function create(Residence $residence)
     {
-        return view('buildings.create', compact('residence'));
+        $statuses = BuildingStatus::all();
+
+        return view('buildings.create', compact('residence','statuses'));
     }
 
     /**

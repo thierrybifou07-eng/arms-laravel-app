@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="col-xxl m-5">
+    <div class="col-xxl-12 my-4">
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h5 class="mb-0">Create a new residence</h5>
@@ -27,7 +27,7 @@
                                         class="icon-base bx bx-box"></i></span>
                                 <input type="text" name="name" class="form-control" id="basic-icon-default-fullname"
                                     placeholder="Enter the residence's name" aria-label="Enter the residence's name"
-                                    aria-describedby="basic-icon-default-fullname2">
+                                    aria-describedby="basic-icon-default-fullname2" value="{{old('name') }}">
                             </div>
                         </div>
                     </div>
@@ -37,7 +37,7 @@
                             <div class="input-group input-group-merge">
                                 <span id="basic-icon-default-company2" class="input-group-text"><i
                                         class="icon-base bx bx-buildings"></i></span>
-                                <input type="text" name="city" id="basic-icon-default-company" class="form-control"
+                                <input type="text" name="city" value="{{old('city') }}" id="basic-icon-default-company" class="form-control"
                                     placeholder="Ex.Douala" aria-label="Ex.Douala"
                                     aria-describedby="basic-icon-default-company2">
                             </div>
@@ -50,7 +50,7 @@
                                 <span id="basic-icon-default-company2" class="input-group-text"><i
                                         class="icon-base bx bx-buildings"></i></span>
                                 <input type="text" name="address" id="basic-icon-default-company" class="form-control"
-                                    placeholder="Ex.PK-17 Station Neptune" aria-label="Ex.PK-17 Station Neptune"
+                                    placeholder="Ex.PK-17 Station Neptune" value="{{old('address') }}" aria-label="Ex.PK-17 Station Neptune"
                                     aria-describedby="basic-icon-default-company2">
                             </div>
                         </div>
@@ -60,7 +60,7 @@
                         <div class="col-sm-10">
                             <div class="input-group input-group-merge">
                                 <span class="input-group-text"><i class="icon-base bx bx-envelope"></i></span>
-                                <input type="number" name="capacity" id="basic-icon-default-email" class="form-control"
+                                <input type="number" name="capacity" value="{{old('capacity') }}" id="basic-icon-default-email" class="form-control"
                                     placeholder="Enter the residence's capacity" aria-label="Enter the residence's capacity"
                                     aria-describedby="basic-icon-default-email2">
                                 <span id="basic-icon-default-email2" class="input-group-text">building(s)</span>
