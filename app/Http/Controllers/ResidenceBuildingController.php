@@ -39,7 +39,7 @@ class ResidenceBuildingController extends Controller
             'building_status_id' => ['required', 'exists:building_statuses,id'],
             'name' => ['required', 'string', 'max:255'],
             'address' => ['nullable', 'string', 'max:255'],
-            'capacity' => ['required', 'integer', 'min:1'],
+            'capacity' => ['required', 'integer', 'min:0'],
 
         ]);
 
@@ -88,7 +88,7 @@ class ResidenceBuildingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id, Residence $residence, Building $building)
+    public function destroy( Residence $residence, Building $building)
     {
         $building->delete();
 

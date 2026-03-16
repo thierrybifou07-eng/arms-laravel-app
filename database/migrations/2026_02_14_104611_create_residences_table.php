@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('address');
             $table->integer('capacity');
+            $table->unique(['address', 'name']);
             $table->timestamps();
 
         });
@@ -33,7 +34,7 @@ return new class extends Migration
                 ->constrained('building_statuses')
                 ->restrictOnDelete();
             $table->string('name');
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->integer('capacity');
             $table->unique(['residence_id', 'name']);
             $table->timestamps();

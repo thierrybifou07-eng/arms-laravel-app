@@ -9,8 +9,8 @@
             </div>
         @endif
         @if ($roles->count() > 0)
-            <div class="table-responsive text-nowrap">
-                <table class="table table-hover">
+        <div class="table-responsive text-nowrap table-hover">
+            <table class="table">
                     <thead class="table-dark">
                         <tr>
                             <th>Label</th>

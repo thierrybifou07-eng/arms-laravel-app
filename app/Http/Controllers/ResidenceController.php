@@ -51,7 +51,7 @@ class ResidenceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id, Residence $residence)
+    public function show(Residence $residence)
     {
         return view('residences.show', compact('residence'));
     }
@@ -59,7 +59,7 @@ class ResidenceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id, Residence $residence)
+    public function edit(Residence $residence)
     {
         $statuses = ResidenceStatus::all();
 
@@ -70,7 +70,7 @@ class ResidenceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id, Residence $residence)
+    public function update(Request $request, Residence $residence)
     {
         $validated = $request->validate([
 
@@ -90,7 +90,7 @@ class ResidenceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id, Residence $residence)
+    public function destroy(Residence $residence)
     {
         $residence->delete();
 

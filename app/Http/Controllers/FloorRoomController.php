@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Floor;
 use App\Models\Room;
+use App\Models\RoomStatus;
 use Illuminate\Http\Request;
 
 class FloorRoomController extends Controller
@@ -23,7 +24,8 @@ class FloorRoomController extends Controller
      */
     public function create(Floor $floor)
     {
-        return view('rooms.create', compact('floor'));
+        $statuses = RoomStatus::all();
+        return view('rooms.create', compact('floor','statuses'));
     }
 
     /**

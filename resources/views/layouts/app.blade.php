@@ -179,7 +179,7 @@
                                 </a>
                             </li>
                             <li class="menu-item">
-                                <a href="app-academy-course.html" class="menu-link">
+                                <a href="" class="menu-link">
                                     <div data-i18n="My Course">Building</div>
                                 </a>
                             </li>
@@ -723,7 +723,7 @@
                                                     <span class="dropdown-shortcuts-icon rounded-circle mb-3">
                                                         <i class="icon-base bx bx-cog icon-26px text-heading"></i>
                                                     </span>
-                                                    <a href="{{ route('profile.edit') }}"
+                                                    <a href="{{ route('profile.update') }}"
                                                         class="stretched-link">Setting</a>
                                                     <small>Account Settings</small>
                                                 </div>
@@ -1125,28 +1125,8 @@
                     <div class="container-xxl flex-grow-1 container-p-y">
                         <div class="row">
                             <div class="col-xxl-12 mb-6 order-0">
-                                <div class="card">
-                                    <div class="d-flex align-items-start row">
-                                        <div class="col-sm-7">
-                                            <div class="card-body">
-                                                <h5 class="card-title text-primary mb-3">Congratulations John! 🎉</h5>
-                                                <p class="mb-6">
-                                                    You have done 72% more sales today.<br>Check your new badge in your
-                                                    profile.
-                                                </p>
 
-                                                <a href="javascript:;" class="btn btn-sm btn-outline-primary">View
-                                                    Badges</a>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-5 text-center text-sm-left">
-                                            <div class="card-body pb-0 px-0 px-md-6">
-                                                <img src="{{ asset('admin-template/assets') }}/img/illustrations/man-with-laptop.png"
-                                                    height="175" alt="View Badge User">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>@yield('content')
+                                @yield('content')
                             </div>
                         </div>
                         

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Building;
 use App\Models\Floor;
+use App\Models\FloorStatus;
 use Illuminate\Http\Request;
 
 class BuildingFloorController extends Controller
@@ -23,7 +24,8 @@ class BuildingFloorController extends Controller
      */
     public function create(Building $building)
     {
-        return view('floors.create', compact('building'));
+        $statuses = FloorStatus::all();
+        return view('floors.create', compact('building','statuses'));
     }
 
     /**
