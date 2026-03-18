@@ -71,7 +71,7 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item active">
-                    <a href="index.html" class="menu-link">
+                    <a href="{{ route('dashboard') }}" class="menu-link">
                         <div class="text-truncate" data-i18n="Analytics">Analytics</div>
                     </a>
                 </li>

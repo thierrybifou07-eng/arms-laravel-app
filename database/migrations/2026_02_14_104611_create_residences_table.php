@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('city');
             $table->string('address');
             $table->integer('capacity');
-            $table->unique(['address', 'name']);
             $table->timestamps();
 
         });

@@ -33,7 +33,7 @@
 
 
 
-            <div class="col-lg-12" id="passwordContainer">
+            <div class="col-lg-12 d-none" id="passwordContainer">
                 <label for="deletePassword" class="form-label">Confirm your password</label>
 
                 <input type="password" name="password"
@@ -62,15 +62,16 @@
             const checkbox = document.getElementById("accountActivation");
             const passwordBox = document.getElementById("passwordContainer");
             const deleteBtn = document.getElementById("deleteBtn");
+            if (!checkbox) return;
 
             checkbox.addEventListener("change", function () {
 
                 if (checkbox.checked) {
-
+                    passwordContainer.classList.remove("d-none")
                     deleteBtn.disabled = false;
 
                 } else {
-
+                    passwordContainer.classList.add("d-none")
                     deleteBtn.disabled = true;
 
                 }

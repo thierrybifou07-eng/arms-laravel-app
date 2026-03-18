@@ -6,6 +6,7 @@ use App\Models\Building;
 use App\Models\BuildingStatus;
 use App\Models\Residence;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ResidenceBuildingController extends Controller
 {
@@ -37,15 +38,19 @@ class ResidenceBuildingController extends Controller
         $validated = $request->validate([
             // Adding building status
             'building_status_id' => ['required', 'exists:building_statuses,id'],
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required','string','max:255',
+                Rule::unique('buildings')->where(function ($query) use ($residence) {
+                    return $query->where('residence_id', $residence->id);
+                }),],
             'address' => ['nullable', 'string', 'max:255'],
             'capacity' => ['required', 'integer', 'min:0'],
-
-        ]);
-
+         ],
+            [
+                'name.unique' => 'This building already exists in this residence.',
+            ]);
         $residence->buildings()->create($validated);
 
-        return redirect()->route('residences.buildings.index', $residence)->with('success', 'Le Bâtiment à bien été créé');
+        return redirect()->route('residences.buildings.index', $residence)->with('success', 'The building has been successfully created');
     }
 
     /**

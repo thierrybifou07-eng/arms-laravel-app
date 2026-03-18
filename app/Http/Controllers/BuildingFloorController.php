@@ -6,6 +6,7 @@ use App\Models\Building;
 use App\Models\Floor;
 use App\Models\FloorStatus;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class BuildingFloorController extends Controller
 {
@@ -25,7 +26,8 @@ class BuildingFloorController extends Controller
     public function create(Building $building)
     {
         $statuses = FloorStatus::all();
-        return view('floors.create', compact('building','statuses'));
+
+        return view('floors.create', compact('building', 'statuses'));
     }
 
     /**
@@ -37,13 +39,20 @@ class BuildingFloorController extends Controller
             // Adding floor status
 
             'floor_status_id' => ['required', 'exists:floor_statuses,id'],
-            'number' => ['required', 'string', 'max:255'],
+            'number' => ['required', 'string', 'max:255',
+                Rule::unique('floors')->where(function ($query) use ($building) {
+                    return $query->where('building_id', $building->id);
+                }), ],
             'capacity' => ['required', 'integer', 'min:1'],
-        ]);
+        ],
+            [
+                'number.unique' => 'This floor already exists in this building.',
+
+            ]);
 
         $building->floors()->create($validated);
 
-        return redirect()->route('buildings.floors.index', $building)->with('success', 'Le palier à bien été créé');
+        return redirect()->route('buildings.floors.index', $building)->with('success', 'The floor has been successfully created');
     }
 
     /**
