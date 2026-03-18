@@ -10,7 +10,7 @@
             @csrf
             @method('PUT')
             <div class="row g-6">
-                <div class="col-md-6 form-control-validation fv-plugins-icon-container">
+                <div class="col-md-12 form-control-validation fv-plugins-icon-container">
                     <label for="password" class="form-label">Current password</label>
                     <input class="form-control @error('current_password', 'updatePassword') is-invalid @enderror" type="password" id="password"
                         name="current_password" required
@@ -23,7 +23,7 @@
                     <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                     </div>
                 </div>
-                <div class="col-md-6 form-control-validation fv-plugins-icon-container">
+                <div class="col-md-12 form-control-validation fv-plugins-icon-container">
                     <label for="password" class="form-label">New password</label>
                     <input class="form-control @error('password', 'updatePassword') is-invalid @enderror" type="password" id="password"
                         name="password" required
@@ -36,7 +36,7 @@
                     <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                     </div>
                 </div>
-                <div class="col-md-6 form-control-validation fv-plugins-icon-container">
+                <div class="col-md-12 form-control-validation fv-plugins-icon-container">
                     <label for="password_confirmation" class="form-label">Confirm password</label>
                     <input class="form-control @error('password_confirmation', 'updatePassword') is-invalid @enderror" type="password" id="password_confirmation"
                         name="password_confirmation" required>

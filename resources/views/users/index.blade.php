@@ -20,6 +20,7 @@
                                 <th>Phone</th>
                                 <th>Roles</th>
                                 <th>Status</th>
+                                <th>Avatars</th>
                                 <th class="text-end">Actions</th>
                             </tr>
                         </thead>
@@ -48,12 +49,18 @@
                                     </td>
                                     <td>
                                         @if ($user->userStatus)
-                                            <span
-                                                class="badge bg-label-primary me-1">{{ $user->userStatus->label ?? 'UnKnown' }}</span>
+                                            <span class="badge bg-label-primary me-1">{{ $user->userStatus->label ?? 'UnKnown' }}</span>
                                         @else
                                             <span class="badge bg-label-info me-1">No Status</span>
                                         @endif
-
+                                    </td>
+                                    <td class=" d-flex align-items-center">
+                                        <span data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
+                                            class="avatar avatar-xs pull-up" aria-label="{{ $user->firstname }}"
+                                            data-bs-original-title="{{ $user->firstname }}">
+                                            <img src="{{ $user->getFirstMediaUrl('avatars') }}" alt="Avatar" width="25"
+                                                height="25" class="rounded-circle">
+                                        </span>
                                     </td>
                                     <td>
                                         <div class="dropdown">

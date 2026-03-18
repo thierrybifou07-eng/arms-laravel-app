@@ -9,8 +9,8 @@
             </div>
         @endif
         @if ($roles->count() > 0)
-        <div class="table-responsive text-nowrap table-hover">
-            <table class="table">
+            <div class="table-responsive text-nowrap table-hover">
+                <table class="table">
                     <thead class="table-dark">
                         <tr>
                             <th>Label</th>
@@ -31,17 +31,19 @@
                                     {{ $role->updated_at }}
                                 </td>
                                 <td>
-                                    <div class="demo-inline-spacing">
-                                        <button type="button" class="btn btn-outline-dark">
-                                            <a class="active" href="{{ route('roles.show', $role) }}">
-                                                View
-                                            </a>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-warning">
-                                            <a href="{{ route('roles.edit', $role) }}">
-                                                Edit
-                                            </a>
-                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="{{ route('roles.show', $role) }}">
+                                                <i class="icon-base bx bx-show-alt me-1"></i>view</a>
+                                            <a class="dropdown-item" href="{{ route('roles.edit', $role) }}"><i
+                                                    class="icon-base bx bx-edit me-1"></i> Edit</a>
+                                            <hr class="dropdown-divider">
+                                            <a class="dropdown-item" href="{{ route('roles.destroy', $role) }}"><i
+                                                    class="icon-base bx bx-trash me-1"></i> Delete</a>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

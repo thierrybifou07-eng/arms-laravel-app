@@ -25,12 +25,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/avatar', [ProfileController::class, 'updateAvatar'])
+        ->name('avatar.update');
 });
 Route::middleware(['auth', 'role:super_admin'])->resource('residences', ResidenceController::class)->scoped();
 Route::middleware(['auth', 'role:super_admin'])->resource('residences.buildings', ResidenceBuildingController::class)->scoped();
 Route::middleware(['auth', 'role:super_admin'])->resource('buildings.floors', BuildingFloorController::class)->scoped();
 Route::middleware(['auth', 'role:super_admin'])->resource('floors.rooms', FloorRoomController::class)->scoped();
-
 
 Route::middleware(['auth', 'role:super_admin'])->resource('users', UserController::class)->scoped();
 Route::middleware(['auth', 'role:super_admin'])->resource('roles', RoleController::class)->scoped();
