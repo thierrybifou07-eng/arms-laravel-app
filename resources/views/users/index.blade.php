@@ -2,7 +2,6 @@
 @section('content')
     <div class="col-xxl-12">
         <div class="card my-5">
-
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
@@ -14,52 +13,72 @@
                     <table class="table">
                         <thead class="table-dark">
                             <tr>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Roles</th>
-                                <th>Status</th>
-                                <th>Avatars</th>
-                                <th class="text-end">Actions</th>
+                                <th class="text-center">#</th>
+                                <th class="text-start">First Name</th>
+                                <th class="text-start">Last Name</th>
+                                <th class="text-start">Email</th>
+                                <th class="text-start">Phone</th>
+                                <th class="text-start">Status</th>
+                                <th class="text-start">Roles</th>
+                                <th class="text-start">Avatars</th>
+                                <th class="text-start">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
                             @foreach ($users as $user)
                                 <tr>
-                                    <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
+                                    <td class="text-center"><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
+                                        <span>{{ $user->id }}</span>
+                                    </td>
+                                    <td class="text-start"><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
                                         <span>{{ $user->firstname }}</span>
                                     </td>
-                                    <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
+                                    <td class="text-start"><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
                                         <span>{{ $user->lastname }}</span>
                                     </td>
-                                    <td> {{ $user->email }}
+                                    <td class="text-start"> {{ $user->email }}
                                     </td>
-                                    <td>
+                                    <td class="text-start">
                                         {{ $user->phone ?? 'N/A' }}
                                     </td>
-                                    <td>
-                                        @if ($user->roles->count() > 0)
-                                            @foreach ($user->roles as $role)
-                                                <span class="badge bg-label-primary me-1">{{ $role->label }}</span>
-                                            @endforeach
-                                        @else
-                                            <span class="badge bg-label-info me-1">No roles</span>
-                                        @endif
-                                    </td>
-                                    <td>
+                                    <td class="text-start">
                                         @if ($user->userStatus)
                                             <span class="badge bg-label-primary me-1">{{ $user->userStatus->label ?? 'UnKnown' }}</span>
                                         @else
                                             <span class="badge bg-label-info me-1">No Status</span>
                                         @endif
                                     </td>
-                                    <td class=" d-flex align-items-center">
+                                    <td>
+                                        @if ($user->roles->count() > 0)
+                                            @foreach ($user->roles as $role)
+                                                <div class="d-flex column">
+                                                    @if ($role->name === 'student')
+                                                        <span class="badge bg-label-info me-1">{{ $role->label }}</span>
+                                                    @endif
+                                                    @if ($role->name === 'teller')
+                                                        <span class="badge bg-label-warning me-1">{{ $role->label }}</span>
+                                                    @endif
+                                                    @if ($role->name === 'staff')
+                                                        <span class="badge bg-label-danger me-1">{{ $role->label }}</span>
+                                                    @endif
+                                                    @if ($role->name === 'admin')
+                                                        <span class="badge bg-label-primary me-1">{{ $role->label }}</span>
+                                                    @endif
+                                                    @if ($role->name === 'super_admin')
+                                                        <span class="badge bg-label-success me-1">{{ $role->label }}</span>
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <span class="badge bg-label-secondary me-1">No roles</span>
+                                        @endif
+                                    </td>
+                                    <td class="d-flex align-items-center">
                                         <span data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
                                             class="avatar avatar-xs pull-up" aria-label="{{ $user->firstname }}"
                                             data-bs-original-title="{{ $user->firstname }}">
-                                            <img src="{{ $user->getFirstMediaUrl('avatars') }}" alt="Avatar" width="25"
-                                                height="25" class="rounded-circle">
+                                            <img src="{{ $user->getFirstMediaUrl('avatars') }}" alt="Avatar" width="25" height="25"
+                                                class="rounded-circle">
                                         </span>
                                     </td>
                                     <td>
