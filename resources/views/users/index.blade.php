@@ -42,10 +42,17 @@
                                         {{ $user->phone ?? 'N/A' }}
                                     </td>
                                     <td class="text-start">
-                                        @if ($user->userStatus)
+                                        @if ($user->userStatus->code==='pending')
+                                            <span class="badge bg-label-info me-1">{{ $user->userStatus->label ?? 'UnKnown' }}</span>
+                                        @endif
+                                        @if ($user->userStatus->code==='active')
                                             <span class="badge bg-label-primary me-1">{{ $user->userStatus->label ?? 'UnKnown' }}</span>
-                                        @else
-                                            <span class="badge bg-label-info me-1">No Status</span>
+                                        @endif
+                                        @if ($user->userStatus->code==='suspended')
+                                            <span class="badge bg-label-warning me-1">{{ $user->userStatus->label ?? 'UnKnown' }}</span>
+                                        @endif
+                                        @if ($user->userStatus->code==='disabled')
+                                            <span class="badge bg-label-secondary me-1">{{ $user->userStatus->label ?? 'UnKnown' }}</span>
                                         @endif
                                     </td>
                                     <td>
