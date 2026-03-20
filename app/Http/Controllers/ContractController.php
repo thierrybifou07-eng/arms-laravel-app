@@ -44,13 +44,10 @@ class ContractController extends Controller
         $validated = $request->validate([
             'student_id' => 'required|exists:students,id',
             'room_id' => 'required|exists:rooms,id',
-            'contract_status_id' => 'required|exists:contract_statuses,id',
             'billing_period_id' => 'required|exists:billing_periods,id',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
         ]);
-        // bring Id of contract status
-        $activeId = ContractStatus::where('code', 'active')->value('id');
         // checking overlapping contracts for the same room
         if (Contract::hasOverlap(
             $validated['room_id'],
@@ -60,19 +57,19 @@ class ContractController extends Controller
             return back()->withErrors(['room_id' => 'The room is already booked for the selected period.'], 422);
 
         }
-        $pendingId = ContractStatus::where('code', 'pending')->value('id');
+        // bring Id of contract status
+        $pendingId = ContractStatus::getIdByCodeOrFail('pending');
         // bring the room rent
         $room = Room::findOrFail($validated['room_id']);
         // creation of the contract
-        Contract::create([
+        $contract = Contract::create([
             ...$validated,
             'rent_amount' => $room->rent,
             'contract_status_id' => $pendingId,
         ]);
-        $contract = Contract::latest()->first();
         $this->generatePayments($contract);
 
-        return redirect()->back()->with('success', 'Contract created successfully and is pending approval.');
+        return redirect()->route('contracts.index') - with('success', 'Contract created successfully and is pending approval.');
     }
 
     /**
@@ -131,14 +128,14 @@ class ContractController extends Controller
         return redirect()->route('contracts.index')->with('success', 'Contract deleted successfully');
     }
 
-     /*
+    /*
     |--------------------------------------------------------------------------
     | WORKING WITH PAYMENTS RELATED TO THE CONTRACT
     |--------------------------------------------------------------------------
     */
     private function generatePayments(Contract $contract)
     {
-        $pendingPaymentStatus = PaymentStatus::where('code', 'pending')->value('id');
+        $pendingPaymentStatus =PaymentStatus::getIdByCodeOrFail('pending');
         $start = Carbon::parse($contract->start_date);
         $end = Carbon::parse($contract->end_date);
         $current = $start->copy();

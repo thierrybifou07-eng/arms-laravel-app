@@ -21,7 +21,7 @@ class RoomStatusSeeder extends Seeder
                 'label' => 'Busy',
                 'created_at' => now(),
                 'updated_at' => now()],
-            ['code' => 'renovation',
+            ['code' => 'renew',
                 'label' => 'Maintenance',
                 'created_at' => now(),
                 'updated_at' => now()],

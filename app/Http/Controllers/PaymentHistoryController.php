@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PaymentEventType;
+use App\Models\PaymentHistory;
 use Illuminate\Http\Request;
 
-class PaymentEventTypeController extends Controller
+class PaymentHistoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class PaymentEventTypeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PaymentEventType $paymentEventType)
+    public function show(PaymentHistory $paymentHistory)
     {
         //
     }
@@ -42,7 +42,7 @@ class PaymentEventTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(PaymentEventType $paymentEventType)
+    public function edit(PaymentHistory $paymentHistory)
     {
         //
     }
@@ -50,7 +50,7 @@ class PaymentEventTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, PaymentEventType $paymentEventType)
+    public function update(Request $request, PaymentHistory $paymentHistory)
     {
         //
     }
@@ -58,7 +58,7 @@ class PaymentEventTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PaymentEventType $paymentEventType)
+    public function destroy(PaymentHistory $paymentHistory)
     {
         //
     }
