@@ -158,17 +158,17 @@
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base bx bx-food-menu"></i>
-                <div data-i18n="Invoice">Invoice</div>
+                <div data-i18n="Invoice">Contracts</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="app-invoice-list.html" class="menu-link">
+                    <a href="{{ route('contracts.index') }}" class="menu-link">
                         <div data-i18n="List">List</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="app-invoice-preview.html" class="menu-link">
-                        <div data-i18n="Preview">Preview</div>
+                    <a href="{{ route('contracts.create') }}" class="menu-link">
+                        <div data-i18n="Preview">Create</div>
                     </a>
                 </li>
                 <li class="menu-item">
