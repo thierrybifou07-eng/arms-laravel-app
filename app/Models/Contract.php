@@ -44,13 +44,19 @@ class Contract extends Model
         return $this->hasMany(Payment::class);
     }
     //bussiness logic to check overlapping contracts for the same room
-    public static function hasOverlap($roomId, $start, $end)
+    public static function hasOverlap($roomId, $start, $end,$ignoreId=null)
     {
         $pendingId=ContractStatus::where('code','pending')->value('id');
         $activeId=ContractStatus::where('code','active')->value('id');
-        return self::where('room_id', $roomId)->whereIn('contract_status_id',[$pendingId,$activeId])
-        ->where(function($query) use ($start, $end) {
-            $query->where('start_date','<=',$end)->where('end_date','>=',$start);
-    })->exists;
+        $query = self::where('room_id', $roomId)->whereIn('contract_status_id',[$pendingId,$activeId])
+        ->where(function($q) use ($start, $end) {
+            $q->where('start_date','<=',$end)->where('end_date','>=',$start);
+        });
+        //Ignore the current contract when checking for overlaps during update
+        
+        if($ignoreId){
+            $query->where('id','!=',$ignoreId);
+        }
+        return $query->exists();
     }
 }

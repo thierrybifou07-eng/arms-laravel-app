@@ -42,7 +42,6 @@ class ContractController extends Controller
             'room_id' => 'required|exists:rooms,id',
             'contract_status_id' => 'required|exists:contract_statuses,id',
             'billing_period_id' => 'required|exists:billing_periods,id',
-            'rent_amount' => 'required|numeric',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
         ]);
@@ -50,16 +49,16 @@ class ContractController extends Controller
         $pendingId = ContractStatus::where('code', 'pending')->value('id');
         $activeId = ContractStatus::where('code', 'active')->value('id');
         // checking overlapping contracts for the same room
-        $exists = ContractStatus::where('room_id', $validated['room_id'])->whereIn('contract_status_id', [$pendingId, $activeId])->where(function ($query) use ($validated) {
-            $query->where('start_date', '<=', $validated['end_date'])
-                ->where('end_date', '>=', $validated['start_date']);
-
-        })->exists();
-        if ($exists) {
+        if(Contract::hasOverlap(
+            $validated['room_id'],
+            $validated['start_id'],
+            $validated['end_id'],
+        )){
             return back()->withErrors(['room_id' => 'The room is already booked for the selected period.'], 422);
-        }
+
+        };
         //bring the room rent
-        $room= Room::find($validated['room_id']);
+        $room= Room::findOrFail($validated['room_id']);
         //creation of the contract
         Contract::create([
             ...$validated,
@@ -68,12 +67,13 @@ class ContractController extends Controller
         ]);
         return redirect()->back()->with('success', 'Contract created successfully and is pending approval.');
     }
+    
     /**
      * Display the specified resource.
      */
     public function show(Contract $contract)
     {
-        //
+        return view('contracts.show',compact('contract'));
     }
 
     /**
@@ -81,7 +81,12 @@ class ContractController extends Controller
      */
     public function edit(Contract $contract)
     {
-        //
+        return view('contracts.edit',[
+            'contracts'=> $contract,
+            'students'=> Student::all(),
+            'rooms'=> Room::all(),
+            'billingPeriods'=>BillingPeriod::all(),
+            ]);       
     }
 
     /**
@@ -89,7 +94,21 @@ class ContractController extends Controller
      */
     public function update(Request $request, Contract $contract)
     {
-        //
+       $validated = $request->validate([
+        'start_date'=>'required|date',
+        'end_date'=>'required|date|after:start_date',
+       ]);
+       if(Contract::hasOverlap(
+        $contract->room_id,
+        $validated['start_date'],
+        $validated['end_date'],
+        $contract->id
+        //ignoring itself when checking for overlaps during update
+       )){
+        return back()->withErrors(['room_id'=> 'The room is already booked for the selected period']);
+       }
+       $contract->update($validated);
+       return redirect()->route('contracts.index')->with('success','The contracts has been updated');
     }
 
     /**
@@ -97,6 +116,7 @@ class ContractController extends Controller
      */
     public function destroy(Contract $contract)
     {
-        //
+        $contract->delete();
+        return redirect()->route('contracts.index')->with('success','Contract deleted successfully');
     }
 }
