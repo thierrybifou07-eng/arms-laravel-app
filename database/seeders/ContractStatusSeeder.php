@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ContractStatus;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -31,7 +32,7 @@ class ContractStatusSeeder extends Seeder
                 'updated_at' => now()],
         ];
         foreach ($statuses as $status) {
-            \App\Models\ContractStatus::create($status);
+            ContractStatus::updateOrCreate(['code' => $status['code']], $status);
         }
     }
 }

@@ -4,13 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ContractStatus extends Model
+class EventPaymentType extends Model
 {
     protected $fillable = ['code', 'label'];
-    public const pending = 'Pending';
-    public const active = 'Active';
-    public const terminated = 'Terminated';
-    public const cancelled = 'Cancelled';
+    public const created = 'Payment created';
+    public const validated = 'Payment validated';
+    public const cancelled = 'Payment cancelled';
 
     //create the function(undefinded here) to call in the dbseeder
     
@@ -20,9 +19,4 @@ class ContractStatus extends Model
     }
 
     // choose hasMany 'cause a status may be links with n users
-
-    public function contracts()
-    {
-        return $this->hasMany(\App\Models\Contract::class);
-    }
 }

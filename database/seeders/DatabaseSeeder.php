@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\UserStatus;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Foundation\Auth\User as AuthUser;
 
 class DatabaseSeeder extends Seeder
 {
@@ -30,6 +29,10 @@ class DatabaseSeeder extends Seeder
             FloorStatusSeeder::class,
             RoomStatusSeeder::class,
             ContractStatusSeeder::class,
+            PaymentStatusSeeder::class,
+            BillingPeriodSeeder::class,
+            PaymentMethodSeeder::class,
+            EventPaymentTypeSeeder::class,
         ]);
         // Select status active by default
         $activeId = UserStatus::getIdByCode(UserStatus::ACTIVE);
