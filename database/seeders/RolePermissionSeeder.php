@@ -15,7 +15,9 @@ class RolePermissionSeeder extends Seeder
     {
         $superAdmin = Role::where('name', 'super_admin')->first();
         $admin = Role::where('name', 'admin')->first();
+        $teller = Role::where('name', 'teller')->first();
         $staff = Role::where('name', 'staff')->first();
+        $student = Role::where('name', 'student')->first();
         $allPermissions = Permission::all();
 
         // Assign all permissions to Super Admin
@@ -29,27 +31,19 @@ class RolePermissionSeeder extends Seeder
                 [
                     // Administration
                     'manage_users',
-                    'create_role',
-                    'update_role',
-                    'delete_role',
-                    'assign_permission',
                     'assign_role',
                     // Residences
                     'view_residences',
-                    'create_residence',
                     'update_residence',
-                    'delete_residence',
                     // Buildings
                     'view_buidingss',
                     'create_buidings',
                     'update_buidings',
-                    'delete_buidings',
                     // Rooms
                     'view_rooms',
                     'create_room',
                     'update_room',
                     'assign_room',
-                    'delete_room',
                     // Contracts
                     'view_contracts',
                     'create_contract',
@@ -62,17 +56,48 @@ class RolePermissionSeeder extends Seeder
                     // Reports
                     'view_reports',
                     'view_residence_report',
-                    'view_building_report'
+                    'view_building_report',
 
                 ])->pluck('id')
         );
 
+        // Assign specific permissions to Teller
+
+        $teller->permissions()->sync(
+            Permission::whereIn('name',
+                [     // Rooms
+                    'view_rooms',
+                    'update_room',
+                    'assign_room',
+                    // payments
+                    'record_payments',
+                    'validate_payment',
+                    'cancel_payment',
+                    // Contracts
+                    'view_contracts',
+                    'create_contract',
+                    'update_contract',
+                    'terminate_contract',
+                ])->pluck('id')
+        );
         // Assign specific permissions to Staff
 
         $staff->permissions()->sync(
             Permission::whereIn('name',
                 [
-                    'validate_payment',
+                    'view_residences',
+                    'view_buidingss',
+                    'view_rooms',
+                    'view_contracts',
+                    ])->pluck('id')
+        );
+
+        // Assign specific permissions to Staff
+
+        $student->permissions()->sync(
+            Permission::whereIn('name',
+                [
+                    'view_rooms',
                 ])->pluck('id')
         );
     }
