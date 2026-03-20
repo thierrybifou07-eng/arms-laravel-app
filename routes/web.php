@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BuildingFloorController;
+use App\Http\Controllers\ContractController;
 use App\Http\Controllers\FloorRoomController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
@@ -31,7 +32,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:super_admin'])->resource('residences', ResidenceController::class)->scoped();
 Route::middleware(['auth', 'role:super_admin'])->resource('residences.buildings', ResidenceBuildingController::class)->scoped();
 Route::middleware(['auth', 'role:super_admin'])->resource('buildings.floors', BuildingFloorController::class)->scoped();
-Route::middleware(['auth', 'role:super_admin'])->resource('floors.rooms', FloorRoomController::class)->scoped();
+Route::middleware(['auth', 'role:super_admin'])->resource('contracts', ContractController::class)->scoped();
 
 Route::middleware(['auth', 'role:super_admin'])->resource('users', UserController::class)->scoped();
 Route::middleware(['auth', 'role:super_admin'])->resource('roles', RoleController::class)->scoped();

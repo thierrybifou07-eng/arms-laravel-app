@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             BuildingStatusSeeder::class,
             FloorStatusSeeder::class,
             RoomStatusSeeder::class,
+            ContractStatusSeeder::class,
         ]);
         // Select status active by default
         $activeId = UserStatus::getIdByCode(UserStatus::ACTIVE);
