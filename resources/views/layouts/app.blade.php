@@ -11,8 +11,9 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <meta name="description" content="" />
-
-    <!-- Favicon -->
+    <!-- CSS Select2 -->
+    <!-- Select2 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="{{ asset('admin-template/assets') }}/img/favicon/favicon.ico" />
 
     <!-- Fonts -->
@@ -62,7 +63,7 @@
             <!-- Layout container -->
             <div class="layout-page">
                 <!-- Navbar -->
-            @include('layouts.partials.navigation')
+                @include('layouts.partials.navigation')
 
 
 
@@ -78,7 +79,7 @@
                                 @yield('content')
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
 
@@ -100,7 +101,7 @@
 
     <!-- Core JS -->
 
-    <script src="{{ asset('admin-template/assets') }}/vendor/libs/jquery/jquery.js"></script>
+    <script src="{{ asset('admin-template/assets') }}/vendor/libs/jquery.js"></script>
 
     <script src="{{ asset('admin-template/assets') }}/vendor/libs/popper/popper.js"></script>
     <script src="{{ asset('admin-template/assets') }}/vendor/js/bootstrap.js"></script>
@@ -123,6 +124,10 @@
 
     <!-- Place this tag before closing body tag for github widget button. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <!-- JS Select2 -->
+    <!-- Select2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    @stack('scripts')
 </body>
 
 </html>
