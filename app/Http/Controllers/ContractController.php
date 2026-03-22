@@ -35,6 +35,7 @@ class ContractController extends Controller
             'rooms' => Room::all(),
             'billingPeriods' => BillingPeriod::all(),
         ]);
+
     }
 
     /**
@@ -42,14 +43,6 @@ class ContractController extends Controller
      */
     public function store(Request $request)
     {
-/*         dd(
-            DB::connection()->getName(),
-            DB::connection()->getDatabaseName(),
-            \App\Models\ContractStatus::count(), ContractStatus::pluck('code'),
-            ContractStatus::where('code', 'pending')->first(),
-            strlen('pending')
-        ); */
-
         $validated = $request->validate([
             'student_id' => 'required|exists:students,id',
             'room_id' => 'required|exists:rooms,id',
@@ -70,15 +63,20 @@ class ContractController extends Controller
         $pendingId = ContractStatus::getIdByCodeOrFail('pending');
         // bring the room rent
         $room = Room::findOrFail($validated['room_id']);
-        // creation of the contract
-        $contract = Contract::create([
-            ...$validated,
-            'rent_amount' => $room->rent,
-            'contract_status_id' => $pendingId,
-        ]);
-        $this->generatePayments($contract);
+        DB::transaction(function () use ($validated, $room, $pendingId) {
 
-        return redirect()->route('contracts.index') - with('success', 'Contract created successfully and is pending approval.');
+            $contract = Contract::create([
+                ...$validated,
+                'rent_amount' => $room->rent,
+                'contract_status_id' => $pendingId,
+            ]);
+
+            if ($contract->status->code === 'pending') {
+                $this->generatePayments($contract);
+            }
+        });
+
+        return redirect()->route('contracts.index')->with('success', 'Contract created successfully and is pending approval.');
     }
 
     /**
@@ -96,8 +94,7 @@ class ContractController extends Controller
      */
     public function edit(Contract $contract)
     {
-/*         dd($contract);
- */        return view('contracts.edit', [
+        return view('contracts.edit', [
             'contracts' => $contract,
             'students' => Student::all(),
             'rooms' => Room::all(),
@@ -123,7 +120,13 @@ class ContractController extends Controller
         )) {
             return back()->withErrors(['room_id' => 'The room is already booked for the selected period']);
         }
+        $oldStatus = $contract->status->code;
+
         $contract->update($validated);
+
+        if ($oldStatus !== 'active' && $contract->status->code === 'active') {
+            $this->generatePayments($contract);
+        }
 
         return redirect()->route('contracts.index')->with('success', 'The contracts has been updated');
     }
@@ -145,9 +148,22 @@ class ContractController extends Controller
     */
     private function generatePayments(Contract $contract)
     {
+        if ($contract->payments()->exists()) {
+            return;
+        }
         $pendingPaymentStatus = PaymentStatus::getIdByCodeOrFail('pending');
         $start = Carbon::parse($contract->start_date);
         $end = Carbon::parse($contract->end_date);
+        $period = $contract->billingPeriod->code; // monthly, quarterly...
+
+        $interval = match ($period) {
+            'monthly' => 1,
+            'quarterly' => 3,
+            'yearly' => 12,
+            default => 1
+        };
+
+        $paymentStatusId = PaymentStatus::where('code', 'pending')->value('id');
         $current = $start->copy();
         while ($current <= $end) {
             Payment::create([
@@ -157,8 +173,8 @@ class ContractController extends Controller
                 'paid_amount' => 0,
                 'due_date' => $current->copy(),
             ]);
-            // Monthly peroid for now
-            $current->addMonth();
+            // peroid for
+            $current->addMonths($interval);
         }
     }
 }

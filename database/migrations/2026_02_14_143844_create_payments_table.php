@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('contract_id')
                 ->constrained('contracts')
                 ->cascadeOnDelete();
-            $table->foreignId('payment_method_id')
+            $table->foreignId('payment_method_id')->nullable()
                 ->constrained('payment_methods')
                 ->restrictOnDelete();
             $table->foreignId('payment_status_id')

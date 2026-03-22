@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
     <div class="card mb-6">
         @if ($errors->any())
