@@ -11,6 +11,7 @@ use App\Models\Room;
 use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ContractController extends Controller
 {
@@ -41,6 +42,14 @@ class ContractController extends Controller
      */
     public function store(Request $request)
     {
+/*         dd(
+            DB::connection()->getName(),
+            DB::connection()->getDatabaseName(),
+            \App\Models\ContractStatus::count(), ContractStatus::pluck('code'),
+            ContractStatus::where('code', 'pending')->first(),
+            strlen('pending')
+        ); */
+
         $validated = $request->validate([
             'student_id' => 'required|exists:students,id',
             'room_id' => 'required|exists:rooms,id',
@@ -51,8 +60,8 @@ class ContractController extends Controller
         // checking overlapping contracts for the same room
         if (Contract::hasOverlap(
             $validated['room_id'],
-            $validated['start_id'],
-            $validated['end_id'],
+            $validated['start_date'],
+            $validated['end_date'],
         )) {
             return back()->withErrors(['room_id' => 'The room is already booked for the selected period.'], 422);
 
@@ -135,7 +144,7 @@ class ContractController extends Controller
     */
     private function generatePayments(Contract $contract)
     {
-        $pendingPaymentStatus =PaymentStatus::getIdByCodeOrFail('pending');
+        $pendingPaymentStatus = PaymentStatus::getIdByCodeOrFail('pending');
         $start = Carbon::parse($contract->start_date);
         $end = Carbon::parse($contract->end_date);
         $current = $start->copy();
