@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
+use App\Models\Student;
 use App\Models\User;
 use App\Models\UserStatus;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -20,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
 
             UserStatusSeeder::class,
+            StudentSeeder::class,
             RoleSeeder::class,
             PermissionSeeder::class,
             RolePermissionSeeder::class,
@@ -36,12 +39,14 @@ class DatabaseSeeder extends Seeder
         ]);
         // Select status active by default
         $activeId = UserStatus::getIdByCode(UserStatus::ACTIVE);
-
-        User::factory()->create([
-            'firstname' => 'Test User',
-            'lastname' => 'Test Lastname',
-            'email' => 'test@example.com',
+/*         $SuperAdminRoleId = Role::getIdByName(Role::STUDENT);
+ */
+        User::factory()->count(10)->create([
             'user_status_id' => $activeId,
+        ])/* ->roles()->attach($SuperAdminRoleId) */;
+        // Select status active by default
+
+        Student::factory()->count(150)->create([
         ]);
 
     }

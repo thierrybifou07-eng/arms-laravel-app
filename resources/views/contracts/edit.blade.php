@@ -11,19 +11,10 @@
                 </ul>
             </div>
         @endif
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-        <h5 class="card-header">Create Contract</h5>
+        <h5 class="card-header">Update Contract</h5>
         <div class="card-body pt-4">
             <form id="formAccountSettings" method="POST" class="fv-plugins-bootstrap5 fv-plugins-framework"
-                novalidate="novalidate" action="{{ route('contracts.store') }}">
+                novalidate="novalidate" action="{{ route('contracts.update', $contracts->id) }}">
                 @method('PUT')
                 @csrf
                 {{-- Student --}}
@@ -34,21 +25,21 @@
                             <select name="student_id" id="resident" class="select2 form-select" tabindex="-1"
                                 aria-hidden="true" required>
                                 @foreach($students as $student)
-                                                        <option value="{{ $student->id }}" {{ $contract->student_id == $student->id ? 'selected' :
-                                    '' }}>
-                                                            {{ $student->surname }} {{ $student->given_name }}
-                                                        </option>
+                                    <option value="{{ $student->id }}" {{ $contracts->student_id == $student->id ? 'selected' : ''
+                                            }}>
+                                        {{ $student->surname }} {{ $student->given_name }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                     {{-- Room --}}
                     <div class="col-md-6">
-                        <label class="form-label" for="room">Room</label>
+                        <label class="form-label" for="room_id">Room</label>
                         <div class="position-relative">
                             <select name="room_id" id="room" class="select2 form-select">
                                 @foreach($rooms as $room)
-                                    <option value="{{ $room->id }}" {{ $contract->room_id == $room->id ? 'selected' : '' }}>
+                                    <option value="{{ $room->id }}" {{ $contracts->room_id == $room->id ? 'selected' : '' }}>
                                         Room {{ $room->number }}
                                     </option>
                                 @endforeach
@@ -63,37 +54,37 @@
                                 <option value="" disabled selected>Select Billing Period</option>
                                 @foreach($billingPeriods as $billingPeriod)
                                     <option placeholder="Select billing period" value="{{ $billingPeriod->id }}">
-                                        {{$contract->billing_period_id == $billingPeriod->id ? 'selected' : '' }}
+                                        {{$contracts->billing_period_id == $billingPeriod->id ? 'selected' : '' }}
                                         {{ $billingPeriod->label }}
                                     </option>
                                 @endforeach
                             </select></div>
                     </div>
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         <label class="form-label" for="rent_amount">Amount</label>
                         <div class="input-group input-group-merge">
                             <span class="input-group-text">FCFA</span>
                             <input type="text" id="PhoneNumber" name="rent_amount" value="{{ old('rent_amount') }}"
                                 class="form-control" placeholder="50000">
                         </div>
-                    </div>
+                    </div> --}}
                     {{-- Dates --}}
                     <div class="col-md-6">
                         <label class="form-label" for="start_date">Start date</label>
                         <div class="position-relative">
-                            <input type="date" value="{{ $contract->start_date }}" id="DateTime" name="start_date"
+                            <input type="date" value="{{ $contracts->start_date }}" id="DateTime" name="start_date"
                                 class="form-control" placeholder="" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="end_date">End date</label>
                         <div class="position-relative">
-                            <input type="date" value="{{ $contract->end_date }}" id="DateTime" name="end_date"
+                            <input type="date" value="{{ $contracts->end_date }}" id="DateTime" name="end_date"
                                 class="form-control" placeholder="" required>
                         </div>
                     </div>
                     <div class="mt-6">
-                        <button type="submit" class="btn btn-primary me-3">UpdateContract</button>
+                        <button type="submit" class="btn btn-primary me-3">Update Contract</button>
                         <button type="reset" class="btn btn-label-secondary">Cancel</button>
                     </div>
                     <input type="hidden">

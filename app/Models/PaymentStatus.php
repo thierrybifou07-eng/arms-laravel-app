@@ -25,12 +25,13 @@ class PaymentStatus extends Model
 
     public static function getIdByCodeOrFail(string $code): int
     {
-        $id = static::where('code', $code)->value('id');
-        if ($id) {
-            throw new \Exception("Code[$code] not found in".static::class);
+        $record = static::where('code', $code)->first();
+
+        if (! $record) {
+            throw new \Exception("Code [$code] not found in ".static::class);
         }
 
-        return $id;
+        return $record->id;
     }
 
     // choose hasMany 'cause a status may be links with n payments

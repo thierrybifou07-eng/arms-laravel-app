@@ -2,6 +2,13 @@
 
 @section('content')
     <div class="card mb-6">
+        @if ($errors->any())
+            <div>
+                @foreach ($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
         <h5 class="card-header">PAYMENT — FORMULAIRE DE PAIEMENT</h5>
         <div class="card-body pt-4">
             <form id="formAccountSettings" method="POST" class="fv-plugins-bootstrap5 fv-plugins-framework"
@@ -22,13 +29,6 @@
                             <span class="input-group-text">FCFA</span>
                             <input type="number" id="PhoneNumber" name="paid_amount" required
                                 value="{{ old('paid_amount') }}" class="form-control" placeholder="50000">
-                            @if ($errors->any())
-                                <div>
-                                    @foreach ($errors->all() as $error)
-                                        <p>{{ $error }}</p>
-                                    @endforeach
-                                </div>
-                            @endif
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -40,13 +40,6 @@
                                     </option>
                                 @endforeach
                             </select>
-                            @if ($errors->any())
-                                <div>
-                                    @foreach ($errors->all() as $error)
-                                        <p>{{ $error }}</p>
-                                    @endforeach
-                                </div>
-                            @endif
                         </div>
                     </div>
                     <div class="mt-6">

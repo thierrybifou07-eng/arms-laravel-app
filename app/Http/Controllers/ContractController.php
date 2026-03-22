@@ -96,7 +96,8 @@ class ContractController extends Controller
      */
     public function edit(Contract $contract)
     {
-        return view('contracts.edit', [
+/*         dd($contract);
+ */        return view('contracts.edit', [
             'contracts' => $contract,
             'students' => Student::all(),
             'rooms' => Room::all(),
