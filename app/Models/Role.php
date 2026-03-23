@@ -15,7 +15,7 @@ class Role extends Model
 
     public const STAFF = 'staff';
 
-    public const PAYMENT_VALIDATOR = 'payment_validator';
+    public const TELLER = 'teller';
 
     public const STUDENT = 'student';
 

@@ -34,7 +34,8 @@
 
     <!-- Vendors CSS -->
 
-    <link rel="stylesheet" href="{{ asset('admin-template/assets') }}/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet"
+        href="{{ asset('admin-template/assets') }}/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
     <!-- endbuild -->
 
@@ -58,7 +59,7 @@
         <div class="authentication-wrapper authentication-basic container-p-y">
             <div class="authentication-inner">
                 <!-- Register -->
-                <div class="card px-sm-6 px-0">
+                <div class="card px-5">
                     <div class="card-body">
                         <!-- Logo -->
                         <div class="app-brand justify-content-center">
@@ -118,7 +119,7 @@
                             </a>
                         </div>
                         @yield('content')
-                        
+
                     </div>
                 </div>
                 <!-- /Register -->

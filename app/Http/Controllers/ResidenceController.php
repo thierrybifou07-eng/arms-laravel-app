@@ -13,7 +13,7 @@ class ResidenceController extends Controller
      */
     public function index()
     {
-        $residence = Residence::with('status')->paginate(10);
+        $residences = Residence::with('status')->paginate(10);
 
         return view('residences.index', compact('residences'));
     }
@@ -37,10 +37,12 @@ class ResidenceController extends Controller
 
             'residence_status_id' => ['required', 'exists:residence_statuses,id'],
             'name' => ['required', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
             'capacity' => ['required', 'integer', 'min:1'],
 
         ]);
+
         Residence::create($validated);
 
         return redirect()->route('residences.index')->with('success', 'La residence à bien été créée');
@@ -49,7 +51,7 @@ class ResidenceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id, Residence $residence)
+    public function show(Residence $residence)
     {
         return view('residences.show', compact('residence'));
     }
@@ -57,7 +59,7 @@ class ResidenceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id, Residence $residence)
+    public function edit(Residence $residence)
     {
         $statuses = ResidenceStatus::all();
 
@@ -68,12 +70,13 @@ class ResidenceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id, Residence $residence)
+    public function update(Request $request, Residence $residence)
     {
         $validated = $request->validate([
 
             'residence_status_id' => ['required', 'exists:residence_statuses,id'],
             'name' => ['required', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
             'capacity' => ['required', 'integer', 'min:1'],
 
@@ -87,10 +90,11 @@ class ResidenceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id, Residence $residence)
+    public function destroy(Residence $residence)
     {
         $residence->delete();
-                return redirect()->route('residences.index')->with('success', 'La residence à bien été supprimée');
+
+        return redirect()->route('residences.index')->with('success', 'La residence à bien été supprimée');
 
     }
 }

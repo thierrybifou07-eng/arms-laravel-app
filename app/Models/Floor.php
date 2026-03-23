@@ -13,20 +13,20 @@ class Floor extends Model
         'capacity',
     ];
 
-        // relationship with building
+    // relationship with building
 
     public function building()
     {
         return $this->belongsTo(Building::class);
     }
 
-        // Assign a status
+    // Assign a status
 
     public function status()
     {
         return $this->belongsTo(FloorStatus::class, 'floor_status_id');
     }
-            // relationship with rooms
+    // relationship with rooms
 
     public function rooms()
     {

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Building;
+use App\Models\BuildingStatus;
 use App\Models\Residence;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ResidenceBuildingController extends Controller
 {
@@ -15,7 +17,7 @@ class ResidenceBuildingController extends Controller
     {
         $buildings = $residence->buildings()->with('status')->get();
 
-        return view('buildings.index', compact('residences', 'buildings'));
+        return view('buildings.index', compact('residence', 'buildings'));
     }
 
     /**
@@ -23,7 +25,9 @@ class ResidenceBuildingController extends Controller
      */
     public function create(Residence $residence)
     {
-        return view('buildings.create', compact('residence'));
+        $statuses = BuildingStatus::all();
+
+        return view('buildings.create', compact('residence','statuses'));
     }
 
     /**
@@ -34,15 +38,19 @@ class ResidenceBuildingController extends Controller
         $validated = $request->validate([
             // Adding building status
             'building_status_id' => ['required', 'exists:building_statuses,id'],
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required','string','max:255',
+                Rule::unique('buildings')->where(function ($query) use ($residence) {
+                    return $query->where('residence_id', $residence->id);
+                }),],
             'address' => ['nullable', 'string', 'max:255'],
-            'capacity' => ['required', 'integer', 'min:1'],
-
-        ]);
-
+            'capacity' => ['required', 'integer', 'min:0'],
+         ],
+            [
+                'name.unique' => 'This building already exists in this residence.',
+            ]);
         $residence->buildings()->create($validated);
 
-        return redirect()->route('residences.buildings.index', $residence)->with('success', 'Le Bâtiment à bien été créé');
+        return redirect()->route('residences.buildings.index', $residence)->with('success', 'The building has been successfully created');
     }
 
     /**
@@ -85,7 +93,7 @@ class ResidenceBuildingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id, Residence $residence, Building $building)
+    public function destroy( Residence $residence, Building $building)
     {
         $building->delete();
 

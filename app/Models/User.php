@@ -6,9 +6,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements HasMedia
 {
+    use InteractsWithMedia;
+    public function avatar()
+    {
+        return $this->getFirstMediaUrl('avatars')?:
+        asset('images/default-avatar.png');
+    }
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -70,7 +80,7 @@ class User extends Authenticatable
     // Assign hasPermission method for the middleware
     public function hasPermission(string $permission): bool
     {
-        return $this->roles()->whereHas('permission', function ($query) use ($permission) {
+        return $this->roles()->whereHas('permissions', function ($query) use ($permission) {
             $query->where('name', $permission);
 
         })->exists();

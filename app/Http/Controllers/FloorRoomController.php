@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Floor;
 use App\Models\Room;
+use App\Models\RoomStatus;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class FloorRoomController extends Controller
 {
@@ -23,7 +25,8 @@ class FloorRoomController extends Controller
      */
     public function create(Floor $floor)
     {
-        return view('rooms.create', compact('floor'));
+        $statuses = RoomStatus::all();
+        return view('rooms.create', compact('floor','statuses'));
     }
 
     /**
@@ -34,14 +37,20 @@ class FloorRoomController extends Controller
         $validated = $request->validate([
             // Adding room status
             'room_status_id' => ['required', 'exists:room_statuses,id'],
-            'number' => ['required'],
+            'number' => ['required',
+                Rule::unique('rooms')->where(function ($query) use ($floor) {
+                    return $query->where('floor_id', $floor->id);
+                }),],
             'rent' => ['required', 'numeric', 'min:0'],
             'capacity' => ['required', 'integer', 'min:1'],
-        ]);
+        ],
+            [
+                'number.unique' => 'This room already exists in this floor.',
 
+            ]);
         $floor->rooms()->create($validated);
 
-        return redirect()->route('floors.rooms.index', $floor)->with('success', 'Le studio à bien été créé');
+        return redirect()->route('floors.rooms.index', $floor)->with('success', 'The room has been successfully created');
     }
 
     /**

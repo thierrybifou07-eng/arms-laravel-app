@@ -17,6 +17,7 @@ return new class extends Migration
                 ->constrained('residence_statuses')
                 ->restrictOnDelete();
             $table->string('name');
+            $table->string('city');
             $table->string('address');
             $table->integer('capacity');
             $table->timestamps();

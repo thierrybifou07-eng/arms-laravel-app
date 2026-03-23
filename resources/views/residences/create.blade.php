@@ -1,114 +1,98 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="content-wrapper">
-        <!-- Content -->
-        <div class="container-xxl flex-grow-1 container-p-y">
-            <div class="row">
-                <div class="col-xxl-8 mb-6 order-0">
-                    <!-- body-wrapper-->
-
-                    <div class="card">
-                        <h5 class="card-header">Bootstrap Validation</h5>
-                        <div class="card-body">
-                            <form class="needs-validation" novalidate="">
-                                <div class="mb-6">
-                                    <label class="form-label" for="bs-validation-name">Name</label>
-                                    <input type="text" class="form-control" id="bs-validation-name"
-                                        placeholder="John Doe" required="">
-                                    <div class="valid-feedback">Looks good!</div>
-                                    <div class="invalid-feedback">Please enter your name.</div>
-                                </div>
-                                <div class="mb-6">
-                                    <label class="form-label" for="bs-validation-email">Email</label>
-                                    <input type="email" id="bs-validation-email" class="form-control"
-                                        placeholder="john.doe" aria-label="john.doe" required="">
-                                    <div class="valid-feedback">Looks good!</div>
-                                    <div class="invalid-feedback">Please enter a valid email</div>
-                                </div>
-                                <div class="mb-6 form-password-toggle">
-                                    <label class="form-label" for="bs-validation-password">Password</label>
-                                    <div class="input-group input-group-merge">
-                                        <input type="password" id="bs-validation-password" class="form-control"
-                                            placeholder="············" required="">
-                                        <span class="input-group-text cursor-pointer" id="basic-default-password4"><i
-                                                class="icon-base bx bx-hide"></i></span>
-                                    </div>
-                                    <div class="valid-feedback">Looks good!</div>
-                                    <div class="invalid-feedback">Please enter your password.</div>
-                                </div>
-                                <div class="mb-6">
-                                    <label class="form-label" for="bs-validation-country">Country</label>
-                                    <select class="form-select" id="bs-validation-country" required="">
-                                        <option value="">Select Country</option>
-                                        <option value="usa">USA</option>
-                                        <option value="uk">UK</option>
-                                        <option value="france">France</option>
-                                        <option value="australia">Australia</option>
-                                        <option value="spain">Spain</option>
-                                    </select>
-                                    <div class="valid-feedback">Looks good!</div>
-                                    <div class="invalid-feedback">Please select your country</div>
-                                </div>
-                                <div class="mb-6">
-                                    <label class="form-label" for="bs-validation-dob">DOB</label>
-                                    <input type="text" class="form-control flatpickr-validation flatpickr-input"
-                                        id="bs-validation-dob" required="">
-                                    <div class="valid-feedback">Looks good!</div>
-                                    <div class="invalid-feedback">Please Enter Your DOB</div>
-                                </div>
-                                <div class="mb-6">
-                                    <label class="form-label" for="bs-validation-upload-file">Profile pic</label>
-                                    <input type="file" class="form-control" id="bs-validation-upload-file"
-                                        required="">
-                                </div>
-                                <div class="mb-6">
-                                    <label class="d-block form-label">Gender</label>
-                                    <div class="form-check mb-2">
-                                        <input type="radio" id="bs-validation-radio-male" name="bs-validation-radio"
-                                            class="form-check-input" required="" checked="">
-                                        <label class="form-check-label" for="bs-validation-radio-male">Male</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="radio" id="bs-validation-radio-female" name="bs-validation-radio"
-                                            class="form-check-input" required="">
-                                        <label class="form-check-label" for="bs-validation-radio-female">Female</label>
-                                    </div>
-                                </div>
-                                <div class="mb-6">
-                                    <label class="form-label" for="bs-validation-bio">Bio</label>
-                                    <textarea class="form-control" id="bs-validation-bio" name="bs-validation-bio" rows="3" required=""></textarea>
-                                </div>
-                                <div class="mb-6">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="bs-validation-checkbox"
-                                            required="">
-                                        <label class="form-check-label" for="bs-validation-checkbox">Agree to our terms
-                                            and conditions</label>
-                                        <div class="invalid-feedback">You must agree before submitting.</div>
-                                    </div>
-                                </div>
-                                <div class="mb-6">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="bootstrapValidationSwitch"
-                                            required="">
-                                        <label class="form-check-label" for="bootstrapValidationSwitch">Send me related
-                                            emails</label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </div>
-                                </div>
-                            </form>
+    <div class="col-xxl-12 my-4">
+        <div class="card">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Create a new residence</h5>
+                <small class="text-body-secondary float-end">Merged input group</small>
+            </div>
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <div class="card-body">
+                <form method="POST" action="{{ route('residences.store') }}">
+                    @csrf
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="name">Name</label>
+                        <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                                <span id="basic-icon-default-message2" class="input-group-text"><i
+                                        class="icon-base bx bx-box"></i></span>
+                                <input type="text" name="name" class="form-control" id="basic-icon-default-fullname"
+                                    placeholder="Enter the residence's name" aria-label="Enter the residence's name"
+                                    aria-describedby="basic-icon-default-fullname2" value="{{old('name') }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="city">City</label>
+                        <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                                <span id="basic-icon-default-company2" class="input-group-text"><i
+                                        class="icon-base bx bx-buildings"></i></span>
+                                <input type="text" name="city" value="{{old('city') }}" id="basic-icon-default-company" class="form-control"
+                                    placeholder="Ex.Douala" aria-label="Ex.Douala"
+                                    aria-describedby="basic-icon-default-company2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="address">Address</label>
+                        <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                                <span id="basic-icon-default-company2" class="input-group-text"><i
+                                        class="icon-base bx bx-buildings"></i></span>
+                                <input type="text" name="address" id="basic-icon-default-company" class="form-control"
+                                    placeholder="Ex.PK-17 Station Neptune" value="{{old('address') }}" aria-label="Ex.PK-17 Station Neptune"
+                                    aria-describedby="basic-icon-default-company2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="capacity">Capacity</label>
+                        <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text"><i class="icon-base bx bx-envelope"></i></span>
+                                <input type="number" name="capacity" value="{{old('capacity') }}" id="basic-icon-default-email" class="form-control"
+                                    placeholder="Enter the residence's capacity" aria-label="Enter the residence's capacity"
+                                    aria-describedby="basic-icon-default-email2">
+                                <span id="basic-icon-default-email2" class="input-group-text">building(s)</span>
+                            </div>
+                            <div class="form-text">You can only use numbers</div>
+                        </div>
+                    </div>
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="residence_status_id">Status</label>
+                        <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text"><i class="icon-base bx bx-envelope"></i></span>
+                                <select name="residence_status_id" class="form-select" id="exampleFormControlSelect1"
+                                    aria-label="Default select example">
+                                    @foreach ($statuses as $status)
+                                        <option value="{{ $status->id }}">
+                                            {{ $status->label ?? $status->code }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-text">What's the status of the residence</div>
                         </div>
                     </div>
 
-                    <!-- / body-wrapper-->
-                </div>
+                    <div class="row justify-content-end">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Create</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-        <!-- / Content -->
     </div>
 @endsection

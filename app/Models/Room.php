@@ -20,6 +20,12 @@ class Room extends Model
     {
         return $this->belongsTo(Floor::class);
     }
+        // relationship with contracts
+
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class);
+    }
 
         // Assign a status
 
