@@ -110,6 +110,18 @@
                                 }); */
             });
 
+document.getElementById('residence').addEventListener('change', function () {
+    fetch(`/buildings/${this.value}`)
+        .then(res => res.json())
+        .then(data => {
+            let buildingSelect = document.getElementById('building');
+            buildingSelect.innerHTML = '<option>Select building</option>';
+
+            data.forEach(b => {
+                buildingSelect.innerHTML += `<option value="${b.id}">${b.name}</option>`;
+            });
+        });
+}); 
         </script>
     @endpush
 @endsection
