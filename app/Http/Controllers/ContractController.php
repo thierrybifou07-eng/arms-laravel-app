@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\DB;
 
 class ContractController extends Controller
 {
+public function getBuildings($residenceId)
+{
+    return \App\Models\Building::where('residence_id', $residenceId)->get();
+}
     /**
      * Display a listing of the resource.
      */
@@ -24,6 +28,16 @@ class ContractController extends Controller
 
         return view('contracts.index', compact('contracts'));
     }
+public function getFloors($buildingId)
+{
+    return \App\Models\Floor::where('building_id', $buildingId)->get();
+}
+public function getRooms($floorId)
+{
+    return \App\Models\Room::where('floor_id', $floorId)
+        ->whereHas('status', fn($q) => $q->where('code', 'avalaible')) // ⚠ typo dans ta DB
+        ->get();
+}
 
     /**
      * Show the form for creating a new resource.
