@@ -122,6 +122,38 @@ document.getElementById('residence').addEventListener('change', function () {
             });
         });
 }); 
+
+
+
+document.getElementById('building').addEventListener('change', function () {
+    fetch(`/floors/${this.value}`)
+        .then(res => res.json())
+        .then(data => {
+            let floorSelect = document.getElementById('floor');
+            floorSelect.innerHTML = '<option>Select floor</option>';
+
+            data.forEach(f => {
+                floorSelect.innerHTML += `<option value="${f.id}">Floor ${f.number}</option>`;
+            });
+        });
+});
+
+
+
+document.getElementById('floor').addEventListener('change', function () {
+    fetch(`/rooms/${this.value}`)
+        .then(res => res.json())
+        .then(data => {
+            let roomSelect = document.getElementById('room_id');
+            roomSelect.innerHTML = '<option>Select room</option>';
+
+            data.forEach(r => {
+                roomSelect.innerHTML += `<option value="${r.id}">${r.number}</option>`;
+            });
+        });
+});
+
+
         </script>
     @endpush
 @endsection
