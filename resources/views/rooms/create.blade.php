@@ -24,8 +24,8 @@
                             <div class="input-group input-group-merge">
                                 <span id="basic-icon-default-message2" class="input-group-text"><i
                                         class="icon-base bx bx-box"></i></span>
-                                <input type="text" name="number" class="form-control" id="basic-icon-default-fullname"
-                                    placeholder="Enter the room's name" aria-label="Enter the room's name"
+                                <input type="number" name="number" class="form-control" id="basic-icon-default-fullname"
+                                    placeholder="Enter the room's name" aria-label="Enter the room's number"
                                     aria-describedby="basic-icon-default-fullname2" value="{{ old('number') }}">
                             </div>
                         </div>

@@ -9,13 +9,13 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-
 class User extends Authenticatable implements HasMedia
 {
     use InteractsWithMedia;
+
     public function avatar()
     {
-        return $this->getFirstMediaUrl('avatars')?:
+        return $this->getFirstMediaUrl('avatars') ?:
         asset('images/default-avatar.png');
     }
 

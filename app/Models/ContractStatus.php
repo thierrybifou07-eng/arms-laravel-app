@@ -8,13 +8,17 @@ class ContractStatus extends Model
 {
     protected $fillable = ['code', 'label'];
 
-    public const pending = 'Pending';
+    public const PENDING = 'Pending';
 
-    public const active = 'Active';
+    public const ACTIVE = 'Active';
 
-    public const terminated = 'Terminated';
+    public const OVERDUE = 'overdue';
 
-    public const cancelled = 'Cancelled';
+    public const TERMINATED = 'Terminated';
+
+    public const EXPIRED = 'Expired';
+
+    public const CANCELLED = 'Cancelled';
 
     // create the function(undefinded here) to call in the dbseeder
 

@@ -14,6 +14,7 @@ class BillingPeriodSeeder extends Seeder
  public function run()
     {
         $periodes = [
+            ['code' => 'once', 'label' => 'One-time'],
             ['code' => 'monthly', 'label' => 'Monthly'],
             ['code' => 'quarterly', 'label' => 'Quarterly'],
             ['code' => 'half_yearly', 'label' => 'Half-Yearly'],

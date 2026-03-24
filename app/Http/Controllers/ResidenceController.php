@@ -13,7 +13,7 @@ class ResidenceController extends Controller
      */
     public function index()
     {
-        $residences = Residence::with('status')->paginate(10);
+        $residences = Residence::with('status')->paginate(6);
 
         return view('residences.index', compact('residences'));
     }
