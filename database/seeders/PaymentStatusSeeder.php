@@ -18,6 +18,7 @@ class PaymentStatusSeeder extends Seeder
             ['code' => 'paid', 'label' => 'Paid'],
             ['code' => 'validated', 'label' => 'Validated'],
             ['code' => 'cancelled', 'label' => 'Cancelled'],
+            ['code' => 'processing', 'label' => 'Processing'],
         ];
 
         foreach ($statuses as $status) {

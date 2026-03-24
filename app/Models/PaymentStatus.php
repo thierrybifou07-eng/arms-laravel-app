@@ -8,13 +8,13 @@ class PaymentStatus extends Model
 {
     protected $fillable = ['code', 'label'];
 
-    public const pending = 'Pending';
+    public const PENDING = 'Pending';
 
-    public const paid = 'Paid';
+    public const PAID = 'Paid';
 
-    public const validated = 'Validated';
+    public const VALIDATED = 'Validated';
 
-    public const cancelled = 'Cancelled';
+    public const CANCELLED = 'Cancelled';
 
     // create the function(undefinded here) to call in the dbseeder
 

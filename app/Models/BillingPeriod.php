@@ -8,13 +8,14 @@ class BillingPeriod extends Model
 {
     protected $fillable = ['code', 'label'];
 
-    public const monthly = 'Monthly';
+    public const ONCE = 'One-time';
+    public const MONTHLY = 'Monthly';
 
-    public const quaterly = 'Quarterly';
+    public const QUARTERLY = 'Quarterly';
 
-    public const half_yearly = 'Half-Yearly';
+    public const HALF_YEARLY = 'Half-Yearly';
 
-    public const yearly = 'Yearly';
+    public const YEARLY = 'Yearly';
 
     // create the function(undefinded here) to call in the dbseeder
 
