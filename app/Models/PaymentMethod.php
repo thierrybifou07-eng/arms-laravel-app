@@ -8,15 +8,15 @@ class PaymentMethod extends Model
 {
     protected $fillable = ['code', 'label'];
 
-    public const cash = 'cash';
+    public const CASH = 'cash';
 
-    public const mtn_money = 'MTN Mobile Money';
+    public const MTN_MONEY = 'MTN Mobile Money';
 
-    public const orange_money = 'Orange Money';
+    public const ORANGE_MONEY = 'Orange Money';
 
-    public const cryptos = 'Cryptocurrencies';
+    public const CRYPTOS = 'Cryptocurrencies';
 
-    public const bank_transfer = 'Bank Transfer';
+    public const BANK_TRANSFERT = 'Bank Transfer';
 
     // create the function(undefinded here) to call in the dbseeder
 

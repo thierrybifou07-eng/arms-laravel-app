@@ -8,6 +8,8 @@ class PaymentStatus extends Model
 {
     protected $fillable = ['code', 'label'];
 
+    public const PROCESSING = 'Processing';
+
     public const PENDING = 'Pending';
 
     public const PAID = 'Paid';

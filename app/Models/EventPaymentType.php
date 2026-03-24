@@ -8,11 +8,11 @@ class EventPaymentType extends Model
 {
     protected $fillable = ['code', 'label'];
 
-    public const created = 'Payment created';
+    public const CREATED = 'Payment created';
 
-    public const validated = 'Payment validated';
+    public const VALIDATED = 'Payment validated';
 
-    public const cancelled = 'Payment cancelled';
+    public const CANCELLED = 'Payment cancelled';
 
     // create the function(undefinded here) to call in the dbseeder
 

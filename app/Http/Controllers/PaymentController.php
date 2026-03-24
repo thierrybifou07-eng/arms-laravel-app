@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\ContractStatus;
@@ -15,8 +16,6 @@ class PaymentController extends Controller
         return view('payments.index', compact('payments'));
     }
 
-    /**
-     */
     public function show(Payment $payment)
     {
         return view('payments.show', compact('payment'));
@@ -29,19 +28,26 @@ class PaymentController extends Controller
 
     public function pay(Request $request, Payment $payment)
     {
+        //  stop double payment
+        if ($payment->paid_amount >= $payment->expected_amount) {
+            return back()->withErrors(['payment' => 'Already fully paid.']);
+        }
+
         $validated = $request->validate([
             'paid_amount' => 'required|numeric|min:0',
             'payment_method_id' => 'required|exists:payment_methods,id',
         ]);
-        $paidStatus = PaymentStatus::getIdByCodeOrFail('paid');
+
+        $processingStatus = PaymentStatus::getIdByCodeOrFail('processing');
+
         $payment->update([
             'paid_amount' => $validated['paid_amount'],
             'payment_method_id' => $validated['payment_method_id'],
-            'payment_status_id' => $paidStatus,
+            'payment_status_id' => $processingStatus,
             'payment_date' => now(),
         ]);
 
-        return back()->with('success', 'Payment recorded successfully.');
+        return back()->with('success', 'Payment submitted for validation.');
     }
 
     /*
@@ -54,26 +60,39 @@ class PaymentController extends Controller
      */
     public function validatePayment(Payment $payment)
     {
+        //  security
+        if ($payment->payment_status_id === PaymentStatus::getIdByCodeOrFail('validated')) {
+            return back()->withErrors(['payment' => 'Already validated.']);
+        }
+
+        if ($payment->paid_amount < $payment->expected_amount) {
+            return back()->withErrors(['payment' => 'Insufficient payment amount.']);
+        }
+
         $validatedStatus = PaymentStatus::getIdByCodeOrFail('validated');
         $activeStatus = ContractStatus::getIdByCodeOrFail('active');
 
-        // Check the paid amount is equal to the expected amount
-        if ($payment->paid_amount < $payment->expected_amount) {
-            return back()->withErrors(['payment' => 'The paid amount is less than the expected amount.']);
-        }
         $payment->update([
             'payment_status_id' => $validatedStatus,
         ]);
-        // Activation of the contract after the payment validation
+
         $contract = $payment->contract;
-        if ($contract->status->code === 'pending') {
+
+        //  activation
+        if (in_array($contract->status->code, ['pending', 'overdue'])) {
             $contract->update([
                 'contract_status_id' => $activeStatus,
             ]);
         }
 
+        //  cheks métier
+        $contract->refresh();
+        $contract->checkOverdue();
+        $contract->checkExpired();
+
         return back()->with('success', 'Payment validated successfully.');
     }
+
     /*
     |--------------------------------------------------------------------------
     | VALIDATION OF THE PAYMENT RECORDED(Important!!)
@@ -84,11 +103,16 @@ class PaymentController extends Controller
      */
     public function cancel(Payment $payment)
     {
+        if ($payment->paid_amount > 0) {
+            return back()->withErrors(['payment' => 'Cannot cancel a paid payment.']);
+        }
+
         $cancelledStatus = PaymentStatus::getIdByCodeOrFail('cancelled');
 
         $payment->update([
             'payment_status_id' => $cancelledStatus,
         ]);
+
         return back()->with('success', 'The payment has been cancelled.');
     }
 }

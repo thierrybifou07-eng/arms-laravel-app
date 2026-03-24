@@ -20,7 +20,7 @@ class ContractController extends Controller
      */
     public function index()
     {
-        $contracts = Contract::with(['student', 'room', 'status'  ])->latest()->paginate(10);
+        $contracts = Contract::with(['student', 'room', 'status'])->latest()->paginate(10);
 
         return view('contracts.index', compact('contracts'));
     }
@@ -151,11 +151,29 @@ class ContractController extends Controller
         if ($contract->payments()->exists()) {
             return;
         }
+
         $pendingPaymentStatus = PaymentStatus::getIdByCodeOrFail('pending');
+
         $start = Carbon::parse($contract->start_date);
         $end = Carbon::parse($contract->end_date);
-        $period = $contract->billingPeriod->code; // monthly, quarterly...
+        $period = $contract->billingPeriod->code;
 
+        //  CASE 1 :  unique payment
+        if ($period === 'once') {
+            Payment::create([
+                'contract_id' => $contract->id,
+                'payment_status_id' => $pendingPaymentStatus,
+                'expected_amount' => $contract->rent_amount,
+                'payment_method_id' => null,
+                'payment_date' => null,
+                'paid_amount' => 0,
+                'due_date' => $start, // i'll decide between $end and it after fix my choise metier
+            ]);
+
+            return;
+        }
+
+        //  NORMAL CASE
         $interval = match ($period) {
             'monthly' => 1,
             'quarterly' => 3,
@@ -163,9 +181,9 @@ class ContractController extends Controller
             default => 1
         };
 
-        $paymentStatusId = PaymentStatus::where('code', 'pending')->value('id');
         $current = $start->copy();
-        while ($current <= $end) {
+
+        while ($current < $end) { //  correction here
             Payment::create([
                 'contract_id' => $contract->id,
                 'payment_status_id' => $pendingPaymentStatus,
@@ -175,7 +193,6 @@ class ContractController extends Controller
                 'paid_amount' => 0,
                 'due_date' => $current->copy(),
             ]);
-            // peroid for
             $current->addMonths($interval);
         }
     }
