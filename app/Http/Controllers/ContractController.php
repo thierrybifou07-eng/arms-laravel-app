@@ -20,7 +20,7 @@ class ContractController extends Controller
      */
     public function index()
     {
-        $contracts = Contract::with(['student', 'room', 'status'])->latest()->paginate(10);
+        $contracts = Contract::with(['student', 'room', 'status'  ])->latest()->paginate(10);
 
         return view('contracts.index', compact('contracts'));
     }
@@ -170,6 +170,8 @@ class ContractController extends Controller
                 'contract_id' => $contract->id,
                 'payment_status_id' => $pendingPaymentStatus,
                 'expected_amount' => $contract->rent_amount,
+                'payment_method_id' => null,
+                'payment_date' => null,
                 'paid_amount' => 0,
                 'due_date' => $current->copy(),
             ]);

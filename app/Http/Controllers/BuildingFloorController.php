@@ -39,7 +39,7 @@ class BuildingFloorController extends Controller
             // Adding floor status
 
             'floor_status_id' => ['required', 'exists:floor_statuses,id'],
-            'number' => ['required', 'string', 'max:255',
+            'number' => ['required', 'integer', 'min:0',
                 Rule::unique('floors')->where(function ($query) use ($building) {
                     return $query->where('building_id', $building->id);
                 }), ],

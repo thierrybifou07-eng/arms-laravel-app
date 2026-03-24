@@ -1,13 +1,14 @@
 @extends('layouts.app')
 @section('content')
     <div class="col-xxl-12">
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="card my-5">
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+
             @if ($rooms->count() > 0)
                 <div class="table-responsive text-nowrap table-hover">
                     <table class="table">
@@ -49,14 +50,11 @@
                                                 <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item"
-                                                    href="{{ route('buildings.floors.index', $floor) }}"><i
+                                                <a class="dropdown-item" href="{{ route('buildings.floors.index', $floor) }}"><i
                                                         class="icon-base bx bx-show-alt me-1"></i> View</a>
-                                                <a class="dropdown-item"
-                                                    href="{{ route('floors.rooms.edit', [$floor, $room]) }}"><i
+                                                <a class="dropdown-item" href="{{ route('floors.rooms.edit', [$floor, $room]) }}"><i
                                                         class="icon-base bx bx-edit me-1"></i> Edit</a>
-                                                <form method="POST"
-                                                    action="{{ route('floors.rooms.destroy', [$floor, $room]) }}">
+                                                <form method="POST" action="{{ route('floors.rooms.destroy', [$floor, $room]) }}">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button class="dropdown-item text-danger" type="submit"><i
@@ -81,11 +79,12 @@
             @endif
         </div>
 
-        @if ($rooms->count() > 0)
-            <div class="demo-inline-spacing mx-5">
+        <div class="demo-inline-spacing mx-5">
+            <a href="" class="btn rounded-pill btn-secondary">Back</a>
+            @if ($rooms->count() > 0)
                 <a href="{{ route('floors.rooms.create', $floor) }}" class="btn rounded-pill btn-primary">New
-                    Room</a>
-            </div>
-        @endif
+            Room</a>@endif
+        </div>
+
     </div>
 @endsection

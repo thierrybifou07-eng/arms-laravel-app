@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Residence;
+use App\Models\ResidenceStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ResidenceFactory extends Factory
 {
+    protected $model = Residence::class;
+
     /**
      * Define the model's default state.
      *
@@ -17,7 +21,12 @@ class ResidenceFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->lastName(),
+            'city' => fake()->city(),
+            'address' => fake()->address(),
+            'capacity' => fake()->numberBetween(1, 10),
+            'residence_status_id' => fake()->randomElement([ResidenceStatus::getIdByCode(ResidenceStatus::ACTIVE), ResidenceStatus::getIdByCode(ResidenceStatus::PENDING), ResidenceStatus::getIdByCode(ResidenceStatus::CLOSED), ResidenceStatus::getIdByCode(ResidenceStatus::RENEW)]), // Default to 'active' status
+
         ];
     }
 }

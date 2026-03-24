@@ -37,7 +37,7 @@ class FloorRoomController extends Controller
         $validated = $request->validate([
             // Adding room status
             'room_status_id' => ['required', 'exists:room_statuses,id'],
-            'number' => ['required',
+            'number' => ['required','integer', 'min:1',
                 Rule::unique('rooms')->where(function ($query) use ($floor) {
                     return $query->where('floor_id', $floor->id);
                 }),],

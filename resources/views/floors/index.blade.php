@@ -1,13 +1,14 @@
 @extends('layouts.app')
 @section('content')
     <div cclass="col-xxl-12">
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="card my-5">
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+
             @if ($floors->count() > 0)
                 <div class="table-responsive text-nowrap table-hover">
                     <table class="table">
@@ -76,11 +77,13 @@
                 </div>
             @endif
         </div>
-        @if ($floors->count() > 0)
-            <div class="demo-inline-spacing mx-5">
+        <div class="demo-inline-spacing mx-5">
+            <a href="" class="btn rounded-pill btn-secondary">Back</a>
+            @if ($floors->count() > 0)
                 <a href="{{ route('buildings.floors.create', $building) }}" class="btn rounded-pill btn-primary">New
-                    Floor</a>
-            </div>
-        @endif
+                    floor</a>
+            @endif
+        </div>
+
     </div>
 @endsection

@@ -2,11 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Residence extends Model
 {
-    //
+    use HasFactory;
+
+    protected static function newFactory()
+    {
+        return \Database\Factories\ResidenceFactory::new();
+    }
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
     protected $fillable = [
         'residence_status_id',
         'name',

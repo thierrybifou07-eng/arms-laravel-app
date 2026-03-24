@@ -24,7 +24,7 @@ return new class extends Migration
                 ->restrictOnDelete();
             $table->decimal('expected_amount', 10, 2);
             $table->decimal('paid_amount', 10, 2);
-            $table->date('payment_date');
+            $table->date('payment_date')->nullable();
             $table->timestamps();
         });
         Schema::create('payments_histories', function (Blueprint $table) {
