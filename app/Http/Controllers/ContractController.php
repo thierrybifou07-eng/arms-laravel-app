@@ -206,3 +206,4 @@ class ContractController extends Controller
         $current->addMonths($interval);
     }
 }
+} 
