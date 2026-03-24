@@ -15,7 +15,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
+/*
+Past route for the creation of contrac
+*/
+Route::get('/buildings/{residence}', [ContractController::class, 'getBuildings']);
+Route::get('/floors/{building}', [ContractController::class, 'getFloors']);
+Route::get('/rooms/{floor}', [ContractController::class, 'getRooms']);
 Route::get('/super_admin/dashboard', function () {
     return view('super_admin.dashboard');
 })->middleware(['auth', 'verified', 'role:super_admin'])->name('super_admin.dashboard');
