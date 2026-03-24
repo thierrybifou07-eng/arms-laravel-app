@@ -34,7 +34,7 @@ class PaymentController extends Controller
         }
 
         $validated = $request->validate([
-            'paid_amount' => 'required|numeric|min:0',
+            'paid_amount' => 'nullable|numeric|min:0',
             'payment_method_id' => 'required|exists:payment_methods,id',
         ]);
 

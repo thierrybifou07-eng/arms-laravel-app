@@ -98,9 +98,11 @@ class Contract extends Model
             ]);
         }
     }
-public function getTotalAmountAttribute()
-{
-    $months = $this->start_date->diffInMonths($this->end_date) + 1;
-    return $this->rent_amount * $months;
-}
+
+    public function getTotalAmountAttribute()
+    {
+        $months = $this->start_date->diffInMonths($this->end_date) + 1;
+
+        return $this->rent_amount * $months;
+    }
 }

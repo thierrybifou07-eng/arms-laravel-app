@@ -146,64 +146,64 @@ class ContractController extends Controller
     | WORKING WITH PAYMENTS RELATED TO THE CONTRACT
     |--------------------------------------------------------------------------
     */
- private function generatePayments(Contract $contract)
-{
-    if ($contract->payments()->exists()) {
-        return;
-    }
+    private function generatePayments(Contract $contract)
+    {
+        if ($contract->payments()->exists()) {
+            return;
+        }
 
-    $pendingStatus = PaymentStatus::getIdByCodeOrFail('pending');
+        $pendingStatus = PaymentStatus::getIdByCodeOrFail('pending');
 
-    $start = Carbon::parse($contract->start_date);
-    $end = Carbon::parse($contract->end_date);
-    $period = $contract->billingPeriod->code;
+        $start = Carbon::parse($contract->start_date);
+        $end = Carbon::parse($contract->end_date);
+        $period = $contract->billingPeriod->code;
 
-    //  deduce delay in months (stong)
-    $totalMonths = $start->diffInMonths($end) + 1;
+        //  deduce delay in months (stong)
+        $totalMonths = $start->diffInMonths($end) + 1;
 
-    //  CASE 1 : unique payment
-    if ($period === 'once') {
+        //  CASE 1 : unique payment
+        if ($period === 'once') {
 
-        $totalAmount = $contract->rent_amount * $totalMonths;
+            $totalAmount = $contract->rent_amount * $totalMonths;
 
-        Payment::create([
-            'contract_id' => $contract->id,
-            'payment_status_id' => $pendingStatus,
-            'expected_amount' => $totalAmount,
-            'payment_method_id' => null,
-            'payment_date' => null,
-            'paid_amount' => 0,
-            'due_date' => $start,
-        ]);
+            Payment::create([
+                'contract_id' => $contract->id,
+                'payment_status_id' => $pendingStatus,
+                'expected_amount' => $totalAmount,
+                'payment_method_id' => null,
+                'payment_date' => null,
+                'paid_amount' => 0,
+                'due_date' => $start,
+            ]);
 
-        return;
-    }
+            return;
+        }
 
-    // INTERVAL + MULTIPLIER
-    $interval = match ($period) {
-        'monthly' => 1,
-        'quarterly' => 3,
-        'yearly' => 12,
-        default => 1
-    };
+        // INTERVAL + MULTIPLIER
+        $interval = match ($period) {
+            'monthly' => 1,
+            'quarterly' => 3,
+            'yearly' => 12,
+            default => 1
+        };
 
-    $amountPerPayment = $contract->rent_amount * $interval;
+        $amountPerPayment = $contract->rent_amount * $interval;
 
-    $current = $start->copy();
+        $current = $start->copy();
 
-    while ($current < $end) {
+        while ($current < $end) {
 
-        Payment::create([
-            'contract_id' => $contract->id,
-            'payment_status_id' => $pendingStatus,
-            'expected_amount' => $amountPerPayment,
-            'payment_method_id' => null,
-            'payment_date' => null,
-            'paid_amount' => 0,
-            'due_date' => $current->copy(),
-        ]);
+            Payment::create([
+                'contract_id' => $contract->id,
+                'payment_status_id' => $pendingStatus,
+                'expected_amount' => $amountPerPayment,
+                'payment_method_id' => null,
+                'payment_date' => null,
+                'paid_amount' => 0,
+                'due_date' => $current->copy(),
+            ]);
 
-        $current->addMonths($interval);
+            $current->addMonths($interval);
+        }
     }
 }
-} 
