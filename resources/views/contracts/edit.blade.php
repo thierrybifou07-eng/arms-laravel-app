@@ -50,7 +50,6 @@
                         <label class="form-label" for="billing_period_id">Billing Period</label>
                         <div class="position-relative"><select name="billing_period_id" id="billing_period"
                                 class="select2 form-select">
-                                <option value="" disabled selected>Select Billing Period</option>
                                 @foreach($billingPeriods as $billingPeriod)
                                     <option placeholder="Select billing period" value="{{ $billingPeriod->id }}">
                                         {{$contracts->billing_period_id == $billingPeriod->id ? 'selected' : '' }}
@@ -59,14 +58,6 @@
                                 @endforeach
                             </select></div>
                     </div>
-                    {{-- <div class="col-md-6">
-                        <label class="form-label" for="rent_amount">Amount</label>
-                        <div class="input-group input-group-merge">
-                            <span class="input-group-text">FCFA</span>
-                            <input type="text" id="PhoneNumber" name="rent_amount" value="{{ old('rent_amount') }}"
-                                class="form-control" placeholder="50000">
-                        </div>
-                    </div> --}}
                     {{-- Dates --}}
                     <div class="col-md-6">
                         <label class="form-label" for="start_date">Start date</label>

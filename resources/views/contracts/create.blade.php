@@ -209,9 +209,9 @@
 
                 let roomOption = $('#room_id option:selected').text();
 
-                                                                                // extrait le rent depuis le label (ex: "Room 101 - 50000 FCFA")
-                                                                                /* let rentMatch = roomOption.match(/(\d+)\s*FCFA/);
-                                                                                 */             let rentMatch = roomOption.match(/([\d.]+)\s*FCFA/);
+                                                                                                                // extrait le rent depuis le label (ex: "Room 101 - 50000 FCFA")
+                                                                                                                /* let rentMatch = roomOption.match(/(\d+)\s*FCFA/);
+                                                                                                                 */             let rentMatch = roomOption.match(/([\d.]+)\s*FCFA/);
                 if (!rentMatch) return;
                 let rent = parseFloat(rentMatch[1]);
 
@@ -279,9 +279,9 @@
                             let options = '<option></option>';
                             data.forEach(r => {
                                 options += `
-                                                 <option value="${r.id}" data-rent="${r.rent}">
-                                                 Room ${r.number} - ${r.rent} FCFA
-                                                 </option>`;
+                                                                                 <option value="${r.id}" data-rent="${r.rent}">
+                                                                                 Room ${r.number} - ${r.rent} FCFA
+                                                                                 </option>`;
                             });
                             $('#room_id').html(options).trigger('change');
                         });
@@ -298,28 +298,36 @@
                     });
 
                 // =========================
-                // CALCUL MONTANT
+                // DEDUCE AMOUNT
                 // =========================
 
                 function calculateAmount() {
                     let rent = $('#room_id option:selected').data('rent');
-                    let billingText = $('#billing_period option:selected').text();
-
-                    if (!rent || !billingText) return;
-
+                    let billingText = $('#billing_period option:selected').text().toLowerCase();
+                    let startDate = $('#start_date').val();
+                    let endDate = $('#end_date').val();
+                    if (!startDate || !endDate || !rent || !billingText) return;
+                    let start = new Date(startDate);
+                    let end = new Date(endDate);
+                    let months = monthDiff(start, end);
                     let multiplier = 1;
 
                     if (billingText.toLowerCase().includes('monthly')) multiplier = 1;
                     if (billingText.toLowerCase().includes('quarter')) multiplier = 3;
-                    if (billingText.toLowerCase().includes('half_yearly')) multiplier = 6;
+                    if (billingText.toLowerCase().includes('half')) multiplier = 6;
                     if (billingText.toLowerCase().includes('year')) multiplier = 12;
-                    let amount = rent * multiplier;
-
+                    //CASE ONCE
+                    if (billingText.includes('once')) {
+                        $('#calculated_amount').val(rent * months)
+                        return;
+                    }
+                    /*                     let amount = rent * multiplier;
+                     */
                     $('#calculated_amount').val(amount);
                 }
 
                 // =========================
-                // PREVIEW ÉCHÉANCES 
+                // PREVIEW SCHEDULES 
                 // =========================
                 function generateSchedulePreview() {
 
@@ -336,24 +344,24 @@
                     let start = new Date(startDate);
                     let end = new Date(endDate);
 
-                    let scheduleHTML = '';
+                    let html = '';
+                    let totalMonths = monthDiff(start, end);
 
                     // =========================
-                    // CASE 1 : ONCE
+                    //  CASE ONCE
                     // =========================
                     if (billingText.includes('once')) {
 
-                        let totalMonths = monthDiff(start, end);
                         let totalAmount = rent * totalMonths;
 
-                        scheduleHTML = `
-                                                    <li class="list-group-item d-flex justify-content-between">
-                                                        <span>${formatDate(start)}</span>
-                                                        <strong>${totalAmount} FCFA</strong>
-                                                    </li>
-                                                `;
+                        html = `
+                                                                                    <li class="list-group-item d-flex justify-content-between">
+                                                                                        <span>${formatDate(start)}</span>
+                                                                                        <strong>${totalAmount} FCFA</strong>
+                                                                                    </li>
+                                                                                `;
 
-                        $('#payment_schedule').html(scheduleHTML);
+                        $('#payment_schedule').html(html);
                         return;
                     }
 
@@ -365,7 +373,7 @@
 
                     if (billingText.includes('monthly')) interval = 1;
                     if (billingText.includes('quarter')) interval = 3;
-                    if (billingText.includes('half_yearly')) interval = 6;
+                    if (billingText.includes('half')) interval = 6;
                     if (billingText.includes('year')) interval = 12;
 
                     let current = new Date(start);
@@ -375,17 +383,17 @@
                         let dueDate = new Date(current);
                         let amount = rent * interval;
 
-                        scheduleHTML += `
-                                                    <li class="list-group-item d-flex justify-content-between">
-                                                        <span>${formatDate(dueDate)}</span>
-                                                        <strong>${amount} FCFA</strong>
-                                                    </li>
-                                                `;
+                        html += `
+                                                                                    <li class="list-group-item d-flex justify-content-between">
+                                                                                        <span>${formatDate(dueDate)}</span>
+                                                                                        <strong>${amount} FCFA</strong>
+                                                                                    </li>
+                                                                                `;
 
                         current.setMonth(current.getMonth() + interval);
                     }
 
-                    $('#payment_schedule').html(scheduleHTML);
+                    $('#payment_schedule').html(html);
                 }
                 // =========================
                 // FORMAT DATE
