@@ -3,7 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-
+use App\Models\Payment;
+use App\Models\PaymentStatus;
 class CheckOverduePayments extends Command
 {
     /**
@@ -25,6 +26,18 @@ class CheckOverduePayments extends Command
      */
     public function handle()
     {
-        //
+        $overdueId = PaymentStatus::where('code','overdue')->value('id');
+
+    Payment::whereNotIn('payment_status_id', [
+        PaymentStatus::where('code','validated')->value('id'),
+        PaymentStatus::where('code','cancelled')->value('id'),
+    ])
+    ->where('due_date', '<', now())
+    ->whereColumn('paid_amount', '<', 'expected_amount')
+    ->update([
+        'payment_status_id' => $overdueId
+    ]);
+
+    return 0;
     }
 }
