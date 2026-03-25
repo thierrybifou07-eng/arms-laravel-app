@@ -25,8 +25,9 @@
                         <th>Contract</th>
                         <th>Student</th>
                         <th>Due Date</th>
-                        <th>Expected</th>
-                        <th>Paid</th>
+                        <th>Expected(FCFA)</th>
+                        <th>Paid(FCFA)</th>
+                        <th>Tip amount(FCFA)</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -39,8 +40,9 @@
 
                             <td>{{ $payment->due_date?->format('d/m/Y') }}</td>
 
-                            <td>{{ number_format($payment->expected_amount, 0, ',', ' ') }} FCFA</td>
-                            <td>{{ number_format($payment->paid_amount, 0, ',', ' ') }} FCFA</td>
+                            <td>{{ number_format($payment->expected_amount, 0, ',', ' ') }}</td>
+                            <td>{{ number_format($payment->paid_amount, 0, ',', ' ') }}</td>
+                            <td>{{ number_format($payment->tip_amount, 0, ',', ' ') }}</td>
 
                             <td>
                                 @php $status = $payment->status->code ?? '' @endphp

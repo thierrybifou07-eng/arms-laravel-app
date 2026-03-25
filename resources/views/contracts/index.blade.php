@@ -18,7 +18,7 @@
                                 <th>Rooms</th>
                                 <th>Status</th>
                                 <th>Billing Periods</th>
-                                <th>Rent Amount</th>
+                                <th>Rent Amount(FCFA)</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
                                 <th class="text-center">Actions</th>

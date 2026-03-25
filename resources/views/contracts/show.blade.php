@@ -33,8 +33,9 @@
                             <thead>
                                 <tr>
                                     <th>Due date</th>
-                                    <th>Expected</th>
-                                    <th>Paid</th>
+                                    <th>Expected(FCFA)</th>
+                                    <th>Other(FCFA)</th>
+                                    <th>Paid(FCFA)</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -42,9 +43,31 @@
                                 @foreach($contract->payments as $payment)
                                     <tr>
                                         <td>{{ \Carbon\Carbon::parse($payment->due_date)->format('d/m/Y') }}</td>
-                                        <td>{{ number_format($payment->expected_amount, 0, ',', ' ') }} FCFA</td>
-                                        <td>{{ number_format($payment->paid_amount, 0, ',', ' ') }} FCFA</td>
-                                        <td>{{ $payment->status->label ?? 'N/A' }}</td>
+                                        <td>{{ number_format($payment->expected_amount, 0, ',', ' ') }}</td>
+                                        <td>{{ number_format($payment->tip_amount, 0, ',', ' ') }}</td>
+                                        <td>{{ number_format($payment->paid_amount, 0, ',', ' ') }}</td>
+                                        <td> @switch($payment->status->code)
+                                            @case('pending')
+                                            <span class="badge bg-label-warning">{{ $payment->status->label }}</span>
+                                            @break
+                                            @case('processing')
+                                            <span class="badge bg-label-primary">{{ $payment->status->label }}</span>
+                                            @break
+                                            @case('overdue')
+                                            <span class="badge bg-label-danger">{{ $payment->status->label }}</span>
+                                            @break
+                                            @case('paid')
+                                            <span class="badge bg-label-info">{{ $payment->status->label }}</span>
+                                            @break
+                                            @case('validated')
+                                            <span class="badge bg-label-success">{{ $payment->status->label }}</span>
+                                            @break
+                                            @case('cancelled')
+                                            <span class="badge bg-label-secondary">{{ $payment->status->label ?? 'Unknown'
+                                                }}</span>
+                                            @break
+                                            @endswitch
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
