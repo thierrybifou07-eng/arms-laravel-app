@@ -10,27 +10,29 @@ use Illuminate\Http\Request;
 class PaymentController extends Controller
 {
     public function index()
-{
+    {
         $payments = Payment::with(['contract.student', 'status'])->latest()->get();
 
-    // filtre
-    if (request('status') === 'overdue') {
-        $payments = $payments->filter(fn($p) => $p->isOverdue());
+        // filtre
+        if (request('status') === 'overdue') {
+            $payments = $payments->filter(fn ($p) => $p->isOverdue());
+        }
+
+        if (request('status') === 'pending') {
+            $payments = $payments->where('status.code', 'pending');
+        }
+        if (request('status') === 'processing') {
+            $payments = $payments->where('status.code', 'processing');
+        }
+
+        if (request('status') === 'validated') {
+            $payments = $payments->where('status.code', 'validated');
+        }
+
+        return view('payments.index', compact('payments'));
     }
 
-    if (request('status') === 'pending') {
-        $payments = $payments->where('status.code', 'pending');
-    }
-
-    if (request('status') === 'validated') {
-        $payments = $payments->where('status.code', 'validated');
-    }
-
-    return view('payments.index', compact('payments'));
-}
-
-
-//send payment with their methods
+    // send payment with their methods
     public function show(Payment $payment)
     {
         $payment->load(['contract', 'status']);

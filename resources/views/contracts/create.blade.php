@@ -209,9 +209,9 @@
 
                 let roomOption = $('#room_id option:selected').text();
 
-                                                                        // extrait le rent depuis le label (ex: "Room 101 - 50000 FCFA")
-                                                                        /* let rentMatch = roomOption.match(/(\d+)\s*FCFA/);
-                                                                         */             let rentMatch = roomOption.match(/([\d.]+)\s*FCFA/);
+                                                                                // extrait le rent depuis le label (ex: "Room 101 - 50000 FCFA")
+                                                                                /* let rentMatch = roomOption.match(/(\d+)\s*FCFA/);
+                                                                                 */             let rentMatch = roomOption.match(/([\d.]+)\s*FCFA/);
                 if (!rentMatch) return;
                 let rent = parseFloat(rentMatch[1]);
 
@@ -279,9 +279,9 @@
                             let options = '<option></option>';
                             data.forEach(r => {
                                 options += `
-                                         <option value="${r.id}" data-rent="${r.rent}">
-                                         Room ${r.number} - ${r.rent} FCFA
-                                         </option>`;
+                                                 <option value="${r.id}" data-rent="${r.rent}">
+                                                 Room ${r.number} - ${r.rent} FCFA
+                                                 </option>`;
                             });
                             $('#room_id').html(options).trigger('change');
                         });
@@ -321,52 +321,6 @@
                 // =========================
                 // PREVIEW ÉCHÉANCES 
                 // =========================
-
-                /*                 function generateSchedulePreview() {
-
-                                    let startDate = $('#start_date').val();
-                                    let endDate = $('#end_date').val();
-                                    let rent = $('#room_id option:selected').data('rent');
-                                    let billingText = $('#billing_period option:selected').text();
-
-                                    if (!startDate || !endDate || !rent || !billingText) {
-                                        $('#payment_schedule').html('');
-                                        return;
-                                    }
-
-                                    let start = new Date(startDate);
-                                    let end = new Date(endDate);
-
-                                    let interval = 1;
-
-                                    if (billingText.toLowerCase().includes('monthly')) interval = 1;
-                                    if (billingText.toLowerCase().includes('quarter')) interval = 3;
-                                    if (billingText.toLowerCase().includes('half_yearly')) interval = 6;
-                                    if (billingText.toLowerCase().includes('year')) interval = 12;
-                                    if (billingText.toLowerCase().includes('once')) interval = 1;
-
-                                    let scheduleHTML = '';
-
-                                    let current = new Date(start);
-
-                                    while (current < end) {
-
-                                        let dueDate = new Date(current);
-
-                                        let amount = rent * interval;
-
-                                        scheduleHTML += `
-                                                <li class="list-group-item d-flex justify-content-between">
-                                                    <span>${formatDate(dueDate)}</span>
-                                                    <strong>${amount} FCFA</strong>
-                                                </li>
-                                            `;
-
-                                        current.setMonth(current.getMonth() + interval);
-                                    }
-
-                                    $('#payment_schedule').html(scheduleHTML);
-                                } */
                 function generateSchedulePreview() {
 
                     let startDate = $('#start_date').val();
@@ -393,11 +347,11 @@
                         let totalAmount = rent * totalMonths;
 
                         scheduleHTML = `
-                                            <li class="list-group-item d-flex justify-content-between">
-                                                <span>${formatDate(start)}</span>
-                                                <strong>${totalAmount} FCFA</strong>
-                                            </li>
-                                        `;
+                                                    <li class="list-group-item d-flex justify-content-between">
+                                                        <span>${formatDate(start)}</span>
+                                                        <strong>${totalAmount} FCFA</strong>
+                                                    </li>
+                                                `;
 
                         $('#payment_schedule').html(scheduleHTML);
                         return;
@@ -422,11 +376,11 @@
                         let amount = rent * interval;
 
                         scheduleHTML += `
-                                            <li class="list-group-item d-flex justify-content-between">
-                                                <span>${formatDate(dueDate)}</span>
-                                                <strong>${amount} FCFA</strong>
-                                            </li>
-                                        `;
+                                                    <li class="list-group-item d-flex justify-content-between">
+                                                        <span>${formatDate(dueDate)}</span>
+                                                        <strong>${amount} FCFA</strong>
+                                                    </li>
+                                                `;
 
                         current.setMonth(current.getMonth() + interval);
                     }

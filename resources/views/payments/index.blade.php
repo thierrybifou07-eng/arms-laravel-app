@@ -1,75 +1,72 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
 
-    <h5 class="mb-0">Payments</h5>
+            <h5 class="mb-0">Payments</h5>
 
-    <form method="GET">
-        <select name="status" onchange="this.form.submit()" class="form-select">
-            <option value="">All</option>
-            <option value="overdue" {{ request('status')=='overdue'?'selected':'' }}>Overdue</option>
-            <option value="pending" {{ request('status')=='pending'?'selected':'' }}>Pending</option>
-            <option value="validated" {{ request('status')=='validated'?'selected':'' }}>Validated</option>
-        </select>
-    </form>
+            <form method="GET">
+                <select name="status" onchange="this.form.submit()" class="form-select">
+                    <option value="">All</option>
+                    <option value="overdue" {{ request('status') == 'overdue' ? 'selected' : '' }}>Overdue</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>Processing</option>
+                    <option value="validated" {{ request('status') == 'validated' ? 'selected' : '' }}>Validated</option>
+                </select>
+            </form>
 
-</div>
+        </div>
 
-    <div class="table-responsive text-nowrap">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Contract</th>
-                    <th>Student</th>
-                    <th>Due Date</th>
-                    <th>Expected</th>
-                    <th>Paid</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($payments as $payment)
-                <tr class="{{ $payment->isOverdue() ? 'table-danger' : '' }}" >
-                    <td>#{{ $payment->contract->id }}</td>
-                    <td>{{ $payment->contract->student->surname }}</td>
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Contract</th>
+                        <th>Student</th>
+                        <th>Due Date</th>
+                        <th>Expected</th>
+                        <th>Paid</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($payments as $payment)
+                        <tr class="{{ $payment->isOverdue() ? 'table-danger' : '' }}">
+                            <td>#{{ $payment->contract->id }}</td>
+                            <td>{{ $payment->contract->student->surname }}</td>
 
-                    <td>{{ $payment->due_date?->format('d/m/Y') }}</td>
+                            <td>{{ $payment->due_date?->format('d/m/Y') }}</td>
 
-                    <td>{{ number_format($payment->expected_amount, 0, ',', ' ') }} FCFA</td>
-                    <td>{{ number_format($payment->paid_amount, 0, ',', ' ') }} FCFA</td>
+                            <td>{{ number_format($payment->expected_amount, 0, ',', ' ') }} FCFA</td>
+                            <td>{{ number_format($payment->paid_amount, 0, ',', ' ') }} FCFA</td>
 
-                    <td>
-                         @php $status = $payment->status->code ?? '' @endphp
+                            <td>
+                                @php $status = $payment->status->code ?? '' @endphp
 
-          @if($payment->isOverdue())
-        <span class="badge bg-danger">Overdue</span>
-                        @elseif($status === 'pending')
-                            <span class="badge bg-label-warning">Pending</span>
-                        @elseif($status === 'processing')
-                            <span class="badge bg-label-info">Processing</span>
-                        @elseif($status === 'validated')
-                            <span class="badge bg-label-success">Validated</span>
-                        @elseif($status === 'cancelled')
-                            <span class="badge bg-label-danger">Cancelled</span>
-                        @endif
-                    </td>
+                                @if($payment->isOverdue())
+                                    <span class="badge bg-danger">Overdue</span>
+                                @elseif($status === 'pending')
+                                    <span class="badge bg-label-warning">Pending</span>
+                                @elseif($status === 'processing')
+                                    <span class="badge bg-label-info">Processing</span>
+                                @elseif($status === 'validated')
+                                    <span class="badge bg-label-success">Validated</span>
+                                @elseif($status === 'cancelled')
+                                    <span class="badge bg-label-danger">Cancelled</span>
+                                @endif
+                            </td>
 
-                    <td>
-                        <a href="{{ route('payments.show', $payment) }}" class="btn btn-sm btn-primary">
-                            View
-                        </a>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                            <td>
+                                <a href="{{ route('payments.show', $payment) }}" class="btn btn-sm btn-primary">
+                                    View
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <div class="card-footer">
-        {{ $payments->links() }}
-    </div>
-</div>
 @endsection

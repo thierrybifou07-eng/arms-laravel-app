@@ -9,7 +9,7 @@ class Kernel extends ConsoleKernel
 {
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('payments:check-overdue')->daily();
+        $schedule->command('app:check-overdue-payments')->daily();
     }
 
     protected function commands()
