@@ -2,7 +2,20 @@
 
 @section('content')
 <div class="card">
-    <h5 class="card-header">Payments</h5>
+    <div class="card-header d-flex justify-content-between align-items-center">
+
+    <h5 class="mb-0">Payments</h5>
+
+    <form method="GET">
+        <select name="status" onchange="this.form.submit()" class="form-select">
+            <option value="">All</option>
+            <option value="overdue" {{ request('status')=='overdue'?'selected':'' }}>Overdue</option>
+            <option value="pending" {{ request('status')=='pending'?'selected':'' }}>Pending</option>
+            <option value="validated" {{ request('status')=='validated'?'selected':'' }}>Validated</option>
+        </select>
+    </form>
+
+</div>
 
     <div class="table-responsive text-nowrap">
         <table class="table">
@@ -19,7 +32,7 @@
             </thead>
             <tbody>
                 @foreach($payments as $payment)
-                <tr>
+                <tr class="{{ $payment->isOverdue() ? 'table-danger' : '' }}" >
                     <td>#{{ $payment->contract->id }}</td>
                     <td>{{ $payment->contract->student->surname }}</td>
 
@@ -29,9 +42,11 @@
                     <td>{{ number_format($payment->paid_amount, 0, ',', ' ') }} FCFA</td>
 
                     <td>
-                        @php $status = $payment->status->code ?? '' @endphp
+                         @php $status = $payment->status->code ?? '' @endphp
 
-                        @if($status === 'pending')
+          @if($payment->isOverdue())
+        <span class="badge bg-danger">Overdue</span>
+                        @elseif($status === 'pending')
                             <span class="badge bg-label-warning">Pending</span>
                         @elseif($status === 'processing')
                             <span class="badge bg-label-info">Processing</span>
