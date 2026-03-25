@@ -197,6 +197,7 @@ public function getRooms($floorId)
         $interval = match ($period) {
             'monthly' => 1,
             'quarterly' => 3,
+            'half_yearly' => 6,
             'yearly' => 12,
             default => 1
         };
