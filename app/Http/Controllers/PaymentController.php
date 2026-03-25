@@ -11,9 +11,20 @@ class PaymentController extends Controller
 {
     public function index()
 {
-    $payments = Payment::with(['contract.student', 'status'])
-        ->latest()
-        ->paginate(10);
+        $payments = Payment::with(['contract.student', 'status'])->latest()->get();
+
+    // filtre
+    if (request('status') === 'overdue') {
+        $payments = $payments->filter(fn($p) => $p->isOverdue());
+    }
+
+    if (request('status') === 'pending') {
+        $payments = $payments->where('status.code', 'pending');
+    }
+
+    if (request('status') === 'validated') {
+        $payments = $payments->where('status.code', 'validated');
+    }
 
     return view('payments.index', compact('payments'));
 }
