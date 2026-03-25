@@ -37,26 +37,22 @@
                                     <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
                                         @switch($contract->status->code)
                                         @case('pending')
-                                        <span class="badge bg-label-info me-1">Pending</span>
+                                        <span class="badge bg-label-warning">{{ $contract->status->label }}</span>
                                         @break
                                         @case('active')
-                                        <span class="badge bg-label-success me-1">Active</span>
-                                        @break
-                                        @case('terminated')
-                                        <span class="badge bg-label-secondary me-1">{{ $contract->status->label ?? 'UnKnown'
-                                            }}</span>
-                                        @break
-                                        @case('cancelled')
-                                        <span class="badge bg-label-warning me-1">Cancelled</span>
+                                        <span class="badge bg-label-success">{{ $contract->status->label }}</span>
                                         @break
                                         @case('overdue')
-                                        <span class="badge bg-label-danger me-1">Overdue</span>
+                                        <span class="badge bg-label-danger">{{ $contract->status->label }}</span>
                                         @break
                                         @case('expired')
-                                        <span class="badge bg-label-secondary me-1">Expired</span>
+                                        <span class="badge bg-label-secondary">{{ $contract->status->label }}</span>
+                                        @break
+                                        @case('archived')
+                                        <span class="badge bg-label-dark">{{ $contract->status->label }}</span>
                                         @break
                                         @default
-                                        <span class="badge bg-label-dark me-1">Unknown</span>
+                                        <span class="badge bg-label-info">{{ $contract->status->label ?? 'Unknown' }}</span>
                                         @endswitch
                                     </td>
                                     <td>
@@ -87,7 +83,7 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <button class="dropdown-item text-danger" type="submit">
-                                                        <i class="icon-base bx bx-trash me-1"></i>Delete
+                                                        <i class="icon-base bx bx-trash me-1"></i>Archived
                                                     </button>
                                                 </form>
                                             </div>

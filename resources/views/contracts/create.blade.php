@@ -83,11 +83,12 @@
                                 class="select2 form-select">
                                 <option value="" disabled selected>Select Billing Period</option>
                                 @foreach($billingPeriods as $billingPeriod)
-                                    <option placeholder="Select billing period" value="{{ $billingPeriod->id }}">
+                                    <option value="{{ $billingPeriod->id }}" data-code="{{ $billingPeriod->code }}">
                                         {{ $billingPeriod->label }}
                                     </option>
                                 @endforeach
-                            </select></div>
+                            </select>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Calculated Amount</label>
@@ -109,20 +110,12 @@
         </div>
     </div>
     @push('scripts')
-        <script>
-            $(document).ready(function () {
-
-                // INIT SELECT2
+        <script>$(document).ready(function () {
                 $('#student_id, #residence, #building, #floor, #room_id, #billing_period')
                     .select2({ width: '100%', placeholder: 'Select option' });
 
-                // =========================
-                // CASCADE SELECTS
-                // =========================
-
                 $('#residence').on('change', function () {
                     let id = $(this).val();
-
                     $('#building, #floor, #room_id').empty().trigger('change');
 
                     fetch(`/buildings/${id}`)
@@ -138,7 +131,6 @@
 
                 $('#building').on('change', function () {
                     let id = $(this).val();
-
                     $('#floor, #room_id').empty().trigger('change');
 
                     fetch(`/floors/${id}`)
@@ -154,7 +146,6 @@
 
                 $('#floor').on('change', function () {
                     let id = $(this).val();
-
                     $('#room_id').empty().trigger('change');
 
                     fetch(`/rooms/${id}`)
@@ -162,18 +153,11 @@
                         .then(data => {
                             let options = '<option></option>';
                             data.forEach(r => {
-                                options += `
-                                                                                         <option value="${r.id}" data-rent="${r.rent}">
-                                                                                         Room ${r.number} - ${r.rent} FCFA
-                                                                                         </option>`;
+                                options += `<option value="${r.id}" data-rent="${r.rent}">Room ${r.number} - ${r.rent} FCFA</option>`;
                             });
                             $('#room_id').html(options).trigger('change');
                         });
                 });
-
-                // =========================
-                // TRIGGERS
-                // =========================
 
                 $('#room_id, #billing_period, #start_date, #end_date')
                     .on('change select2:select', function () {
@@ -181,112 +165,106 @@
                         generateSchedulePreview();
                     });
 
-                // =========================
-                // DEDUCE AMOUNT
-                // =========================
+                function getBillingCode() {
+                    return $('#billing_period option:selected').data('code') || '';
+                }
 
                 function calculateAmount() {
-                    let rent = $('#room_id option:selected').data('rent');
-                    let billingText = $('#billing_period option:selected').text().toLowerCase();
-                    let startDate = $('#start_date').val();
-                    let endDate = $('#end_date').val();
-                    if (!startDate || !endDate || !rent || !billingText) return;
-                    let start = new Date(startDate);
-                    let end = new Date(endDate);
-                    let months = monthDiff(start, end);
-                    let multiplier = 1;
+                    const rent = parseFloat($('#room_id option:selected').data('rent')) || 0;
+                    const code = getBillingCode();
+                    const startDate = $('#start_date').val();
+                    const endDate = $('#end_date').val();
 
-                    if (billingText.toLowerCase().includes('monthly')) multiplier = 1;
-                    if (billingText.toLowerCase().includes('quarter')) multiplier = 3;
-                    if (billingText.toLowerCase().includes('half')) multiplier = 6;
-                    if (billingText.toLowerCase().includes('year')) multiplier = 12;
-                    //CASE ONCE
-                    if (billingText.includes('once')) {
-                        $('#calculated_amount').val(rent * months)
+                    if (!rent || !code || !startDate || !endDate) {
+                        $('#calculated_amount').val('');
                         return;
                     }
-                    let amount = rent * multiplier;
+
+                    const start = new Date(startDate);
+                    const end = new Date(endDate);
+                    const months = monthDiff(start, end);
+
+                    let amount = 0;
+
+                    switch (code) {
+                        case 'once':
+                            amount = rent * months;
+                            break;
+                        case 'monthly':
+                            amount = rent;
+                            break;
+                        case 'quarterly':
+                            amount = rent * 3;
+                            break;
+                        case 'half_yearly':
+                            amount = rent * 6;
+                            break;
+                        case 'yearly':
+                            amount = rent * 12;
+                            break;
+                        default:
+                            amount = rent;
+                    }
 
                     $('#calculated_amount').val(amount);
                 }
 
-                // =========================
-                // PREVIEW SCHEDULES 
-                // =========================
                 function generateSchedulePreview() {
+                    const startDate = $('#start_date').val();
+                    const endDate = $('#end_date').val();
+                    const rent = parseFloat($('#room_id option:selected').data('rent')) || 0;
+                    const code = getBillingCode();
 
-                    let startDate = $('#start_date').val();
-                    let endDate = $('#end_date').val();
-                    let rent = $('#room_id option:selected').data('rent');
-                    let billingText = $('#billing_period option:selected').text().toLowerCase();
-
-                    if (!startDate || !endDate || !rent || !billingText) {
+                    if (!startDate || !endDate || !rent || !code) {
                         $('#payment_schedule').html('');
                         return;
                     }
 
-                    let start = new Date(startDate);
-                    let end = new Date(endDate);
+                    const start = new Date(startDate);
+                    const end = new Date(endDate);
+                    const totalMonths = monthDiff(start, end);
 
                     let html = '';
-                    let totalMonths = monthDiff(start, end);
 
-                    // =========================
-                    //  CASE ONCE
-                    // =========================
-                    if (billingText.includes('once')) {
-
-                        let totalAmount = rent * totalMonths;
+                    if (code === 'once') {
+                        const totalAmount = rent * totalMonths;
 
                         html = `
-                                                                                            <li class="list-group-item d-flex justify-content-between">
-                                                                                                <span>${formatDate(start)}</span>
-                                                                                                <strong>${totalAmount} FCFA</strong>
-                                                                                            </li>
-                                                                                        `;
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>${formatDate(start)}</span>
+                            <strong>${totalAmount} FCFA</strong>
+                        </li>
+                    `;
 
                         $('#payment_schedule').html(html);
                         return;
                     }
 
-                    // =========================
-                    //  NORMAL CASE
-                    // =========================
-
                     let interval = 1;
-
-                    if (billingText.includes('monthly')) interval = 1;
-                    if (billingText.includes('quarter')) interval = 3;
-                    if (billingText.includes('half')) interval = 6;
-                    if (billingText.includes('year')) interval = 12;
+                    if (code === 'monthly') interval = 1;
+                    if (code === 'quarterly') interval = 3;
+                    if (code === 'half_yearly') interval = 6;
+                    if (code === 'yearly') interval = 12;
 
                     let current = new Date(start);
 
                     while (current < end) {
-
-                        let dueDate = new Date(current);
-                        let amount = rent * interval;
-
                         html += `
-                                                                                            <li class="list-group-item d-flex justify-content-between">
-                                                                                                <span>${formatDate(dueDate)}</span>
-                                                                                                <strong>${amount} FCFA</strong>
-                                                                                            </li>
-                                                                                        `;
-
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>${formatDate(current)}</span>
+                            <strong>${rent * interval} FCFA</strong>
+                        </li>
+                    `;
                         current.setMonth(current.getMonth() + interval);
                     }
 
                     $('#payment_schedule').html(html);
                 }
-                // =========================
-                // FORMAT DATE
-                // =========================
 
                 function formatDate(date) {
                     return date.toISOString().split('T')[0];
                 }
-                //UTILITY FUNCTION
+
                 function monthDiff(start, end) {
                     let months =
                         (end.getFullYear() - start.getFullYear()) * 12 +
@@ -295,6 +273,7 @@
                     return months <= 0 ? 1 : months;
                 }
             });
+
         </script>
     @endpush
 @endsection

@@ -14,7 +14,7 @@ class ContractStatus extends Model
 
     public const OVERDUE = 'overdue';
 
-    public const TERMINATED = 'Terminated';
+    public const ARCHIVED = 'archived';
 
     public const EXPIRED = 'Expired';
 

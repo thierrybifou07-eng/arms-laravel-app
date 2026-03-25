@@ -12,6 +12,7 @@ class Payment extends Model
         'payment_status_id',
         'expected_amount',
         'paid_amount',
+        'tip_amount',
         'payment_date',
         'due_date',
     ];

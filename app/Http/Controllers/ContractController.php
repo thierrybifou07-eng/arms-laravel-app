@@ -25,7 +25,14 @@ class ContractController extends Controller
      */
     public function index()
     {
-        $contracts = Contract::with(['student', 'room', 'status'])->latest()->paginate(10);
+        $query = Contract::with(['student', 'room.floor.building', 'status', 'billingPeriod'])->latest();
+
+        if (! auth()->user()->hasRole('super_admin')) {
+            $archivedId = ContractStatus::getIdByCodeOrFail('archived');
+            $query->where('contract_status_id', '!=', $archivedId);
+        }
+
+        $contracts = $query->paginate(10);
 
         return view('contracts.index', compact('contracts'));
     }
@@ -153,9 +160,17 @@ class ContractController extends Controller
      */
     public function destroy(Contract $contract)
     {
-        $contract->delete();
+        if ($contract->status->code === 'active') {
+            return back()->withErrors(['contract' => 'Active contracts cannot be archived directly. Cncelled or expire it first.']);
+        }
 
-        return redirect()->route('contracts.index')->with('success', 'Contract deleted successfully');
+        $archivedId = ContractStatus::getIdByCodeOrFail('archived');
+
+        $contract->update([
+            'contract_status_id' => $archivedId,
+        ]);
+
+        return redirect()->route('contracts.index')->with('success', 'Contract archived successfully.');
     }
 
     /*
@@ -181,7 +196,7 @@ class ContractController extends Controller
         //  CASE 1 : unique payment
         if ($period === 'once') {
 
-            $months = $start->diffInMonths($end)+1;
+            $months = $start->diffInMonths($end) + 1;
             $total = $months * $contract->rent_amount;
 
             Payment::create([
@@ -193,6 +208,7 @@ class ContractController extends Controller
                 'paid_amount' => 0,
                 'due_date' => $start,
             ]);
+
             return;
         }
 

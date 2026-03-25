@@ -48,20 +48,21 @@ class PaymentController extends Controller
 
     public function pay(Request $request, Payment $payment)
     {
-        //  stop double payment
-        if ($payment->paid_amount >= $payment->expected_amount) {
-            return back()->withErrors(['payment' => 'Already fully paid.']);
-        }
-
+        //
         $validated = $request->validate([
             'paid_amount' => 'nullable|numeric|min:0',
             'payment_method_id' => 'required|exists:payment_methods,id',
         ]);
+        // add tip system
+        $paidAmount = (float) $validated['paid_amount'];
+        $expected = (float) $payment->expected_amount;
+        $tip = max(0, $paidAmount - $expected);
 
         $processingStatus = PaymentStatus::getIdByCodeOrFail('processing');
 
         $payment->update([
-            'paid_amount' => $validated['paid_amount'],
+            'paid_amount' => $paidAmount,
+            'tip_amount' => $tip,
             'payment_method_id' => $validated['payment_method_id'],
             'payment_status_id' => $processingStatus,
             'payment_date' => now(),
