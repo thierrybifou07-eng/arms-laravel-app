@@ -10,11 +10,22 @@ use Illuminate\Http\Request;
 class PaymentController extends Controller
 {
     public function index()
-    {
-        $payments = Payment::with(['contract', 'status'])->latest()->paginate(10);
+{
+    $payments = Payment::with(['contract.student', 'status'])
+        ->latest()
+        ->paginate(10);
 
-        return view('payments.index', compact('payments'));
-    }
+    return view('payments.index', compact('payments'));
+}
+
+public function show(Payment $payment)
+{
+    $payment->load(['contract.student', 'status']);
+
+    $paymentMethods = \App\Models\PaymentMethod::all();
+
+    return view('payments.show', compact('payment', 'paymentMethods'));
+}
 //send payment with their methods
     public function show(Payment $payment)
     {
