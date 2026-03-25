@@ -28,25 +28,38 @@
                             @foreach ($contracts as $contract)
                                 <tr>
                                     <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
-                                        <span>{{ $contract->student_id }}</span>
+                                        <span>{{ $contract->student->surname }} {{ $contract->student->given_name }}</span>
                                     </td>
                                     <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
-                                        <span>B({{ $contract->room->floor->building->name }}), F N.{{ $contract->room->floor->number }}, R N.{{ $contract->room->number }}</span>
+                                        <span>({{ $contract->room->floor->building->name }})/Floor
+                                            {{ $contract->room->floor->number }}/Room {{ $contract->room->number }}</span>
                                     </td>
                                     <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
-                                        @if ($contract->status->code==='pending')
-                                            <span class="badge bg-label-success me-1">{{ $contract->status->label ?? 'UnKnown' }}</span>
-                                        @endif
-                                        @if ($contract->status->code==='active')
-                                            <span class="badge bg-label-primary me-1">{{ $contract->status->label ?? 'UnKnown' }}</span>
-                                        @endif
-                                        @if ($contract->status->code==='terminated')
-                                            <span class="badge bg-label-secondary me-1">{{ $contract->status->label ?? 'UnKnown' }}</span>
-                                        @endif
-                                        @if ($contract->status->code==='cancelled')
-                                            <span class="badge bg-label-danger me-1">{{ $contract->status->label ?? 'UnKnown' }}</span>
-                                        @endif                                    </td>
-                                    <td> 
+                                        @switch($contract->status->code)
+                                        @case('pending')
+                                        <span class="badge bg-label-info me-1">Pending</span>
+                                        @break
+                                        @case('active')
+                                        <span class="badge bg-label-success me-1">Active</span>
+                                        @break
+                                        @case('terminated')
+                                        <span class="badge bg-label-secondary me-1">{{ $contract->status->label ?? 'UnKnown'
+                                            }}</span>
+                                        @break
+                                        @case('cancelled')
+                                        <span class="badge bg-label-warning me-1">Cancelled</span>
+                                        @break
+                                        @case('overdue')
+                                        <span class="badge bg-label-danger me-1">Overdue</span>
+                                        @break
+                                        @case('expired')
+                                        <span class="badge bg-label-secondary me-1">Expired</span>
+                                        @break
+                                        @default
+                                        <span class="badge bg-label-dark me-1">Unknown</span>
+                                        @endswitch
+                                    </td>
+                                    <td>
                                         {{ $contract->billingPeriod->label }}
                                     </td>
                                     <td>
@@ -58,10 +71,6 @@
                                     <td>
                                         {{ $contract->end_date }}
                                     </td>
-{{--                                     <td>
-                                        <span class="badge bg-label-primary me-1">{{ $contract->status->label }}</span>
-
-                                    </td> --}}
                                     <td>
                                         <div class="dropdown">
                                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
@@ -69,15 +78,12 @@
                                                 <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item"
-                                                    href="{{ route('contracts.index', $contract) }}">
+                                                <a class="dropdown-item" href="{{ route('contracts.show', $contract) }}">
                                                     <i class="icon-base bx bx-show-alt me-1"></i>view</a>
-                                                <a class="dropdown-item"
-                                                    href="{{ route('contracts.edit', $contract) }}"><i
+                                                <a class="dropdown-item" href="{{ route('contracts.edit', $contract) }}"><i
                                                         class="icon-base bx bx-edit me-1"></i> Edit</a>
                                                 <hr class="dropdown-divider">
-                                                <form method="POST"
-                                                    action="{{ route('contracts.destroy', $contract) }}">
+                                                <form method="POST" action="{{ route('contracts.destroy', $contract) }}">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button class="dropdown-item text-danger" type="submit">

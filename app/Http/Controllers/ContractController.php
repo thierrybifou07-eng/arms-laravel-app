@@ -38,7 +38,7 @@ class ContractController extends Controller
     public function getRooms($floorId)
     {
         return \App\Models\Room::where('floor_id', $floorId)
-            ->whereHas('status', fn ($q) => $q->where('code', 'avalaible')) // ⚠ typo dans ta DB
+            ->whereHas('status', fn ($q) => $q->where('code', 'available')) //  typo into the DB
             ->get();
     }
 
@@ -175,29 +175,13 @@ class ContractController extends Controller
         $end = Carbon::parse($contract->end_date);
         $period = $contract->billingPeriod->code;
 
-        //  deduce delay in months (stong)
+        //  deduce delay in months (strong)
         $totalMonths = $start->diffInMonths($end) + 1;
 
         //  CASE 1 : unique payment
-        /*         if ($period === 'once') {
-
-                    $totalAmount = $contract->rent_amount * $totalMonths;
-
-                    Payment::create([
-                        'contract_id' => $contract->id,
-                        'payment_status_id' => $pendingStatus,
-                        'expected_amount' => $totalAmount,
-                        'payment_method_id' => null,
-                        'payment_date' => null,
-                        'paid_amount' => 0,
-                        'due_date' => $start,
-                    ]);
-
-                    return;
-                } */
         if ($period === 'once') {
 
-            $months = $start->diffInMonths($end);
+            $months = $start->diffInMonths($end)+1;
             $total = $months * $contract->rent_amount;
 
             Payment::create([
