@@ -12,8 +12,8 @@
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
-            </div>
-        @endif
+            @endif
+        </div>
 
         <form method="POST" action="{{ route('contracts.update', $contracts->id) }}">
             @method('PUT')
