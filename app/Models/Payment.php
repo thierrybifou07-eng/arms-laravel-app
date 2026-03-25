@@ -28,4 +28,12 @@ class Payment extends Model
     public function method(){
         return $this->belongsTo(PaymentMethod::class,'payment_method_id');
     }
+    public function isOverdue(): bool {
+
+    return $this->due_date
+        && $this->paid_amount < $this->expected_amount
+        && now()->gt($this->due_date)
+        && $this->status?->code !== 'validated'
+        && $this->status?->code !== 'cancelled';
+    } 
 }
