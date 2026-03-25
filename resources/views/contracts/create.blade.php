@@ -1,7 +1,3 @@
-Nous avons quelque soucis...deja quand je creer le contrat le montant n,est pas affiche comme on le voulais...aussi bien
-que jai choisie une chambre, le message d'erreur precise que le champ room est required donc la requete n;est pas
-effectuer...tiens les images et le code de la vue contracts.crerate
-
 @extends('layouts.app')
 @section('content')
     <div class="card mb-6">
@@ -213,9 +209,9 @@ effectuer...tiens les images et le code de la vue contracts.crerate
 
                 let roomOption = $('#room_id option:selected').text();
 
-                                        // extrait le rent depuis le label (ex: "Room 101 - 50000 FCFA")
-                                        /* let rentMatch = roomOption.match(/(\d+)\s*FCFA/);
-                                         */             let rentMatch = roomOption.match(/([\d.]+)\s*FCFA/);
+                                                                        // extrait le rent depuis le label (ex: "Room 101 - 50000 FCFA")
+                                                                        /* let rentMatch = roomOption.match(/(\d+)\s*FCFA/);
+                                                                         */             let rentMatch = roomOption.match(/([\d.]+)\s*FCFA/);
                 if (!rentMatch) return;
                 let rent = parseFloat(rentMatch[1]);
 
@@ -283,9 +279,9 @@ effectuer...tiens les images et le code de la vue contracts.crerate
                             let options = '<option></option>';
                             data.forEach(r => {
                                 options += `
-                                        <option value="${r.id}" data-rent="${r.rent}">
-                                            Room ${r.number} - ${r.rent} FCFA
-                                        </option>`;
+                                         <option value="${r.id}" data-rent="${r.rent}">
+                                         Room ${r.number} - ${r.rent} FCFA
+                                         </option>`;
                             });
                             $('#room_id').html(options).trigger('change');
                         });
@@ -317,8 +313,6 @@ effectuer...tiens les images et le code de la vue contracts.crerate
                     if (billingText.toLowerCase().includes('quarter')) multiplier = 3;
                     if (billingText.toLowerCase().includes('half_yearly')) multiplier = 6;
                     if (billingText.toLowerCase().includes('year')) multiplier = 12;
-                    if (billingText.toLowerCase().includes('once')) multiplier = 12;
-
                     let amount = rent * multiplier;
 
                     $('#calculated_amount').val(amount);
@@ -328,12 +322,57 @@ effectuer...tiens les images et le code de la vue contracts.crerate
                 // PREVIEW ÉCHÉANCES 
                 // =========================
 
+                /*                 function generateSchedulePreview() {
+
+                                    let startDate = $('#start_date').val();
+                                    let endDate = $('#end_date').val();
+                                    let rent = $('#room_id option:selected').data('rent');
+                                    let billingText = $('#billing_period option:selected').text();
+
+                                    if (!startDate || !endDate || !rent || !billingText) {
+                                        $('#payment_schedule').html('');
+                                        return;
+                                    }
+
+                                    let start = new Date(startDate);
+                                    let end = new Date(endDate);
+
+                                    let interval = 1;
+
+                                    if (billingText.toLowerCase().includes('monthly')) interval = 1;
+                                    if (billingText.toLowerCase().includes('quarter')) interval = 3;
+                                    if (billingText.toLowerCase().includes('half_yearly')) interval = 6;
+                                    if (billingText.toLowerCase().includes('year')) interval = 12;
+                                    if (billingText.toLowerCase().includes('once')) interval = 1;
+
+                                    let scheduleHTML = '';
+
+                                    let current = new Date(start);
+
+                                    while (current < end) {
+
+                                        let dueDate = new Date(current);
+
+                                        let amount = rent * interval;
+
+                                        scheduleHTML += `
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    <span>${formatDate(dueDate)}</span>
+                                                    <strong>${amount} FCFA</strong>
+                                                </li>
+                                            `;
+
+                                        current.setMonth(current.getMonth() + interval);
+                                    }
+
+                                    $('#payment_schedule').html(scheduleHTML);
+                                } */
                 function generateSchedulePreview() {
 
                     let startDate = $('#start_date').val();
                     let endDate = $('#end_date').val();
                     let rent = $('#room_id option:selected').data('rent');
-                    let billingText = $('#billing_period option:selected').text();
+                    let billingText = $('#billing_period option:selected').text().toLowerCase();
 
                     if (!startDate || !endDate || !rent || !billingText) {
                         $('#payment_schedule').html('');
@@ -343,43 +382,71 @@ effectuer...tiens les images et le code de la vue contracts.crerate
                     let start = new Date(startDate);
                     let end = new Date(endDate);
 
+                    let scheduleHTML = '';
+
+                    // =========================
+                    // CASE 1 : ONCE
+                    // =========================
+                    if (billingText.includes('once')) {
+
+                        let totalMonths = monthDiff(start, end);
+                        let totalAmount = rent * totalMonths;
+
+                        scheduleHTML = `
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>${formatDate(start)}</span>
+                                                <strong>${totalAmount} FCFA</strong>
+                                            </li>
+                                        `;
+
+                        $('#payment_schedule').html(scheduleHTML);
+                        return;
+                    }
+
+                    // =========================
+                    //  NORMAL CASE
+                    // =========================
+
                     let interval = 1;
 
-                    if (billingText.toLowerCase().includes('monthly')) interval = 1;
-                    if (billingText.toLowerCase().includes('quarter')) interval = 3;
-                    if (billingText.toLowerCase().includes('half_yearly')) interval = 6;
-                    if (billingText.toLowerCase().includes('year')) interval = 12;
-                    if (billingText.toLowerCase().includes('once')) interval = 1;
-
-                    let scheduleHTML = '';
+                    if (billingText.includes('monthly')) interval = 1;
+                    if (billingText.includes('quarter')) interval = 3;
+                    if (billingText.includes('half_yearly')) interval = 6;
+                    if (billingText.includes('year')) interval = 12;
 
                     let current = new Date(start);
 
                     while (current < end) {
 
                         let dueDate = new Date(current);
-
                         let amount = rent * interval;
 
                         scheduleHTML += `
-                                <li class="list-group-item d-flex justify-content-between">
-                                    <span>${formatDate(dueDate)}</span>
-                                    <strong>${amount} FCFA</strong>
-                                </li>
-                            `;
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>${formatDate(dueDate)}</span>
+                                                <strong>${amount} FCFA</strong>
+                                            </li>
+                                        `;
 
                         current.setMonth(current.getMonth() + interval);
                     }
 
                     $('#payment_schedule').html(scheduleHTML);
                 }
-
                 // =========================
                 // FORMAT DATE
                 // =========================
 
                 function formatDate(date) {
                     return date.toISOString().split('T')[0];
+                }
+                //UTILITY FUNCTION
+                function monthDiff(start, end) {
+                    let months =
+                        (end.getFullYear() - start.getFullYear()) * 12 +
+                        (end.getMonth() - start.getMonth());
+
+                    return months <= 0 ? 1 : months;
                 }
             });
         </script>

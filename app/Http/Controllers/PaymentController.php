@@ -15,10 +15,13 @@ class PaymentController extends Controller
 
         return view('payments.index', compact('payments'));
     }
-
+//send payment with their methods
     public function show(Payment $payment)
     {
-        return view('payments.show', compact('payment'));
+        $payment->load(['contract', 'status']);
+        $paymentMethods = \App\Models\PaymentMethod::all();
+
+        return view('payments.show', compact('payment', 'paymentMethods'));
     }
     /*
     |--------------------------------------------------------------------------

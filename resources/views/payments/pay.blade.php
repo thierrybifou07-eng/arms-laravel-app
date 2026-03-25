@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<p class="class">j'espere que tu te rapelle qu'apres tout cela on devrat bloquer certaines actions en fonction des roles que le super admin aura assigne a chaque user...deja le role de base est celui de student...mais on a pas encore implementer l'interface permettant au super admin d'attribuer des roles au users...j'espere que ca ne pose pas de probleme si on ait qu'un seul interface et qu'on configure le comportement de ce meme interface pour qu'il s'adapte en fonction des roles de l'user, si ce fait posera probleme ensuite on devrat donc creer des vues en fonction de chaque role, et les middleware et controller s'occuperons de diriger chaque user vers differentes vues ou interface en fonction de leur roles...donc ce que je pensais c'est que la table student pourrait perdre son importance...bref c'est un peu embrouiler dans ma tete...fais moi tes retours...et si on peu ce permettre de continuer ainsi, on s'ocuppe des vues de paiement(sache que la seul vue configure de ce cote est la vue pay.blade.php et meme elle n'est pas encore operationnel...le code est plus bas). Deja tiens un apercu de la structure de mes vues actuellement</p>
     <div class="card mb-6">
         @if ($errors->any())
             <div>
