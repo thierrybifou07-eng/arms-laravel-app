@@ -34,12 +34,30 @@
                             </select>
                         </div>
                     </div>
+/*Select residence*/
+<div class="col-md-6">
+    <label class="form-label">Residence</label>
+    <select id="residence" class="select2 form-select">
+        <option value="">Select residence</option>
+        @foreach(\App\Models\Residence::all() as $residence)
+            <option value="{{ $residence->id }}">{{ $residence->name }}</option>
+        @endforeach
+    </select>
+</div>
+
+<div class="col-md-6">
+    <label class="form-label">Building</label>
+    <select id="building" class="select2 form-select"></select>
+</div>
+
+<div class="col-md-6">
+    <label class="form-label">Floor</label>
+    <select id="floor" class="select2 form-select"></select>
+</div>
+/*Select residence*/
                     <div class="col-md-6">
                         <label class="form-label" for="room">Room</label>
                         <div class="position-relative"><select name="room_id" id="room" class="select2 form-select">
-                                @foreach($rooms as $room)
-                                    <option value="{{ $room->id }}">Room {{ $room->number }} ({{ $room->rent }} FCFA)</option>
-                                @endforeach
                             </select></div>
                     </div>
                     {{-- Billing Period --}}
@@ -63,6 +81,7 @@
                                 class="form-control" placeholder="50000">
                         </div>
                     </div>
+/*Auto calcul total rent_amount*/
                     <div class="col-md-6">
                         <label class="form-label" for="start_date">Start date</label>
                         <div class="position-relative">
@@ -110,50 +129,100 @@
                                 }); */
             });
 
-document.getElementById('residence').addEventListener('change', function () {
-    fetch(`/buildings/${this.value}`)
-        .then(res => res.json())
-        .then(data => {
-            let buildingSelect = document.getElementById('building');
-            buildingSelect.innerHTML = '<option>Select building</option>';
+$(document).ready(function () {
 
-            data.forEach(b => {
-                buildingSelect.innerHTML += `<option value="${b.id}">${b.name}</option>`;
+    $('#resident, #residence, #building, #floor, #room_id').select2({
+        width: '100%',
+        placeholder: 'Select option'
+    });
+
+    // Residence → Buildings
+    $('#residence').on('change', function () {
+        let id = $(this).val();
+
+        $('#building').empty();
+        $('#floor').empty();
+        $('#room_id').empty();
+
+        fetch(`/buildings/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                $('#building').append('<option></option>');
+                data.forEach(b => {
+                    $('#building').append(`<option value="${b.id}">${b.name}</option>`);
+                });
             });
-        });
-}); 
+    });
 
+    // Building → Floors
+    $('#building').on('change', function () {
+        let id = $(this).val();
 
+        $('#floor').empty();
+        $('#room_id').empty();
 
-document.getElementById('building').addEventListener('change', function () {
-    fetch(`/floors/${this.value}`)
-        .then(res => res.json())
-        .then(data => {
-            let floorSelect = document.getElementById('floor');
-            floorSelect.innerHTML = '<option>Select floor</option>';
-
-            data.forEach(f => {
-                floorSelect.innerHTML += `<option value="${f.id}">Floor ${f.number}</option>`;
+        fetch(`/floors/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                $('#floor').append('<option></option>');
+                data.forEach(f => {
+                    $('#floor').append(`<option value="${f.id}">Floor ${f.number}</option>`);
+                });
             });
-        });
+    });
+
+    // Floor → Rooms
+    $('#floor').on('change', function () {
+        let id = $(this).val();
+
+        $('#room_id').empty();
+
+        fetch(`/rooms/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                $('#room_id').append('<option></option>');
+                data.forEach(r => {
+                    $('#room_id').append(
+                        `<option value="${r.id}">Room ${r.number} - ${r.rent} FCFA</option>`
+                    );
+                });
+            });
+    });
+
 });
 
+//Auto calcul
 
 
-document.getElementById('floor').addEventListener('change', function () {
-    fetch(`/rooms/${this.value}`)
-        .then(res => res.json())
-        .then(data => {
-            let roomSelect = document.getElementById('room_id');
-            roomSelect.innerHTML = '<option>Select room</option>';
+function calculateAmount() {
 
-            data.forEach(r => {
-                roomSelect.innerHTML += `<option value="${r.id}">${r.number}</option>`;
-            });
-        });
-});
+    let roomId = $('#room_id').val();
+    let billingText = $('#billing_period option:selected').text();
+
+    if (!roomId || !billingText) return;
+
+    let roomOption = $('#room_id option:selected').text();
+
+    // extrait le rent depuis le label (ex: "Room 101 - 50000 FCFA")
+    let rentMatch = roomOption.match(/(\d+)\s*FCFA/);
+
+    if (!rentMatch) return;
+
+    let rent = parseInt(rentMatch[1]);
+
+    let multiplier = 1;
+
+    if (billingText.toLowerCase().includes('quarter')) multiplier = 3;
+    if (billingText.toLowerCase().includes('year')) multiplier = 12;
+
+    let amount = rent * multiplier;
+
+    $('#calculated_amount').val(amount);
 
 
+//triggers
+$('#room_id, #billing_period').on('change', calculateAmount); 
+} 
         </script>
     @endpush
 @endsection
