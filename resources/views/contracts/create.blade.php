@@ -109,122 +109,6 @@
         </div>
     </div>
     @push('scripts')
-        {{--
-        <script>
-            console.log($.fn.select2);
-            console.log("Select2 init");
-            $(document).ready(function () {
-
-                $('#resident').select2({
-                    placeholder: "Select resident",
-                    allowClear: true,
-                    width: '100%'
-                });
-
-                $('#room').select2({
-                    placeholder: "Select room",
-                    allowClear: true,
-                    width: '100%'
-                });
-
-                /*                  $('#billing_period').select2({
-                                    placeholder: "Select billing period",
-                                    allowClear: true,
-                                    width: '100%'
-                                }); */
-            });
-
-            $(document).ready(function () {
-
-                $('#resident, #residence, #building, #floor, #room_id').select2({
-                    width: '100%',
-                    placeholder: 'Select option'
-                });
-                //triggers
-                $('#room_id, #billing_period').on('change', calculateAmount);
-                // Residence → Buildings
-                $('#residence').on('change', function () {
-                    let id = $(this).val();
-
-                    $('#building').empty();
-                    $('#floor').empty();
-                    $('#room_id').empty();
-
-                    fetch(`/buildings/${id}`)
-                        .then(res => res.json())
-                        .then(data => {
-                            $('#building').append('<option></option>');
-                            data.forEach(b => {
-                                $('#building').append(`<option value="${b.id}">${b.name}</option>`);
-                            });
-                        });
-                });
-
-                // Building → Floors
-                $('#building').on('change', function () {
-                    let id = $(this).val();
-
-                    $('#floor').empty();
-                    $('#room_id').empty();
-
-                    fetch(`/floors/${id}`)
-                        .then(res => res.json())
-                        .then(data => {
-                            $('#floor').append('<option></option>');
-                            data.forEach(f => {
-                                $('#floor').append(`<option value="${f.id}">Floor ${f.number}</option>`);
-                            });
-                        });
-                });
-
-                // Floor → Rooms
-                $('#floor').on('change', function () {
-                    let id = $(this).val();
-
-                    $('#room_id').empty();
-
-                    fetch(`/rooms/${id}`)
-                        .then(res => res.json())
-                        .then(data => {
-                            $('#room_id').append('<option></option>');
-                            data.forEach(r => {
-                                $('#room_id').append(
-                                    `<option value="${r.id}">Room ${r.number} - ${r.rent} FCFA</option>`
-                                );
-                            });
-                        });
-                });
-
-            });
-
-            //Auto calcul
-
-
-            function calculateAmount() {
-
-                let roomId = $('#room_id').val();
-                let billingText = $('#billing_period option:selected').text();
-
-                if (!roomId || !billingText) return;
-
-                let roomOption = $('#room_id option:selected').text();
-
-                                                                                                                // extrait le rent depuis le label (ex: "Room 101 - 50000 FCFA")
-                                                                                                                /* let rentMatch = roomOption.match(/(\d+)\s*FCFA/);
-                                                                                                                 */             let rentMatch = roomOption.match(/([\d.]+)\s*FCFA/);
-                if (!rentMatch) return;
-                let rent = parseFloat(rentMatch[1]);
-
-                let multiplier = 1;
-
-                if (billingText.toLowerCase().includes('quarter')) multiplier = 3;
-                if (billingText.toLowerCase().includes('year')) multiplier = 12;
-
-                let amount = rent * multiplier;
-
-                $('#calculated_amount').val(amount);
-            } 
-        </script> --}}
         <script>
             $(document).ready(function () {
 
@@ -279,9 +163,9 @@
                             let options = '<option></option>';
                             data.forEach(r => {
                                 options += `
-                                                                                 <option value="${r.id}" data-rent="${r.rent}">
-                                                                                 Room ${r.number} - ${r.rent} FCFA
-                                                                                 </option>`;
+                                                                                         <option value="${r.id}" data-rent="${r.rent}">
+                                                                                         Room ${r.number} - ${r.rent} FCFA
+                                                                                         </option>`;
                             });
                             $('#room_id').html(options).trigger('change');
                         });
@@ -321,8 +205,8 @@
                         $('#calculated_amount').val(rent * months)
                         return;
                     }
-                    /*                     let amount = rent * multiplier;
-                     */
+                    let amount = rent * multiplier;
+
                     $('#calculated_amount').val(amount);
                 }
 
@@ -355,11 +239,11 @@
                         let totalAmount = rent * totalMonths;
 
                         html = `
-                                                                                    <li class="list-group-item d-flex justify-content-between">
-                                                                                        <span>${formatDate(start)}</span>
-                                                                                        <strong>${totalAmount} FCFA</strong>
-                                                                                    </li>
-                                                                                `;
+                                                                                            <li class="list-group-item d-flex justify-content-between">
+                                                                                                <span>${formatDate(start)}</span>
+                                                                                                <strong>${totalAmount} FCFA</strong>
+                                                                                            </li>
+                                                                                        `;
 
                         $('#payment_schedule').html(html);
                         return;
@@ -384,11 +268,11 @@
                         let amount = rent * interval;
 
                         html += `
-                                                                                    <li class="list-group-item d-flex justify-content-between">
-                                                                                        <span>${formatDate(dueDate)}</span>
-                                                                                        <strong>${amount} FCFA</strong>
-                                                                                    </li>
-                                                                                `;
+                                                                                            <li class="list-group-item d-flex justify-content-between">
+                                                                                                <span>${formatDate(dueDate)}</span>
+                                                                                                <strong>${amount} FCFA</strong>
+                                                                                            </li>
+                                                                                        `;
 
                         current.setMonth(current.getMonth() + interval);
                     }
