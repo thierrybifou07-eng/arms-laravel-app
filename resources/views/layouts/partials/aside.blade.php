@@ -172,7 +172,7 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="{{-- {{ route('payments.pay', $payment) }} --}}" class="menu-link">
+                    <a href="{{ route('payments.index') }}" class="menu-link">
                         <div data-i18n="Edit">Payments</div>
                     </a>
                 </li>

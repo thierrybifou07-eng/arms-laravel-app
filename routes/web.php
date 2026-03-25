@@ -46,7 +46,7 @@ Route::middleware(['auth', 'role:super_admin'])->resource('users', UserControlle
 Route::middleware(['auth', 'role:super_admin'])->resource('roles', RoleController::class)->scoped();
 Route::middleware(['auth', 'role:super_admin'])->resource('permissions', PermissionController::class)->scoped();
 Route::middleware('auth')->group(function () {
-    Route::resource('payments', PaymentController::class)->only(['index','show']);
+Route::resource('payments', PaymentController::class)->only(['index','show']);
 
 Route::post('/payments/{payment}/pay', [PaymentController::class, 'pay'])->name('payments.pay');
 Route::post('/payments/{payment}/validate', [PaymentController::class, 'validatePayment'])->name('payments.validate');
