@@ -42,6 +42,130 @@
                             </select>
                         </div>
                     </div>
+                    <div class="card accordion-item active">
+                        <h2 class="accordion-header" id="headingPaymentMethod">
+                            <button type="button" class="accordion-button" data-bs-toggle="collapse"
+                                data-bs-target="#collapsePaymentMethod" aria-expanded="true"
+                                aria-controls="collapsePaymentMethod">
+                                <font dir="auto" style="vertical-align: inherit;">
+                                    <font dir="auto" style="vertical-align: inherit;">Mode de paiement</font>
+                                </font>
+                            </button>
+                        </h2>
+                        <div id="collapsePaymentMethod" class="accordion-collapse collapse show"
+                            aria-labelledby="headingPaymentMethod" data-bs-parent="#collapsibleSection" style="">
+                            <form>
+                                <div class="accordion-body">
+                                    <div class="mb-6">
+                                        <div class="form-check form-check-inline">
+                                            <input name="collapsible-payment"
+                                                class="form-check-input form-check-input-payment" type="radio"
+                                                value="credit-card" id="collapsible-payment-cc" checked="">
+                                            <label class="form-check-label" for="collapsible-payment-cc">
+                                                <font dir="auto" style="vertical-align: inherit;">
+                                                    <font dir="auto" style="vertical-align: inherit;">Carte de
+                                                        crédit/débit/GAB</font>
+                                                </font><i class="icon-base bx bx-credit-card-alt"></i>
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input name="collapsible-payment"
+                                                class="form-check-input form-check-input-payment" type="radio" value="cash"
+                                                id="collapsible-payment-cash">
+                                            <label class="form-check-label" for="collapsible-payment-cash">
+                                                <font dir="auto" style="vertical-align: inherit;">
+                                                    <font dir="auto" style="vertical-align: inherit;">
+                                                        Paiement à la livraison
+                                                    </font>
+                                                </font><i class="icon-base bx bx-help-circle" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top"
+                                                    aria-label="Vous pouvez payer une fois le produit reçu."
+                                                    data-bs-original-title="You can pay once you receive the product."></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div id="form-credit-card" class="row">
+                                        <div class="col-12 col-md-8 col-xl-6">
+                                            <div class="mb-6">
+                                                <label class="form-label w-100" for="creditCardMask">
+                                                    <font dir="auto" style="vertical-align: inherit;">
+                                                        <font dir="auto" style="vertical-align: inherit;">Numéro de carte
+                                                        </font>
+                                                    </font>
+                                                </label>
+                                                <div class="input-group input-group-merge">
+                                                    <input type="text" id="creditCardMask" name="creditCardMask"
+                                                        class="form-control credit-card-mask"
+                                                        placeholder="1356 3215 6548 7898"
+                                                        aria-describedby="creditCardMask2">
+                                                    <span class="input-group-text cursor-pointer" id="creditCardMask2"><span
+                                                            class="card-type"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 col-md-6">
+                                                    <div class="mb-6">
+                                                        <label class="form-label" for="collapsible-payment-name">
+                                                            <font dir="auto" style="vertical-align: inherit;">
+                                                                <font dir="auto" style="vertical-align: inherit;">Nom</font>
+                                                            </font>
+                                                        </label>
+                                                        <input type="text" id="collapsible-payment-name"
+                                                            class="form-control" placeholder="John Doe">
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <div class="mb-6">
+                                                        <label class="form-label" for="collapsible-payment-expiry-date">
+                                                            <font dir="auto" style="vertical-align: inherit;">
+                                                                <font dir="auto" style="vertical-align: inherit;">Date
+                                                                    d'expiration</font>
+                                                            </font>
+                                                        </label>
+                                                        <input type="text" id="collapsible-payment-expiry-date"
+                                                            class="form-control expiry-date-mask" placeholder="MM/AA">
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <div class="mb-6">
+                                                        <label class="form-label" for="collapsible-payment-cvv">
+                                                            <font dir="auto" style="vertical-align: inherit;">
+                                                                <font dir="auto" style="vertical-align: inherit;">Code CVV
+                                                                </font>
+                                                            </font>
+                                                        </label>
+                                                        <div class="input-group input-group-merge">
+                                                            <input type="text" id="collapsible-payment-cvv"
+                                                                class="form-control cvv-code-mask" maxlength="3"
+                                                                placeholder="654">
+                                                            <span class="input-group-text cursor-pointer"
+                                                                id="collapsible-payment-cvv2"><i
+                                                                    class="icon-base bx bx-help-circle text-body-secondary"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                    aria-label="Valeur de vérification de la carte"
+                                                                    data-bs-original-title="Card Verification Value"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-1">
+                                        <button type="submit" class="btn btn-primary me-4">
+                                            <font dir="auto" style="vertical-align: inherit;">
+                                                <font dir="auto" style="vertical-align: inherit;">Soumettre</font>
+                                            </font>
+                                        </button>
+                                        <button type="reset" class="btn btn-label-secondary">
+                                            <font dir="auto" style="vertical-align: inherit;">
+                                                <font dir="auto" style="vertical-align: inherit;">Annuler</font>
+                                            </font>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                     <div class="mt-6">
                         <form action="{{ route('payments.validate', $payment->id) }}" method="POST">
                             @csrf

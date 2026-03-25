@@ -15,10 +15,11 @@ use Illuminate\Support\Facades\DB;
 
 class ContractController extends Controller
 {
-public function getBuildings($residenceId)
-{
-    return \App\Models\Building::where('residence_id', $residenceId)->get();
-}
+    public function getBuildings($residenceId)
+    {
+        return \App\Models\Building::where('residence_id', $residenceId)->get();
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -28,16 +29,18 @@ public function getBuildings($residenceId)
 
         return view('contracts.index', compact('contracts'));
     }
-public function getFloors($buildingId)
-{
-    return \App\Models\Floor::where('building_id', $buildingId)->get();
-}
-public function getRooms($floorId)
-{
-    return \App\Models\Room::where('floor_id', $floorId)
-        ->whereHas('status', fn($q) => $q->where('code', 'avalaible')) // ⚠ typo dans ta DB
-        ->get();
-}
+
+    public function getFloors($buildingId)
+    {
+        return \App\Models\Floor::where('building_id', $buildingId)->get();
+    }
+
+    public function getRooms($floorId)
+    {
+        return \App\Models\Room::where('floor_id', $floorId)
+            ->whereHas('status', fn ($q) => $q->where('code', 'avalaible')) // ⚠ typo dans ta DB
+            ->get();
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -176,20 +179,36 @@ public function getRooms($floorId)
         $totalMonths = $start->diffInMonths($end) + 1;
 
         //  CASE 1 : unique payment
+        /*         if ($period === 'once') {
+
+                    $totalAmount = $contract->rent_amount * $totalMonths;
+
+                    Payment::create([
+                        'contract_id' => $contract->id,
+                        'payment_status_id' => $pendingStatus,
+                        'expected_amount' => $totalAmount,
+                        'payment_method_id' => null,
+                        'payment_date' => null,
+                        'paid_amount' => 0,
+                        'due_date' => $start,
+                    ]);
+
+                    return;
+                } */
         if ($period === 'once') {
 
-            $totalAmount = $contract->rent_amount * $totalMonths;
+            $months = $start->diffInMonths($end);
+            $total = $months * $contract->rent_amount;
 
             Payment::create([
                 'contract_id' => $contract->id,
                 'payment_status_id' => $pendingStatus,
-                'expected_amount' => $totalAmount,
+                'expected_amount' => $total,
                 'payment_method_id' => null,
                 'payment_date' => null,
                 'paid_amount' => 0,
                 'due_date' => $start,
             ]);
-
             return;
         }
 
@@ -197,6 +216,7 @@ public function getRooms($floorId)
         $interval = match ($period) {
             'monthly' => 1,
             'quarterly' => 3,
+            'half_yearly' => 6,
             'yearly' => 12,
             default => 1
         };
