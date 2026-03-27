@@ -11,9 +11,15 @@ use App\Http\Controllers\ResidenceController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
+/*
+Past route for the super administrator
+*/
 Route::get('/', function () {
     return view('welcome');
+});
+Route::middleware(['auth', 'checkRole:super_admin'])->group(function () {
+    Route::resource('roles', RoleController::class);
+    Route::resource('permissions', PermissionController::class);
 });
 /*
 Past route for the creation of contrac
