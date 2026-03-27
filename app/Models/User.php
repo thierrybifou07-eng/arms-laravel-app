@@ -58,12 +58,7 @@ class User extends Authenticatable implements HasMedia
             'password' => 'hashed',
         ];
     }
-    // Assigning role to many users
-
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class);
-    }
+    
 
     //  belongs to 'cause the fk is in the users table
     public function userStatus()
@@ -71,18 +66,27 @@ class User extends Authenticatable implements HasMedia
         return $this->belongsTo(\App\Models\UserStatus::class);
     }
 
-    // create the hasRole method for the middleware
+  
+// Assigning role to many users
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class)->withTimestamps();
+    }
+// create the hasRole method for the middleware 
     public function hasRole(string $roleName): bool
     {
         return $this->roles()->where('name', $roleName)->exists();
     }
-
-    // Assign hasPermission method for the middleware
-    public function hasPermission(string $permission): bool
+// create the hasPermission method for the middleware
+    public function hasPermission(string $permissionName): bool
     {
-        return $this->roles()->whereHas('permissions', function ($query) use ($permission) {
-            $query->where('name', $permission);
+        if ($this->hasRole(Role::SUPER_ADMIN)) {
+            return true;
+        }
 
-        })->exists();
+        return $this->roles()
+            ->whereHas('permissions', function ($query) use ($permissionName) {
+                $query->where('name', $permissionName);
+            })->exists();
     }
 }

@@ -22,7 +22,7 @@ class RoleSeeder extends Seeder
             ['name' => 'staff', 'label' => 'Staff Member',
                 'created_at' => now(),
                 'updated_at' => now()],
-            ['name' => 'teller', 'label' => 'teller',
+            ['name' => 'teller', 'label' => 'Teller',
                 'created_at' => now(),
                 'updated_at' => now()],
             ['name' => 'student', 'label' => 'Student',

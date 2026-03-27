@@ -28,7 +28,8 @@ class DatabaseSeeder extends Seeder
             ContractStatusSeeder::class,
             PaymentStatusSeeder::class,
             BillingPeriodSeeder::class,
-            PaymentMethodSeeder::class,
+            PaymentMethodSeeder::class, 
+           SuperAdminPermissionSeeder::class,
             EventPaymentTypeSeeder::class,
         ]);
         // Select status active by default

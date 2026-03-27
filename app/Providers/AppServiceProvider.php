@@ -21,6 +21,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+Gate::before(function ($user, $ability) {
+            if ($user->hasRole(Role::SUPER_ADMIN)) {
+                return true;
+            }
+
+            return null;
+        });
         // Add directives Blade for roles and permissions
 
         Blade::if('permission', function ($permission) {

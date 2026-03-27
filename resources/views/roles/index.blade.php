@@ -1,60 +1,58 @@
 @extends('layouts.app')
-@section('content')
-    <div class="card m-5">
 
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-        @if ($roles->count() > 0)
-            <div class="table-responsive text-nowrap table-hover">
-                <table class="table">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Label</th>
-                            <th>Created Date</th>
-                            <th>Updated Date</th>
-                            <th class="text-end">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-border-bottom-0">
-                        @foreach ($roles as $role)
-                            <tr>
-                                <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
-                                    <span>{{ $role->label }}</span>
-                                </td>
-                                <td> {{ $role->created_at }}
-                                </td>
-                                <td>
-                                    {{ $role->updated_at }}
-                                </td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                            <i class="icon-base bx bx-dots-vertical-rounded"></i>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('roles.show', $role) }}">
-                                                <i class="icon-base bx bx-show-alt me-1"></i>view</a>
-                                            <a class="dropdown-item" href="{{ route('roles.edit', $role) }}"><i
-                                                    class="icon-base bx bx-edit me-1"></i> Edit</a>
-                                            <hr class="dropdown-divider">
-                                            <a class="dropdown-item" href="{{ route('roles.destroy', $role) }}"><i
-                                                    class="icon-base bx bx-trash me-1"></i> Delete</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @else
-            <div class="alert alert-info text-center py-5">
-                <h5>No roles found</h5>
-            </div>
-        @endif
+@section('content')
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h4 mb-0">Gestion des rôles</h1>
+        <a href="{{ route('roles.create') }}" class="btn btn-primary">Nouveau rôle</a>
     </div>
+
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Libellé</th>
+                    <th>Permissions</th>
+                    <th>Utilisateurs</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($roles as $role)
+                    <tr>
+                        <td>{{ $role->name }}</td>
+                        <td>{{ $role->label }}</td>
+                        <td>
+                            @forelse($role->permissions as $permission)
+                                <span class="badge bg-secondary me-1 mb-1">{{ $permission->label }}</span>
+                            @empty
+                                <span class="text-muted">Aucune</span>
+                            @endforelse
+                        </td>
+                        <td>{{ $role->users_count ?? $role->users->count() }}</td>
+                        <td class="text-end">
+                            <a href="{{ route('roles.show', $role) }}" class="btn btn-sm btn-info">Voir</a>
+                            <a href="{{ route('roles.edit', $role) }}" class="btn btn-sm btn-warning">Modifier</a>
+                            <form action="{{ route('roles.destroy', $role) }}" method="POST" class="d-inline"
+                                  onsubmit="return confirm('Supprimer ce rôle ?')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-sm btn-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">Aucun rôle trouvé.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection

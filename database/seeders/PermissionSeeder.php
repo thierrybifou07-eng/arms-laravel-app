@@ -29,11 +29,11 @@ class PermissionSeeder extends Seeder
             ['name' => 'update_residence', 'label' => 'Update residence'],
             ['name' => 'delete_residence', 'label' => 'Delete residence'],
 
-            // Buidings
-            ['name' => 'view_buidings', 'label' => 'View buidings'],
-            ['name' => 'create_buidings', 'label' => 'Create buidings'],
-            ['name' => 'update_buidings', 'label' => 'Update buidings'],
-            ['name' => 'delete_buidings', 'label' => 'Delete buidings'],
+            // Buildings
+            ['name' => 'view_buildings', 'label' => 'View buildings'],
+            ['name' => 'create_buildings', 'label' => 'Create buildings'],
+            ['name' => 'update_buildings', 'label' => 'Update buildings'],
+            ['name' => 'delete_buildings', 'label' => 'Delete buildings'],
 
             // Rooms
             ['name' => 'view_rooms', 'label' => 'View rooms'],
