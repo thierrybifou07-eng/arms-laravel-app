@@ -15,14 +15,14 @@ class RoleController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('roles.index', compact('roles'));
+        return view('super_admin.roles.index', compact('roles'));
     }
 
     public function create()
     {
         $permissions = Permission::orderBy('label')->get();
 
-        return view('roles.create', compact('permissions'));
+        return view('super_admin.roles.create', compact('permissions'));
     }
 
     public function store(Request $request)
@@ -50,7 +50,7 @@ class RoleController extends Controller
     {
         $role->load(['permissions', 'users']);
 
-        return view('roles.show', compact('role'));
+        return view('super_admin.roles.show', compact('role'));
     }
 
     public function edit(Role $role)
@@ -58,7 +58,7 @@ class RoleController extends Controller
         $permissions = Permission::orderBy('label')->get();
         $role->load('permissions');
 
-        return view('roles.edit', compact('role', 'permissions'));
+        return view('super_admin.roles.edit', compact('role', 'permissions'));
     }
 
     public function update(Request $request, Role $role)

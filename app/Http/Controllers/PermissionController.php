@@ -15,12 +15,12 @@ class PermissionController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('permissions.index', compact('permissions'));
+        return view('super_admin.permissions.index', compact('permissions'));
     }
 
     public function create()
     {
-        return view('permissions.create');
+        return view('super_admin.permissions.create');
     }
 
     public function store(Request $request)
@@ -41,12 +41,12 @@ class PermissionController extends Controller
     {
         $permission->load('roles');
 
-        return view('permissions.show', compact('permission'));
+        return view('super_admin.permissions.show', compact('permission'));
     }
 
     public function edit(Permission $permission)
     {
-        return view('permissions.edit', compact('permission'));
+        return view('super_admin.permissions.edit', compact('permission'));
     }
 
     public function update(Request $request, Permission $permission)
