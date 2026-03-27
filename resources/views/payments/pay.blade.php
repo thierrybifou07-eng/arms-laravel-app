@@ -39,31 +39,31 @@
                     </div>
 
                     <div class="col-md-6">
-                         <label>Payment Method</label>
+                        <label>Payment Method</label>
 
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="method" value="mobile">
-        <label class="form-check-label">Mobile Money</label>
-    </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="method" value="mobile">
+                            <label class="form-check-label">Mobile Money</label>
+                        </div>
 
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="method" value="card">
-        <label class="form-check-label">Bank Card</label>
-    </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="method" value="card">
+                            <label class="form-check-label">Bank Card</label>
+                        </div>
 
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="method" value="cash">
-        <label class="form-check-label">Cash</label>
-    </div>
-</div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="method" value="cash">
+                            <label class="form-check-label">Cash</label>
+                        </div>
+                    </div>
 
-<div id="mobile_fields" class="mt-3 d-none">
-    <input type="text" name="phone" class="form-control" placeholder="Phone number">
-</div>
+                    <div id="mobile_fields" class="mt-3 d-none">
+                        <input type="text" name="phone" class="form-control" placeholder="Phone number">
+                    </div>
 
-<div id="card_fields" class="mt-3 d-none">
-    <input type="text" name="card_number" class="form-control mb-2" placeholder="Card number">
-    <input type="text" name="cvv" class="form-control" placeholder="CVV">
+                    <div id="card_fields" class="mt-3 d-none">
+                        <input type="text" name="card_number" class="form-control mb-2" placeholder="Card number">
+                        <input type="text" name="cvv" class="form-control" placeholder="CVV">
                     </div>
                 </div>
 
