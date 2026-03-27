@@ -38,8 +38,8 @@ class RegisteredUserController extends Controller
             'phone' => ['required', 'string', 'max:25', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-        $activateId=UserStatus::getIdByCode(UserStatus::ACTIVE);
-         $SuperStudentRoleId = Role::getIdByName(Role::STUDENT);
+        $activateId=UserStatus::getIdByCodeOrFail(UserStatus::ACTIVE);
+        $SuperStudentRoleId = Role::getIdByNameOrFail(Role::STUDENT);
         $user = User::create([
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,

@@ -40,6 +40,13 @@ class PaymentController extends Controller
 
         return view('payments.show', compact('payment', 'paymentMethods'));
     }
+    public function showPay(Payment $payment)
+    {
+        $payment->load(['contract', 'status']);
+        $paymentMethods = \App\Models\PaymentMethod::all();
+
+        return view('payments.showPay', compact('payment', 'paymentMethods'));
+    }
     /*
     |--------------------------------------------------------------------------
     | RECORDING A PAYMENT

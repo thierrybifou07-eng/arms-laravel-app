@@ -79,9 +79,8 @@
                                                 <a class="dropdown-item" href="{{ route('contracts.edit', $contract) }}"><i
                                                         class="icon-base bx bx-edit me-1"></i> Edit</a>
                                                 <hr class="dropdown-divider">
-                                                <form method="POST" action="{{ route('contracts.destroy', $contract) }}">
+                                                <form method="POST" action="{{ route('contracts.archive', $contract) }}">
                                                     @csrf
-                                                    @method('DELETE')
                                                     <button class="dropdown-item text-danger" type="submit">
                                                         <i class="icon-base bx bx-trash me-1"></i>Archived
                                                     </button>

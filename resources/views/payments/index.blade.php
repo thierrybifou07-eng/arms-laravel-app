@@ -61,9 +61,14 @@
                             </td>
 
                             <td>
-                                <a href="{{ route('payments.show', $payment) }}" class="btn btn-sm btn-primary">
-                                    View
-                                </a>
+                                <div class="inline-block">
+                                    <a href="{{ route('payments.show', $payment) }}" class="btn btn-sm btn-primary">
+                                        Pay
+                                    </a>
+                                    <a href="{{ route('payments.show.pay', $payment) }}" class="btn btn-sm btn-info">
+                                        View
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
