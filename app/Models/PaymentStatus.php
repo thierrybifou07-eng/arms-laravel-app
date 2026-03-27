@@ -13,7 +13,8 @@ class PaymentStatus extends Model
     public const PENDING = 'Pending';
 
     public const PAID = 'Paid';
-public const OVERDUE= 'Overdue';
+
+    public const OVERDUE = 'Overdue';
 
     public const VALIDATED = 'Validated';
 

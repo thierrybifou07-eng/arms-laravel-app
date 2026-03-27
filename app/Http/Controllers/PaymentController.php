@@ -33,19 +33,22 @@ class PaymentController extends Controller
     }
 
     // send payment with their methods
-    public function show(Payment $payment)
+    public function payForm(Payment $payment)
     {
-        $payment->load(['contract', 'status']);
+        if ($payment->status->code === 'validated') {
+            return redirect()->route('payments.show.pay', $payment)->withErrors('This payment is already validated');
+        }
         $paymentMethods = \App\Models\PaymentMethod::all();
 
-        return view('payments.show', compact('payment', 'paymentMethods'));
+        return view('payments.pay', compact('payment', 'paymentMethods'));
     }
+
     public function showPay(Payment $payment)
     {
         $payment->load(['contract', 'status']);
         $paymentMethods = \App\Models\PaymentMethod::all();
 
-        return view('payments.showPay', compact('payment', 'paymentMethods'));
+        return view('payments.show', compact('payment', 'paymentMethods'));
     }
     /*
     |--------------------------------------------------------------------------

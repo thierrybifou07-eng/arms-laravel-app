@@ -62,9 +62,12 @@
 
                             <td>
                                 <div class="inline-block">
-                                    <a href="{{ route('payments.show', $payment) }}" class="btn btn-sm btn-primary">
-                                        Pay
-                                    </a>
+                                    @if ($payment->status->code === 'pending' || $payment->status->code === 'cancelled' || $payment->status->code === 'overdue')
+                                        <a href="{{ route('payments.pay.form', $payment) }}" class="btn btn-sm btn-primary">
+                                            Pay
+                                        </a>
+                                    @endif
+
                                     <a href="{{ route('payments.show.pay', $payment) }}" class="btn btn-sm btn-info">
                                         View
                                     </a>
