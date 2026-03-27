@@ -8,8 +8,6 @@ class BuildingStatus extends Model
 {
     protected $fillable = ['code', 'label'];
 
-    public const PENDING = 'pending';
-
     public const ACTIVE = 'active';
 
     public const CLOSED = 'closed';

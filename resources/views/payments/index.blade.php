@@ -1,93 +1,82 @@
 @extends('layouts.app')
+
 @section('content')
-    <div cclass="col-xxl-12">
-        <div class="card my-5">
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-            @if ($buildings->count() > 0)
-                <div class="table-responsive text-nowrap table-hover">
-                    <table class="table">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>Capacity</th>
-                                <th>Created Date</th>
-                                <th>Updated Date</th>
-                                <th>Status</th>
-                                <th class="text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-border-bottom-0">
-                            @foreach ($buildings as $building)
-                                <tr>
-                                    <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
-                                        <span>{{ $building->name }}</span>
-                                    </td>
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
 
-                                    <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
-                                        <span>{{ $building->address }}</span>
-                                    </td>
-                                    <td> {{ $building->capacity }}
-                                    </td>
-                                    <td>
-                                        {{ $building->created_at }}
-                                    </td>
-                                    <td>
-                                        {{ $building->updated_at }}
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-label-primary me-1">{{ $building->status->label }}</span>
+            <h5 class="mb-0">Payments</h5>
 
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                                data-bs-toggle="dropdown">
-                                                <i class="icon-base bx bx-dots-vertical-rounded"></i>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item"
-                                                    href="{{ route('buildings.floors.index', $building) }}"><i
-                                                        class="icon-base bx bx-show-alt me-1"></i> View</a>
-                                                <a class="dropdown-item"
-                                                    href="{{ route('residences.buildings.edit', [$residence, $building]) }}"><i
-                                                        class="icon-base bx bx-edit me-1"></i> Edit</a>
-                                                <form method="POST"
-                                                    action="{{ route('residences.buildings.destroy', [$residence, $building]) }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="dropdown-item text-danger" type="submit"><i
-                                                            class="icon-base bx bx-trash me-1"></i>Delete </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @else
-                <div class="text-center py-5">
-                    <div class="demo-inline-spacing mx-5">
+            <form method="GET">
+                <select name="status" onchange="this.form.submit()" class="form-select">
+                    <option value="">All</option>
+                    <option value="overdue" {{ request('status') == 'overdue' ? 'selected' : '' }}>Overdue</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>Processing</option>
+                    <option value="validated" {{ request('status') == 'validated' ? 'selected' : '' }}>Validated</option>
+                </select>
+            </form>
 
-                        <a class="btn rounded-pill btn-primary"
-                            href="{{ route('residences.buildings.create', $residence) }}">
-                            No building found, create one. </a>
-                    </div>
-                </div>
-            @endif
         </div>
-        @if ($buildings->count() > 0)
-            <div class="demo-inline-spacing mx-5">
-                <a href="{{ route('residences.buildings.create', $residence) }}" class="btn rounded-pill btn-primary">New
-                    Building</a>
-            </div>
-        @endif
+
+        <div class="table-responsive text-nowrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Contract</th>
+                        <th>Student</th>
+                        <th>Due Date</th>
+                        <th>Expected(FCFA)</th>
+                        <th>Paid(FCFA)</th>
+                        <th>Tip amount(FCFA)</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($payments as $payment)
+                        <tr class="{{ $payment->isOverdue() ? 'table-danger' : '' }}">
+                            <td>#{{ $payment->contract->id }}</td>
+                            <td>{{ $payment->contract->student->surname }}</td>
+
+                            <td>{{ $payment->due_date?->format('d/m/Y') }}</td>
+
+                            <td>{{ number_format($payment->expected_amount, 0, ',', ' ') }}</td>
+                            <td>{{ number_format($payment->paid_amount, 0, ',', ' ') }}</td>
+                            <td>{{ number_format($payment->tip_amount, 0, ',', ' ') }}</td>
+
+                            <td>
+                                @php $status = $payment->status->code ?? '' @endphp
+
+                                @if($payment->isOverdue())
+                                    <span class="badge bg-danger">Overdue</span>
+                                @elseif($status === 'pending')
+                                    <span class="badge bg-label-warning">Pending</span>
+                                @elseif($status === 'processing')
+                                    <span class="badge bg-label-info">Processing</span>
+                                @elseif($status === 'validated')
+                                    <span class="badge bg-label-success">Validated</span>
+                                @elseif($status === 'cancelled')
+                                    <span class="badge bg-label-danger">Cancelled</span>
+                                @endif
+                            </td>
+
+                            <td>
+                                <div class="inline-block">
+                                    @if ($payment->status->code === 'pending' || $payment->status->code === 'cancelled' || $payment->status->code === 'overdue')
+                                        <a href="{{ route('payments.pay.form', $payment) }}" class="btn btn-sm btn-primary">
+                                            Pay
+                                        </a>
+                                    @endif
+
+                                    <a href="{{ route('payments.show.pay', $payment) }}" class="btn btn-sm btn-info">
+                                        View
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 @endsection

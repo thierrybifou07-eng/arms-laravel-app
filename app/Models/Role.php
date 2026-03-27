@@ -21,9 +21,20 @@ class Role extends Model
 
     // create the function(undefinded here) to call in the dbseeder
 
-    public static function getIdByName(string $name): int
+    public static function getIdByName(string $name): ?int
     {
         return static::where('name', $name)->value('id');
+    }
+
+    public static function getIdByNameOrFail(string $name): int
+    {
+        $record = static::where('name', $name)->first();
+
+        if (! $record) {
+            throw new \Exception("Name [$name] not found in ".static::class);
+        }
+
+        return $record->id;
     }
 
     public function users()

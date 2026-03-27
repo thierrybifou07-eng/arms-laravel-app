@@ -13,8 +13,8 @@ class RoomStatusSeeder extends Seeder
     public function run(): void
     {
         $statuses = [
-            ['code' => 'avalaible',
-                'label' => 'Avalaible',
+            ['code' => 'available',
+                'label' => 'Available',
                 'created_at' => now(),
                 'updated_at' => now()],
             ['code' => 'busy',

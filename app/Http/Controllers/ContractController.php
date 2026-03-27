@@ -15,14 +15,38 @@ use Illuminate\Support\Facades\DB;
 
 class ContractController extends Controller
 {
+    public function getBuildings($residenceId)
+    {
+        return \App\Models\Building::where('residence_id', $residenceId)->get();
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $contracts = Contract::with(['student', 'room', 'status'])->latest()->paginate(10);
+        $query = Contract::with(['student', 'room.floor.building', 'status', 'billingPeriod'])->latest();
+
+        if (! auth()->user()->hasRole('super_admin')) {
+            $archivedId = ContractStatus::getIdByCodeOrFail('archived');
+            $query->where('contract_status_id', '!=', $archivedId);
+        }
+
+        $contracts = $query->paginate(10);
 
         return view('contracts.index', compact('contracts'));
+    }
+
+    public function getFloors($buildingId)
+    {
+        return \App\Models\Floor::where('building_id', $buildingId)->get();
+    }
+
+    public function getRooms($floorId)
+    {
+        return \App\Models\Room::where('floor_id', $floorId)
+            ->whereHas('status', fn ($q) => $q->where('code', 'available')) //  typo into the DB
+            ->get();
     }
 
     /**
@@ -136,9 +160,17 @@ class ContractController extends Controller
      */
     public function destroy(Contract $contract)
     {
-        $contract->delete();
+        if ($contract->status->code === 'active') {
+            return back()->withErrors(['contract' => 'Active contracts cannot be archived directly. Cancelled or expire it first.']);
+        }
 
-        return redirect()->route('contracts.index')->with('success', 'Contract deleted successfully');
+        $archivedId = ContractStatus::getIdByCodeOrFail('archived');
+
+        $contract->update([
+            'contract_status_id' => $archivedId,
+        ]);
+
+        return redirect()->route('contracts.index')->with('success', 'Contract archived successfully.');
     }
 
     /*
@@ -158,18 +190,19 @@ class ContractController extends Controller
         $end = Carbon::parse($contract->end_date);
         $period = $contract->billingPeriod->code;
 
-        //  deduce delay in months (stong)
+        //  deduce delay in months (strong)
         $totalMonths = $start->diffInMonths($end) + 1;
 
         //  CASE 1 : unique payment
         if ($period === 'once') {
 
-            $totalAmount = $contract->rent_amount * $totalMonths;
+            $months = $start->diffInMonths($end) + 1;
+            $total = $months * $contract->rent_amount;
 
             Payment::create([
                 'contract_id' => $contract->id,
                 'payment_status_id' => $pendingStatus,
-                'expected_amount' => $totalAmount,
+                'expected_amount' => $total,
                 'payment_method_id' => null,
                 'payment_date' => null,
                 'paid_amount' => 0,
@@ -183,6 +216,7 @@ class ContractController extends Controller
         $interval = match ($period) {
             'monthly' => 1,
             'quarterly' => 3,
+            'half_yearly' => 6,
             'yearly' => 12,
             default => 1
         };

@@ -11,14 +11,44 @@ class PaymentController extends Controller
 {
     public function index()
     {
-        $payments = Payment::with(['contract', 'status'])->latest()->paginate(10);
+        $payments = Payment::with(['contract.student', 'status'])->latest()->get();
+
+        // filtre
+        if (request('status') === 'overdue') {
+            $payments = $payments->filter(fn ($p) => $p->isOverdue());
+        }
+
+        if (request('status') === 'pending') {
+            $payments = $payments->where('status.code', 'pending');
+        }
+        if (request('status') === 'processing') {
+            $payments = $payments->where('status.code', 'processing');
+        }
+
+        if (request('status') === 'validated') {
+            $payments = $payments->where('status.code', 'validated');
+        }
 
         return view('payments.index', compact('payments'));
     }
 
-    public function show(Payment $payment)
+    // send payment with their methods
+    public function payForm(Payment $payment)
     {
-        return view('payments.show', compact('payment'));
+        if ($payment->status->code === 'validated') {
+            return redirect()->route('payments.show.pay', $payment)->withErrors('This payment is already validated');
+        }
+        $paymentMethods = \App\Models\PaymentMethod::all();
+
+        return view('payments.pay', compact('payment', 'paymentMethods'));
+    }
+
+    public function showPay(Payment $payment)
+    {
+        $payment->load(['contract', 'status']);
+        $paymentMethods = \App\Models\PaymentMethod::all();
+
+        return view('payments.show', compact('payment', 'paymentMethods'));
     }
     /*
     |--------------------------------------------------------------------------
@@ -28,20 +58,21 @@ class PaymentController extends Controller
 
     public function pay(Request $request, Payment $payment)
     {
-        //  stop double payment
-        if ($payment->paid_amount >= $payment->expected_amount) {
-            return back()->withErrors(['payment' => 'Already fully paid.']);
-        }
-
+        //
         $validated = $request->validate([
             'paid_amount' => 'nullable|numeric|min:0',
             'payment_method_id' => 'required|exists:payment_methods,id',
         ]);
+        // add tip system
+        $paidAmount = (float) $validated['paid_amount'];
+        $expected = (float) $payment->expected_amount;
+        $tip = max(0, $paidAmount - $expected);
 
         $processingStatus = PaymentStatus::getIdByCodeOrFail('processing');
 
         $payment->update([
-            'paid_amount' => $validated['paid_amount'],
+            'paid_amount' => $paidAmount,
+            'tip_amount' => $tip,
             'payment_method_id' => $validated['payment_method_id'],
             'payment_status_id' => $processingStatus,
             'payment_date' => now(),

@@ -24,19 +24,6 @@
     </div>
 </div>
 
-{{-- <form method="POST" action="{{ route('avatar.update') }}" enctype="multipart/form-data">
-    @csrf
-
-    <img src="{{ auth()->user()->avatar() }}" alt="" class="rounded-circle">
-
-    <input type="file" name="avatar" class="form-control mt-3">
-
-    <button class="btn btn-primary mt-3">
-        Upload
-    </button>
-
-</form> --}}
-
 <div class="card-body pt-4">
     <form id="send-verification" class="d-none" method="post" action="{{ route('verification.send') }}">
         @csrf

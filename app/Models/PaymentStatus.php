@@ -14,6 +14,8 @@ class PaymentStatus extends Model
 
     public const PAID = 'Paid';
 
+    public const OVERDUE = 'Overdue';
+
     public const VALIDATED = 'Validated';
 
     public const CANCELLED = 'Cancelled';

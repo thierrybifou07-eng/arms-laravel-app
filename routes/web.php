@@ -15,7 +15,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
+/*
+Past route for the creation of contrac
+*/
+Route::get('/buildings/{residence}', [ContractController::class, 'getBuildings']);
+Route::get('/floors/{building}', [ContractController::class, 'getFloors']);
+Route::get('/rooms/{floor}', [ContractController::class, 'getRooms']);
 Route::get('/super_admin/dashboard', function () {
     return view('super_admin.dashboard');
 })->middleware(['auth', 'verified', 'role:super_admin'])->name('super_admin.dashboard');
@@ -35,12 +40,17 @@ Route::middleware(['auth', 'role:super_admin'])->resource('residences.buildings'
 Route::middleware(['auth', 'role:super_admin'])->resource('buildings.floors', BuildingFloorController::class)->scoped();
 
 Route::middleware(['auth', 'role:super_admin'])->resource('floors.rooms', FloorRoomController::class)->scoped();
-Route::middleware(['auth', 'role:super_admin'])->resource('contracts', ContractController::class)->scoped();
+Route::middleware(['auth', 'role:super_admin'])->resource('contracts', ContractController::class)/* ->only(['index','show','update','edit','store','create','archive']) */ ->scoped();
 
 Route::middleware(['auth', 'role:super_admin'])->resource('users', UserController::class)->scoped();
 Route::middleware(['auth', 'role:super_admin'])->resource('roles', RoleController::class)->scoped();
 Route::middleware(['auth', 'role:super_admin'])->resource('permissions', PermissionController::class)->scoped();
-Route::middleware(['auth', 'role:super_admin'])->group(function(){
-    Route::post('/payments', [PaymentController::class, 'pay'])->name('payments.pay');
-    });
+Route::middleware('auth')->group(function () {
+    Route::resource('payments', PaymentController::class)->only('index');
+    Route::get('/payments/{payment}', [PaymentController::class, 'payForm'])->name('payments.pay.form');
+    Route::get('/payments/{payment}/pay', [PaymentController::class, 'showPay'])->name('payments.show.pay');
+    Route::post('/payments/{payment}/pay', [PaymentController::class, 'pay'])->name('payments.pay');
+    Route::post('/payments/{payment}/validate', [PaymentController::class, 'validatePayment'])->name('payments.validate');
+    Route::post('/payments/{payment}/cancel', [PaymentController::class, 'cancel'])->name('payments.cancel');
+});
 require __DIR__.'/auth.php';

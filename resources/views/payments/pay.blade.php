@@ -2,85 +2,104 @@
 
 @section('content')
     <div class="card mb-6">
-        @if ($errors->any())
-            <div>
-                @foreach ($errors->all() as $error)
-                    <p>{{ $error }}</p>
-                @endforeach
+        <h5 class="card-header">Payment Details</h5>
+
+        <div class="card-body">
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <label>Contract</label>
+                    <input class="form-control" value="Contract #{{ $payment->contract->id }}" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label>Status</label>
+                    <input class="form-control" value="{{ $payment->status->label ?? '' }}" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label>Expected</label>
+                    <input class="form-control" value="{{ $payment->expected_amount }} FCFA" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label>Paid</label>
+                    <input class="form-control" value="{{ $payment->paid_amount }} FCFA" readonly>
+                </div>
             </div>
-        @endif
-        <h5 class="card-header">PAYMENT — FORMULAIRE DE PAIEMENT</h5>
-        <div class="card-body pt-4">
-            <form id="formAccountSettings" method="POST" class="fv-plugins-bootstrap5 fv-plugins-framework"
-                novalidate="novalidate" action="{{ route('payments.pay') }}">
+
+            {{-- PAY --}}
+            <form method="POST" action="{{ route('payments.pay', $payment) }}">
                 @csrf
-                <div class="row g-6">
+
+                <div class="row g-4">
                     <div class="col-md-6">
-                        <label class="form-label" for="rent_amount">Expected Amount</label>
-                        <div class="input-group input-group-merge">
-                            <span class="input-group-text">FCFA</span>
-                            <input type="text" id="PhoneNumber" value="{{ $payment->expected_amount }}" disabled
-                                class="form-control">
-                        </div>
+                        <label>Amount</label>
+                        <input type="number" name="paid_amount" class="form-control" required>
                     </div>
+
                     <div class="col-md-6">
-                        <label class="form-label" for="rent_amount">Paid amount</label>
-                        <div class="input-group input-group-merge">
-                            <span class="input-group-text">FCFA</span>
-                            <input type="number" id="PhoneNumber" name="paid_amount" required
-                                value="{{ old('paid_amount') }}" class="form-control" placeholder="50000">
-                        </div>
+                         <label>Payment Method</label>
+
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="method" value="mobile">
+        <label class="form-check-label">Mobile Money</label>
+    </div>
+
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="method" value="card">
+        <label class="form-check-label">Bank Card</label>
+    </div>
+
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="method" value="cash">
+        <label class="form-check-label">Cash</label>
+    </div>
+</div>
+
+<div id="mobile_fields" class="mt-3 d-none">
+    <input type="text" name="phone" class="form-control" placeholder="Phone number">
+</div>
+
+<div id="card_fields" class="mt-3 d-none">
+    <input type="text" name="card_number" class="form-control mb-2" placeholder="Card number">
+    <input type="text" name="cvv" class="form-control" placeholder="CVV">
                     </div>
-                    <div class="col-md-6">
-                        <label for="payment_method_id" class="form-label">Payment Methods</label>
-                        <div class="position-relative"><select name="payment_method_id" id="resident"
-                                class="select2 form-select" tabindex="-1" aria-hidden="true" required>
-                                @foreach($PaymentMethods as $PaymentMethod)
-                                    <option value="{{ $PaymentMethod->id }}">{{ $PaymentMethod->label }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mt-6">
-                        <form action="{{ route('payments.validate', $payment->id) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn btn-primary me-3">Validate</button>
-                        </form>
-                        <form action="{{ route('payments.cancel', $payment->id) }}" method="POST">
-                            @csrf
-                            <button class="btn btn-label-secondary" type="submit">Cancel</button>
-                        </form>
-                    </div>
-                    <input type="hidden">
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    <button class="btn btn-primary">Pay</button>
+                </div>
             </form>
+
+            {{-- VALIDATE --}}
+            <form method="POST" action="{{ route('payments.validate', $payment) }}" class="mt-3">
+                @csrf
+                <button class="btn btn-success">Validate</button>
+            </form>
+
+            {{-- CANCEL --}}
+            <form method="POST" action="{{ route('payments.cancel', $payment) }}" class="mt-2">
+                @csrf
+                <button class="btn btn-danger">Cancel</button>
+            </form>
+
         </div>
     </div>
-    @push('scripts')
-        <script>
-            console.log($.fn.select2);
-            console.log("Select2 init");
-            $(document).ready(function () {
+@push('script')
+<script>
+$('input[name="method"]').on('change', function () {
 
-                $('#resident').select2({
-                    placeholder: "Select resident",
-                    allowClear: true,
-                    width: '100%'
-                });
+    $('#mobile_fields, #card_fields').addClass('d-none');
 
-                $('#room').select2({
-                    placeholder: "Select room",
-                    allowClear: true,
-                    width: '100%'
-                });
+    if (this.value === 'mobile') {
+        $('#mobile_fields').removeClass('d-none');
+    }
 
-                /*                  $('#billing_period').select2({
-                                    placeholder: "Select billing period",
-                                    allowClear: true,
-                                    width: '100%'
-                                }); */
-            });
-
-        </script>
-    @endpush
+    if (this.value === 'card') {
+        $('#card_fields').removeClass('d-none');
+    }
+});
+</script>
+@endpush
 @endsection

@@ -12,10 +12,6 @@ class ResidenceStatusSeeder extends Seeder
     public function run(): void
     {
         $statuses = [
-            ['code' => 'pending',
-                'label' => 'Construction',
-                'created_at' => now(),
-                'updated_at' => now()],
             ['code' => 'active',
                 'label' => 'Active',
                 'created_at' => now(),

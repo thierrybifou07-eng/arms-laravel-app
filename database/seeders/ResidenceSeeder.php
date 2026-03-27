@@ -14,6 +14,6 @@ class ResidenceSeeder extends Seeder
      */
     public function run(): void
     {
-        Residence::factory()->count(18)->create();
+        Residence::factory()->count(5)->create();
     }
 }
