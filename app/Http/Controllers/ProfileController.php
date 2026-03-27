@@ -26,6 +26,15 @@ class ProfileController extends Controller
 
         return back()->with('success', 'Avatar updated!');
     }
+// 
+
+    public function show(Request $request): View
+    {
+        $user = $request->user()->load(['userStatus', 'roles']);
+
+        return view('profile.show', compact('user'));
+    }
+}
 
     /**
      * Display the user's profile form.
