@@ -46,7 +46,7 @@ Route::middleware(['auth', 'role:super_admin'])->resource('residences.buildings'
 Route::middleware(['auth', 'role:super_admin'])->resource('buildings.floors', BuildingFloorController::class)->scoped();
 
 Route::middleware(['auth', 'role:super_admin'])->resource('floors.rooms', FloorRoomController::class)->scoped();
-Route::middleware(['auth', 'role:super_admin'])->resource('contracts', ContractController::class)/* ->only(['index','show','update','edit','store','create','archive']) */ ->scoped();
+Route::middleware(['auth', 'role:super_admin'])->resource('contracts', ContractController::class)->scoped();
 
 Route::middleware(['auth', 'role:super_admin'])->resource('users', UserController::class)->scoped();
 Route::middleware(['auth', 'role:super_admin'])->resource('roles', RoleController::class)->scoped();
@@ -58,5 +58,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/payments/{payment}/pay', [PaymentController::class, 'pay'])->name('payments.pay');
     Route::post('/payments/{payment}/validate', [PaymentController::class, 'validatePayment'])->name('payments.validate');
     Route::post('/payments/{payment}/cancel', [PaymentController::class, 'cancel'])->name('payments.cancel');
+
+/*     Route::patch('/contracts/{contract}/archived', ContractController::class, 'archived')->name('contracts.archive');
+ */
 });
 require __DIR__.'/auth.php';

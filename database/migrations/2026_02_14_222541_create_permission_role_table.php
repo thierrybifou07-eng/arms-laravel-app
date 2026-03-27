@@ -19,6 +19,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
             $table->primary(['permission_id', 'role_id']);
+            $table->timestamps();
         });
     }
 

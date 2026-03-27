@@ -188,7 +188,7 @@
 
                     switch (code) {
                         case 'once':
-                            amount = rent * months;
+                            amount = rent * (months);
                             break;
                         case 'monthly':
                             amount = rent;
@@ -248,7 +248,7 @@
 
                     let current = new Date(start);
 
-                    while (current < end) {
+                    while (current <= end) {
                         html += `
                         <li class="list-group-item d-flex justify-content-between">
                             <span>${formatDate(current)}</span>

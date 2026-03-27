@@ -24,14 +24,8 @@
         @foreach($permissions as $permission)
             <div class="col-md-4 mb-2">
                 <div class="form-check">
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        name="permissions[]"
-                        value="{{ $permission->id }}"
-                        id="permission_{{ $permission->id }}"
-                        @checked(in_array($permission->id, $selectedPermissions))
-                    >
+                    <input class="form-check-input" type="checkbox" name="permissions[]" value="{{ $permission->id }}"
+                        id="permission_{{ $permission->id }}" @checked(in_array($permission->id, $selectedPermissions))>
                     <label class="form-check-label" for="permission_{{ $permission->id }}">
                         {{ $permission->label }}
                     </label>

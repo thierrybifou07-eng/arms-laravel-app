@@ -39,31 +39,14 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label>Payment Method</label>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="method" value="mobile">
-                            <label class="form-check-label">Mobile Money</label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="method" value="card">
-                            <label class="form-check-label">Bank Card</label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="method" value="cash">
-                            <label class="form-check-label">Cash</label>
-                        </div>
-                    </div>
-
-                    <div id="mobile_fields" class="mt-3 d-none">
-                        <input type="text" name="phone" class="form-control" placeholder="Phone number">
-                    </div>
-
-                    <div id="card_fields" class="mt-3 d-none">
-                        <input type="text" name="card_number" class="form-control mb-2" placeholder="Card number">
-                        <input type="text" name="cvv" class="form-control" placeholder="CVV">
+                        <label>Method</label>
+                        <select name="payment_method_id" class="form-select">
+                            @foreach($paymentMethods as $method)
+                                <option @if ($method->code === 'orange_money' || $method->code === 'mtn_money') id="mobile_fields"
+                                @elseif ($method->code === 'bank_transfer') id="card_fields" @endif value="{{ $method->id }}">
+                                    {{ $method->label }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
@@ -86,20 +69,20 @@
 
         </div>
     </div>
-@push('script')
-<script>
-$('input[name="method"]').on('change', function () {
+    @push('script')
+        <script>
+            $('input[name="method"]').on('change', function () {
 
-    $('#mobile_fields, #card_fields').addClass('d-none');
+                $('#mobile_fields, #card_fields').addClass('d-none');
 
-    if (this.value === 'mobile') {
-        $('#mobile_fields').removeClass('d-none');
-    }
+                if (this.value === 'mobile') {
+                    $('#mobile_fields').removeClass('d-none');
+                }
 
-    if (this.value === 'card') {
-        $('#card_fields').removeClass('d-none');
-    }
-});
-</script>
-@endpush
+                if (this.value === 'card') {
+                    $('#card_fields').removeClass('d-none');
+                }
+            });
+        </script>
+    @endpush
 @endsection

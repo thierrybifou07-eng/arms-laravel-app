@@ -13,11 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function ($middleware) {
         // Add an alias for the middleware CheckRole
         $middleware->alias([
-            'role' => \App\Http\Middleware\CheckRole::class,
+            'checkRole' => \App\Http\Middleware\CheckRole::class,
 
         // Add an alias for the middleware CheckPermission
 
-            'permission' => \App\Http\Middleware\CheckPermission::class,
+            'checkPermission' => \App\Http\Middleware\CheckPermission::class,
         ]);
 
     })
