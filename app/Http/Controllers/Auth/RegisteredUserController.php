@@ -38,16 +38,15 @@ class RegisteredUserController extends Controller
             'phone' => ['required', 'string', 'max:25', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-        $activateId=UserStatus::getIdByCodeOrFail(UserStatus::ACTIVE);
-        $SuperStudentRoleId = Role::getIdByNameOrFail(Role::STUDENT);
+        $pendingId=UserStatus::getIdByCodeOrFail(UserStatus::PENDING);
         $user = User::create([
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
-            'user_status_id' => $activateId, // Assuming active is the default status
-        ])->roles()->attach($SuperStudentRoleId);
+            'user_status_id' => $pendingId, // Assuming pending is the default status
+        ]);
 
 
         event(new Registered($user));

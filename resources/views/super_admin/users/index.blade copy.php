@@ -52,10 +52,10 @@
                                 </td>
                                 <td class="text-end">
                                     <a href="{{ route('users.show', $user) }}" class="btn btn-sm btn-info">
-                                        👁️ View
+                                         View
                                     </a>
                                     <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-warning">
-                                        ✏️ Edit
+                                         Edit
                                     </a>
                                 </td>
                             </tr>

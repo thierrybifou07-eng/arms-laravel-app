@@ -8,7 +8,7 @@
         @csrf
         @method('PUT')
 
-        @include('permissions._form', ['permission' => $permission])
+        @include('super_admin.permissions._form', ['permission' => $permission])
 
         <div class="d-flex gap-2">
             <button class="btn btn-primary">Update</button>

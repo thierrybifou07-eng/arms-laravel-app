@@ -14,7 +14,7 @@ class UserRoleController extends Controller
         $roles = Role::orderBy('label')->get();
         $user->load('roles');
 
-        return view('admin.users.roles', compact('user', 'roles'));
+        return view('super_admin.users.roles', compact('user', 'roles'));
     }
 
     public function update(Request $request, User $user)
@@ -33,6 +33,6 @@ class UserRoleController extends Controller
 
         return redirect()
             ->route('users.index')
-            ->with('success', 'The user' s role has been successfully modified');
+            ->with('success', 'The user\' s role has been successfully modified');
     }
 }

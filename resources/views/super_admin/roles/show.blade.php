@@ -12,7 +12,7 @@
             @forelse($role->permissions as $permission)
                 <span class="badge bg-secondary me-1 mb-1">{{ $permission->label }}</span>
             @empty
-                <span class="text-muted">No one permission</span>
+                <span class="text-muted">No permission found.</span>
             @endforelse
         </div>
     </div>

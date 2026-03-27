@@ -10,7 +10,7 @@ use App\Http\Controllers\ResidenceBuildingController;
 use App\Http\Controllers\ResidenceController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserRoleController;
+use App\Http\Controllers\Admin\UserRoleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,7 +52,7 @@ Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('buil
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('floors.rooms', FloorRoomController::class)->scoped();
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('contracts', ContractController::class)->scoped();
 
-Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('users', UserController::class)->scoped();
+Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('users', UserController::class)->only(['index','show','update','destroy'])->scoped();
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('roles', RoleController::class)->scoped();
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('permissions', PermissionController::class)->scoped();
 Route::middleware('auth')->group(function () {

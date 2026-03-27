@@ -11,7 +11,7 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <form method="POST" action="{{ route('super_admin.users.roles.update', $user) }}" class="card card-body">
+    <form method="POST" action="{{ route('super_adminuser.roles.update', $user) }}" class="card card-body">
         @csrf
         @method('PUT')
 

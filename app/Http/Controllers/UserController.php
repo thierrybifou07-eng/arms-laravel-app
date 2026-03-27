@@ -12,7 +12,7 @@ class UserController extends Controller
     {
         $users = User::all();
 
-        return view('users.index', compact('users'));
+        return view('super_admin.users.index', compact('users'));
     }
 
     /**
@@ -36,7 +36,7 @@ class UserController extends Controller
      */
     public function show(string $id, user $user)
     {
-        return view('users.show', compact('user'));
+        return view('super_admin.users.show', compact('user'));
     }
 
     /**

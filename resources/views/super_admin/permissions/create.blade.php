@@ -7,7 +7,7 @@
     <form method="POST" action="{{ route('permissions.store') }}" class="card card-body">
         @csrf
 
-        @include('permissions._form', ['permission' => null])
+        @include('super_admin.permissions._form', ['permission' => null])
 
         <div class="d-flex gap-2">
             <button class="btn btn-primary">Save</button>
