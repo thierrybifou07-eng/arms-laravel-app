@@ -86,4 +86,20 @@
 
         </div>
     </div>
+@push('script')
+<script>
+$('input[name="method"]').on('change', function () {
+
+    $('#mobile_fields, #card_fields').addClass('d-none');
+
+    if (this.value === 'mobile') {
+        $('#mobile_fields').removeClass('d-none');
+    }
+
+    if (this.value === 'card') {
+        $('#card_fields').removeClass('d-none');
+    }
+});
+</script>
+@endpush
 @endsection
