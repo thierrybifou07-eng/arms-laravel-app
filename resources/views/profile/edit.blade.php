@@ -6,7 +6,7 @@
             <div class="card mb-6">
                 @include('profile.partials.update-profile-information-form')
             </div>
-            <div class="row g-12 ">
+            <div class="row g-12">
                 <div class="col-lg-6">
                     @include('profile.partials.update-password-form')
                 </div>

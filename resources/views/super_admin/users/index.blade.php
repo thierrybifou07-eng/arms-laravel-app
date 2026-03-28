@@ -95,7 +95,7 @@
                                                 <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="{{ route('users.show', $user) }}">
+                                                <a class="dropdown-item" href="{{ route('activate_accountpending_users.show', $user) }}">
                                                     <i class="icon-base bx bx-show-alt me-1"></i>view</a>
                                                 <a class="dropdown-item" href="{{ route('super_adminuser.roles.update', $user) }}"><i
                                                         class="icon-base bx bx-edit me-1"></i>Assign role</a>
