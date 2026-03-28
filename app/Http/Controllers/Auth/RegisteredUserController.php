@@ -34,11 +34,14 @@ class RegisteredUserController extends Controller
         $request->validate([
             'firstname' => ['string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'phone' => ['required', 'string', 'max:25', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email:rfc,dns', 'max:255', 'unique:users,email'.User::class],
+            'phone' => ['required', 'string', 'max:25', 'regex:/^\+?[0-9]{8,15}$/', 'unique:users, phone'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-        $pendingId=UserStatus::getIdByCodeOrFail(UserStatus::PENDING);
+        $pendingId=UserStatus::where('code', UserStatus::PENDING)->value('id' ) ;
+if (!$pendingId) {
+        throw new \Exception('User status "pending" missing in database');
+    }
         $user = User::create([
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
@@ -53,6 +56,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('dashboard'));
     }
 }
