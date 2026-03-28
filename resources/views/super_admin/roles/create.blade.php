@@ -7,7 +7,7 @@
         <form method="POST" action="{{ route('roles.store') }}" class="card card-body">
             @csrf
 
-            @include('roles._form', ['role' => null, 'permissions' => $permissions])
+            @include('super_admin.roles._form', ['role' => null, 'permissions' => $permissions])
 
             <div class="d-flex gap-2">
                 <button class="btn btn-primary">Save role</button>

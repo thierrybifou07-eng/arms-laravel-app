@@ -8,7 +8,7 @@
             @csrf
             @method('PUT')
 
-            @include('roles._form', ['role' => $role, 'permissions' => $permissions])
+            @include('super_admin.roles._form', ['role' => $role, 'permissions' => $permissions])
 
             <div class="d-flex gap-2">
                 <button class="btn btn-primary">Update role</button>

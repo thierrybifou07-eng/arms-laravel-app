@@ -36,8 +36,8 @@
                             </td>
                             <td>{{ $role->users_count ?? $role->users->count() }}</td>
                             <td class="text-end">
-                                <a href="{{ route('roles.show', $role) }}" class="btn btn-sm btn-info">Voir</a>
-                                <a href="{{ route('roles.edit', $role) }}" class="btn btn-sm btn-warning">Modifier</a>
+                                <a href="{{ route('roles.show', $role) }}" class="btn btn-sm btn-info">View</a>
+                                <a href="{{ route('roles.edit', $role) }}" class="btn btn-sm btn-warning">Edit</a>
                                 <form action="{{ route('roles.destroy', $role) }}" method="POST" class="d-inline"
                                     onsubmit="return confirm('Supprimer ce rôle ?')">
                                     @csrf
