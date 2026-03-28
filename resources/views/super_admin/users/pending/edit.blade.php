@@ -11,7 +11,7 @@
         <p class="mb-0"><strong>Current status :</strong> {{ $user->userStatus?->label ?? 'Pending' }}</p>
     </div>
 
-    <form method="POST" action="{{ route('super_admin.pending_users.update', $user) }}" class="card shadow-sm p-4">
+    <form method="POST" action="{{ route('activate_accountpending_users.update', $user) }}" class="card shadow-sm p-4">
         @csrf
         @method('PUT')
 
@@ -45,7 +45,7 @@
             <button type="submit" class="btn btn-success">
                 Active
             </button>
-            <a href="{{ route('super_admin.pending_users.index') }}" class="btn btn-secondary">
+            <a href="{{ route('activate_accountpending_users.index') }}" class="btn btn-secondary">
                 Cancel
             </a>
         </div>

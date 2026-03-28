@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\PendingUserController;
+use App\Http\Controllers\Admin\UserRoleController;
 use App\Http\Controllers\BuildingFloorController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\FloorRoomController;
@@ -10,7 +12,6 @@ use App\Http\Controllers\ResidenceBuildingController;
 use App\Http\Controllers\ResidenceController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Admin\UserRoleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,8 +23,14 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->prefix('super-admin')->name('super_admin')->group(function () {
     Route::resource('roles', RoleController::class);
     Route::resource('permissions', PermissionController::class);
-    Route::get('users/{user}/roles',[UserRoleController::class,'edit'])->name('user.roles.edit');
-    Route::put('users/{user}/roles',[UserRoleController::class,'update'])->name('user.roles.update');
+    Route::get('users/{user}/roles', [UserRoleController::class, 'edit'])->name('user.roles.edit');
+    Route::put('users/{user}/roles', [UserRoleController::class, 'update'])->name('user.roles.update');
+});
+Route::middleware(['auth', 'verified', 'checkRole:admin'])->prefix('activate-account')->name('activate_account')->group(function () {
+    Route::get('pending-users/{user}/edit', [PendingUserController::class, 'edit'])->name('pending_users.edit');
+    Route::put('pending-users/{user}', [PendingUserController::class, 'update'])->name('pending_users.update');
+    Route::get('pending-users', [PendingUserController::class, 'index'])->name('pending_users.index');
+    Route::get('pending-users/{user}', [PendingUserController::class, 'show'])->name('pending_users.show');
 });
 /*
 Past route for the creation of contrac
@@ -39,6 +46,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/profile/view', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -52,7 +60,7 @@ Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('buil
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('floors.rooms', FloorRoomController::class)->scoped();
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('contracts', ContractController::class)->scoped();
 
-Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('users', UserController::class)->only(['index','show','update','destroy'])->scoped();
+Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('users', UserController::class)->only(['index', 'show', 'update', 'destroy'])->scoped();
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('roles', RoleController::class)->scoped();
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('permissions', PermissionController::class)->scoped();
 Route::middleware('auth')->group(function () {

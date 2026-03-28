@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserStatus;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
 
 class PendingUserController extends Controller
 {
@@ -22,14 +22,14 @@ class PendingUserController extends Controller
             ->latest()
             ->get();
 
-        return view('admin.users.pending.index', compact('pendingUsers'));
+        return view('super_admin.users.pending.index', compact('pendingUsers'));
     }
 
     public function show(User $user): View
     {
         $user->load(['userStatus', 'roles']);
 
-        return view('admin.users.pending.show', compact('user'));
+        return view('super_admin.users.pending.show', compact('user'));
     }
 
     public function edit(User $user): View
@@ -40,7 +40,7 @@ class PendingUserController extends Controller
             ->orderBy('label')
             ->get();
 
-        return view('admin.users.pending.edit', compact('user', 'roles'));
+        return view('super_admin.users.pending.edit', compact('user', 'roles'));
     }
 
     public function update(Request $request, User $user): RedirectResponse
@@ -67,7 +67,7 @@ class PendingUserController extends Controller
         ]);
 
         return redirect()
-            ->route('super_admin.pending_users.index')
+            ->route('activate_accountpending_users.index')
             ->with('success', 'The user has been successfully activated.');
     }
 }

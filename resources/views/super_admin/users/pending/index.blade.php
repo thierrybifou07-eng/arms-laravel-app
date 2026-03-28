@@ -42,11 +42,11 @@
                                 @endforelse
                             </td>
                             <td class="text-end">
-                                <a href="{{ route('super_admin.pending_users.show', $user) }}"
+                                <a href="{{ route('activate_accountpending_users.show', $user) }}"
                                    class="btn btn-sm btn-info">
                                     Voir
                                 </a>
-                                <a href="{{ route('super_admin.pending_users.edit', $user) }}"
+                                <a href="{{ route('activate_accountpending_users.edit', $user) }}"
                                    class="btn btn-sm btn-primary">
                                     Activer
                                 </a>

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-    <h1 class="h4 mb-3">Détails de l'utilisateur</h1>
+    <h1 class="h4 mb-3">User informations</h1>
 
     <div class="card shadow-sm p-4">
         <p><strong>Name :</strong> {{ $user->firstname }} {{ $user->lastname }}</p>
@@ -18,10 +18,10 @@
         @endforelse
 
         <div class="mt-4">
-            <a href="{{ route('super_admin.pending_users.edit', $user) }}" class="btn btn-primary">
+            <a href="{{ route('activate_accountpending_users.edit', $user) }}" class="btn btn-primary">
                 Assign roles and active
             </a>
-            <a href="{{ route('super_admin.pending_users.index') }}" class="btn btn-secondary">
+            <a href="{{ route('activate_accountpending_users.index') }}" class="btn btn-secondary">
                 Back
             </a>
         </div>
