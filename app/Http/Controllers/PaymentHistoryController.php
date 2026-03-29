@@ -103,13 +103,21 @@ class PaymentHistoryController extends Controller
     }
 
     /**
-     * Export payment history
+     * Export payment history to CSV
      */
-    public function export(Request $request): mixed
+    public function export(Request $request)
     {
         $this->authorize('export', PaymentHistory::class);
 
-        // Export logic here if needed
-        return response()->download('path/to/export.csv');
+        $histories = PaymentHistory::with('payment')->get();
+        
+        $csv = "ID,Paiement ID,Montant,Ancien Solde,Nouveau Solde,Date\n";
+        foreach ($histories as $history) {
+            $csv .= "\"{$history->id}\",\"{$history->payment_id}\",\"{$history->amount}\",\"{$history->old_balance}\",\"{$history->new_balance}\",\"{$history->created_at}\"\n";
+        }
+        
+        return response($csv)
+            ->header('Content-Type', 'text/csv')
+            ->header('Content-Disposition', 'attachment; filename=historique_paiements_' . now()->format('Y-m-d_H-i-s') . '.csv');
     }
 }

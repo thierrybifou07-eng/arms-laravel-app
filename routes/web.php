@@ -86,7 +86,10 @@ Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('paym
 Route::middleware(['auth', 'verified', 'checkRole:staff,admin,super_admin'])->resource('event_payment_types', EventPaymentTypeController::class)->scoped();
 
 // Payment history routes
-Route::middleware(['auth', 'verified', 'checkRole:staff,teller,admin,super_admin'])->resource('payment_histories', PaymentHistoryController::class)->scoped();
+Route::middleware(['auth', 'verified', 'checkRole:staff,teller,admin,super_admin'])->group(function () {
+    Route::resource('payment_histories', PaymentHistoryController::class)->scoped();
+    Route::post('payment_histories/export', [PaymentHistoryController::class, 'export'])->name('payment_histories.export');
+});
 
 Route::middleware('auth')->group(function () {
     Route::resource('payments', PaymentController::class)->only('index');

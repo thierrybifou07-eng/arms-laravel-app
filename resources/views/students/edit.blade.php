@@ -1,67 +1,113 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto py-6 max-w-md">
-    <h1 class="text-3xl font-bold mb-6">Éditer Étudiant</h1>
+    <div class="col-xxl-12 my-4">
+        <div class="card">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Éditer Étudiant</h5>
+                <small class="text-body-secondary float-end">{{ $student->identification_number }}</small>
+            </div>
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Erreurs:</strong>
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            <div class="card-body">
+                <form method="POST" action="{{ route('students.update', $student) }}">
+                    @csrf
+                    @method('PUT')
+                    
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="surname">Nom Famille *</label>
+                        <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text"><i class="icon-base bx bx-user-circle"></i></span>
+                                <input type="text" name="surname" id="surname" value="{{ old('surname', $student->surname) }}"
+                                    class="form-control @error('surname') is-invalid @enderror"
+                                    placeholder="Entrez le nom de famille" required>
+                            </div>
+                            @error('surname')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                        </div>
+                    </div>
 
-    @if($errors->any())
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-        <ul>
-            @foreach($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="given_name">Prénom *</label>
+                        <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text"><i class="icon-base bx bx-user-circle"></i></span>
+                                <input type="text" name="given_name" id="given_name" value="{{ old('given_name', $student->given_name) }}"
+                                    class="form-control @error('given_name') is-invalid @enderror"
+                                    placeholder="Entrez le prénom" required>
+                            </div>
+                            @error('given_name')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                        </div>
+                    </div>
+
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="middlename">Deuxième Prénom</label>
+                        <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text"><i class="icon-base bx bx-user-circle"></i></span>
+                                <input type="text" name="middlename" id="middlename" value="{{ old('middlename', $student->middlename) }}"
+                                    class="form-control" placeholder="Optionnel">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="identification_number">Numéro d'ID *</label>
+                        <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text"><i class="icon-base bx bx-id-card"></i></span>
+                                <input type="text" name="identification_number" id="identification_number"
+                                    value="{{ old('identification_number', $student->identification_number) }}"
+                                    class="form-control @error('identification_number') is-invalid @enderror"
+                                    placeholder="Numéro d'identification" required>
+                            </div>
+                            @error('identification_number')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                        </div>
+                    </div>
+
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="phone">Téléphone *</label>
+                        <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text"><i class="icon-base bx bx-phone"></i></span>
+                                <input type="tel" name="phone" id="phone" value="{{ old('phone', $student->phone) }}"
+                                    class="form-control @error('phone') is-invalid @enderror"
+                                    placeholder="+213 XX XX XX XX" required>
+                            </div>
+                            @error('phone')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                        </div>
+                    </div>
+
+                    <div class="row mb-6">
+                        <label class="col-sm-2 col-form-label" for="email">Email *</label>
+                        <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text"><i class="icon-base bx bx-envelope"></i></span>
+                                <input type="email" name="email" id="email" value="{{ old('email', $student->email) }}"
+                                    class="form-control @error('email') is-invalid @enderror"
+                                    placeholder="exemple@email.com" required>
+                            </div>
+                            @error('email')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-end">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary me-2">Mettre à Jour</button>
+                            <a href="{{ route('students.show', $student) }}" class="btn btn-secondary">Annuler</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    @endif
-
-    <form action="{{ route('students.update', $student) }}" method="POST" class="bg-white rounded-lg shadow p-6">
-        @csrf
-        @method('PUT')
-        
-        <div class="mb-4">
-            <label for="surname" class="block text-gray-700 text-sm font-bold mb-2">Nom Famille *</label>
-            <input type="text" name="surname" id="surname" value="{{ old('surname', $student->surname) }}" class="w-full px-3 py-2 border border-gray-300 rounded-md @error('surname') border-red-500 @enderror" required>
-            @error('surname')<span class="text-red-600 text-sm">{{ $message }}</span>@enderror
-        </div>
-
-        <div class="mb-4">
-            <label for="given_name" class="block text-gray-700 text-sm font-bold mb-2">Prénom *</label>
-            <input type="text" name="given_name" id="given_name" value="{{ old('given_name', $student->given_name) }}" class="w-full px-3 py-2 border border-gray-300 rounded-md @error('given_name') border-red-500 @enderror" required>
-            @error('given_name')<span class="text-red-600 text-sm">{{ $message }}</span>@enderror
-        </div>
-
-        <div class="mb-4">
-            <label for="middlename" class="block text-gray-700 text-sm font-bold mb-2">Deuxième Prénom</label>
-            <input type="text" name="middlename" id="middlename" value="{{ old('middlename', $student->middlename) }}" class="w-full px-3 py-2 border border-gray-300 rounded-md">
-            @error('middlename')<span class="text-red-600 text-sm">{{ $message }}</span>@enderror
-        </div>
-
-        <div class="mb-4">
-            <label for="identification_number" class="block text-gray-700 text-sm font-bold mb-2">Numéro d'Identification *</label>
-            <input type="text" name="identification_number" id="identification_number" value="{{ old('identification_number', $student->identification_number) }}" class="w-full px-3 py-2 border border-gray-300 rounded-md @error('identification_number') border-red-500 @enderror" required>
-            @error('identification_number')<span class="text-red-600 text-sm">{{ $message }}</span>@enderror
-        </div>
-
-        <div class="mb-4">
-            <label for="phone" class="block text-gray-700 text-sm font-bold mb-2">Téléphone *</label>
-            <input type="tel" name="phone" id="phone" value="{{ old('phone', $student->phone) }}" class="w-full px-3 py-2 border border-gray-300 rounded-md @error('phone') border-red-500 @enderror" required>
-            @error('phone')<span class="text-red-600 text-sm">{{ $message }}</span>@enderror
-        </div>
-
-        <div class="mb-6">
-            <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email *</label>
-            <input type="email" name="email" id="email" value="{{ old('email', $student->email) }}" class="w-full px-3 py-2 border border-gray-300 rounded-md @error('email') border-red-500 @enderror" required>
-            @error('email')<span class="text-red-600 text-sm">{{ $message }}</span>@enderror
-        </div>
-
-        <div class="flex gap-2">
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Mettre à Jour
-            </button>
-            <a href="{{ route('students.show', $student) }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                Annuler
-            </a>
-        </div>
-    </form>
-</div>
 @endsection

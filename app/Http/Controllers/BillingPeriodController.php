@@ -28,7 +28,8 @@ class BillingPeriodController extends Controller
     {
         $this->authorize('create', BillingPeriod::class);
         
-        return view('billing_periods.create');
+        $contracts = Contract::all();
+        return view('billing_periods.create', compact('contracts'));
     }
 
     /**

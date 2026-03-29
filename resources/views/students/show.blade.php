@@ -1,76 +1,126 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto py-6">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">{{ $student->surname }} {{ $student->given_name }}</h1>
-        <div class="flex gap-2">
-            @can('update', $student)
-            <a href="{{ route('students.edit', $student) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
-                Éditer
-            </a>
-            @endcan
-            @can('delete', $student)
-            <form action="{{ route('students.destroy', $student) }}" method="POST" class="inline">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="return confirm('Êtes-vous sûr?')">
-                    Supprimer
-                </button>
-            </form>
-            @endcan
-        </div>
-    </div>
+    <div class="col-xxl-12">
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-bold mb-4">Informations Personnelles</h2>
-            <div class="space-y-3">
-                <div>
-                    <strong>Nom Famille:</strong> {{ $student->surname }}
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card my-4">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h5 class="mb-0">Informations Personnelles</h5>
+                        @can('update', $student)
+                        <a href="{{ route('students.edit', $student) }}" class="btn btn-warning btn-sm">
+                            <i class="icon-base bx bx-edit me-1"></i> Éditer
+                        </a>
+                        @endcan
+                    </div>
+                    <div class="table-responsive text-nowrap">
+                        <table class="table table-borderless">
+                            <tbody class="table-border-bottom-0">
+                                <tr>
+                                    <td class="fw-medium">Nom Complet:</td>
+                                    <td>{{ $student->surname }} {{ $student->given_name }}
+                                        @if ($student->middlename)
+                                            {{ $student->middlename }}
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-medium">ID Étudiant:</td>
+                                    <td>{{ $student->identification_number }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-medium">Email:</td>
+                                    <td>{{ $student->email }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-medium">Téléphone:</td>
+                                    <td>{{ $student->phone }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-medium">Utilisateur Lié:</td>
+                                    <td>
+                                        @if ($student->user)
+                                            <a href="{{ route('users.show', $student->user) }}">
+                                                {{ $student->user->firstname }} {{ $student->user->lastname }}
+                                            </a>
+                                        @else
+                                            <span class="badge bg-warning">Aucun utilisateur</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-medium">Créé le:</td>
+                                    <td>{{ $student->created_at->format('d/m/Y H:i') }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-medium">Mis à jour le:</td>
+                                    <td>{{ $student->updated_at->format('d/m/Y H:i') }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div>
-                    <strong>Prénom:</strong> {{ $student->given_name }}
+            </div>
+
+            <div class="col-md-4">
+                <div class="card my-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Contrats</h5>
+                    </div>
+                    @if ($contracts->count() > 0)
+                        <div class="list-group list-group-flush">
+                            @foreach ($contracts as $contract)
+                                <a href="{{ route('contracts.show', $contract) }}"
+                                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{{ $contract->room->room_number ?? 'N/A' }}</strong>
+                                        <br>
+                                        <small class="text-muted">{{ $contract->status->label ?? 'N/A' }}</small>
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill">
+                                        {{ $contract->created_at->format('d/m/Y') }}
+                                    </span>
+                                </a>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="card-body">
+                            <p class="text-muted text-center mb-0">Aucun contrat trouvé.</p>
+                        </div>
+                    @endif
                 </div>
-                @if($student->middlename)
-                <div>
-                    <strong>Deuxième Prénom:</strong> {{ $student->middlename }}
+
+                @can('delete', $student)
+                <div class="card border-danger my-4">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">Zone Dangereuse</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ route('students.destroy', $student) }}" class="mb-0">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger w-100"
+                                onclick="return confirm('Êtes-vous absolument sûr? Cette action est irréversible.')">
+                                <i class="icon-base bx bx-trash me-1"></i> Supprimer Étudiant
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                @endif
-                <div>
-                    <strong>ID:</strong> {{ $student->identification_number }}
-                </div>
-                <div>
-                    <strong>Téléphone:</strong> {{ $student->phone }}
-                </div>
-                <div>
-                    <strong>Email:</strong> {{ $student->email }}
-                </div>
+                @endcan
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-bold mb-4">Contrats</h2>
-            @if($contracts->count() > 0)
-            <ul class="space-y-2">
-                @foreach($contracts as $contract)
-                <li>
-                    <a href="{{ route('contracts.show', $contract) }}" class="text-blue-600 hover:text-blue-900">
-                        {{ $contract->room->room_number }} - {{ $contract->status->name }}
-                    </a>
-                </li>
-                @endforeach
-            </ul>
-            @else
-            <p class="text-gray-500">Aucun contrat trouvé.</p>
-            @endif
+        <div class="demo-inline-spacing">
+            <a href="{{ route('students.index') }}" class="btn btn-secondary">
+                <i class="icon-base bx bx-arrow-back me-1"></i> Retour à la Liste
+            </a>
         </div>
     </div>
-
-    <div class="mt-6">
-        <a href="{{ route('students.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-            Retour à la Liste
-        </a>
-    </div>
-</div>
 @endsection

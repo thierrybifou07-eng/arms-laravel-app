@@ -1,69 +1,80 @@
 @extends('layouts.app')
-
 @section('content')
-<div class="container mx-auto py-6">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">Méthodes de Paiement</h1>
-        @can('create', App\Models\PaymentMethod::class)
-        <a href="{{ route('payment_methods.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Ajouter
-        </a>
-        @endcan
+    <div class="col-xxl-12">
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        <div class="card my-5">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Méthodes de Paiement</h5>
+                @can('create', App\Models\PaymentMethod::class)
+                <a href="{{ route('payment_methods.create') }}" class="btn btn-primary btn-sm">
+                    <i class="icon-base bx bx-plus me-1"></i> Ajouter
+                </a>
+                @endcan
+            </div>
+            @if ($payment_methods->count() > 0)
+                <div class="table-responsive table-hover text-nowrap">
+                    <table class="table">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Nom</th>
+                                <th>Code</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            @foreach ($payment_methods as $method)
+                                <tr>
+                                    <td><span class="fw-medium">{{ $method->name }}</span></td>
+                                    <td><span class="badge bg-light text-dark">{{ $method->code }}</span></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                                data-bs-toggle="dropdown">
+                                                <i class="icon-base bx bx-dots-vertical-rounded"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                @can('view', $method)
+                                                <a class="dropdown-item" href="{{ route('payment_methods.show', $method) }}">
+                                                    <i class="icon-base bx bx-show-alt me-1"></i>Voir</a>
+                                                @endcan
+                                                @can('update', $method)
+                                                <a class="dropdown-item" href="{{ route('payment_methods.edit', $method) }}">
+                                                    <i class="icon-base bx bx-edit me-1"></i>Éditer</a>
+                                                @endcan
+                                                @can('delete', $method)
+                                                <hr class="dropdown-divider">
+                                                <form method="POST" action="{{ route('payment_methods.destroy', $method) }}" class="d-inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="dropdown-item text-danger" type="submit" onclick="return confirm('Êtes-vous sûr?')">
+                                                        <i class="icon-base bx bx-trash me-1"></i>Supprimer
+                                                    </button>
+                                                </form>
+                                                @endcan
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <div class="text-center py-5">
+                    <a class="btn rounded-pill btn-primary" href="{{ route('payment_methods.create') }}">
+                        Aucune méthode - Créer une nouvelle</a>
+                </div>
+            @endif
+        </div>
+        @if ($payment_methods->count() > 0)
+            <div class="demo-inline-spacing mx-5">
+                {{ $payment_methods->links() }}
+            </div>
+        @endif
     </div>
-
-    @if(session('success'))
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-        {{ session('success') }}
-    </div>
-    @endif
-
-    <div class="bg-white rounded-lg shadow overflow-hidden">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @forelse($payment_methods as $method)
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{ $method->name }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ $method->code }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        @can('view', $method)
-                        <a href="{{ route('payment_methods.show', $method) }}" class="text-blue-600 hover:text-blue-900">Voir</a>
-                        @endcan
-                        @can('update', $method)
-                        <a href="{{ route('payment_methods.edit', $method) }}" class="text-yellow-600 hover:text-yellow-900 ml-2">Éditer</a>
-                        @endcan
-                        @can('delete', $method)
-                        <form action="{{ route('payment_methods.destroy', $method) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-900 ml-2" onclick="return confirm('Êtes-vous sûr?')">Supprimer</button>
-                        </form>
-                        @endcan
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                        Aucune méthode trouvée.
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    <div class="mt-4">
-        {{ $payment_methods->links() }}
-    </div>
-</div>
 @endsection

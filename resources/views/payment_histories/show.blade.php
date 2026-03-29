@@ -1,44 +1,56 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto py-6">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">Entrée d'Historique</h1>
-    </div>
-
-    <div class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-bold mb-4">Détails</h2>
-        <div class="space-y-3">
-            <div>
-                <strong>Paiement ID:</strong> {{ $payment_history->payment_id }}
+    <div class="col-xxl-12">
+        <div class="card my-4">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Entrée d'Historique #{{ $payment_history->id }}</h5>
+                <a href="{{ route('payment_histories.index') }}" class="btn btn-secondary btn-sm">
+                    <i class="icon-base bx bx-arrow-back me-1"></i> Retour
+                </a>
             </div>
-            <div>
-                <strong>Montant:</strong> {{ number_format($payment_history->amount, 2) }} DA
-            </div>
-            <div>
-                <strong>Ancien Solde:</strong> {{ number_format($payment_history->old_balance, 2) }} DA
-            </div>
-            <div>
-                <strong>Nouveau Solde:</strong> {{ number_format($payment_history->new_balance, 2) }} DA
-            </div>
-            <div>
-                <strong>Notes:</strong> 
-                @if($payment_history->notes)
-                    {{ $payment_history->notes }}
-                @else
-                    <em>Aucune note</em>
-                @endif
-            </div>
-            <div>
-                <strong>Créé le:</strong> {{ $payment_history->created_at->format('d/m/Y H:i:s') }}
+            <div class="table-responsive text-nowrap">
+                <table class="table table-borderless">
+                    <tbody class="table-border-bottom-0">
+                        <tr>
+                            <td class="fw-medium">Paiement ID:</td>
+                            <td>#{{ $payment_history->payment_id }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-medium">Montant (DZD):</td>
+                            <td><span class="badge bg-success">{{ number_format($payment_history->amount, 2, ',', ' ') }}</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-medium">Ancien Solde:</td>
+                            <td>{{ number_format($payment_history->old_balance, 2, ',', ' ') }} DZD</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-medium">Nouveau Solde:</td>
+                            <td>{{ number_format($payment_history->new_balance, 2, ',', ' ') }} DZD</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-medium">Notes:</td>
+                            <td>
+                                @if ($payment_history->notes)
+                                    {{ $payment_history->notes }}
+                                @else
+                                    <em class="text-muted">Aucune note</em>
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fw-medium">Créé le:</td>
+                            <td><span class="badge bg-label-info">{{ $payment_history->created_at->format('d/m/Y H:i:s') }}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-    </div>
 
-    <div class="mt-6">
-        <a href="{{ route('payment_histories.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-            Retour à la Liste
-        </a>
+        <div class="demo-inline-spacing">
+            <a href="{{ route('payment_histories.index') }}" class="btn btn-secondary">
+                <i class="icon-base bx bx-arrow-back me-1"></i> Retour à la Liste
+            </a>
+        </div>
     </div>
-</div>
 @endsection
