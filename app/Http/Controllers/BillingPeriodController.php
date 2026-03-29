@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBillingPeriodRequest;
 use App\Http\Requests\UpdateBillingPeriodRequest;
 use App\Models\BillingPeriod;
+use App\Models\Contract;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 

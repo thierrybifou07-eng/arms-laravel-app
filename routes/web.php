@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\PendingUserController;
 use App\Http\Controllers\Admin\UserRoleController;
 use App\Http\Controllers\BillingPeriodController;
@@ -47,9 +48,7 @@ Route::get('/rooms/{floor}', [ContractController::class, 'getRooms']);
 Route::get('/super_admin/dashboard', function () {
     return view('super_admin.dashboard');
 })->middleware(['auth', 'verified', 'checkRole:super_admin'])->name('super_admin.dashboard');
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile/view', [ProfileController::class, 'show'])->name('profile.show');
@@ -60,10 +59,10 @@ Route::middleware('auth')->group(function () {
         ->name('avatar.update');
 });
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('residences', ResidenceController::class)->scoped();
-Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('residences.buildings', ResidenceBuildingController::class)->scoped();
-Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('buildings.floors', BuildingFloorController::class)->scoped();
-
-Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('floors.rooms', FloorRoomController::class)->scoped();
+// NOTE: Nested resource routes for buildings/floors/rooms not yet implemented
+// Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('residences.buildings', ResidenceBuildingController::class)->scoped();
+// Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('buildings.floors', BuildingFloorController::class)->scoped();
+// Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('floors.rooms', FloorRoomController::class)->scoped();
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('contracts', ContractController::class)->scoped();
 
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('users', UserController::class)->only(['index', 'show', 'update', 'destroy'])->scoped();
