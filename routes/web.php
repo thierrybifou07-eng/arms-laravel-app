@@ -60,9 +60,9 @@ Route::middleware('auth')->group(function () {
 });
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('residences', ResidenceController::class)->scoped();
 // NOTE: Nested resource routes for buildings/floors/rooms not yet implemented
-// Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('residences.buildings', ResidenceBuildingController::class)->scoped();
-// Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('buildings.floors', BuildingFloorController::class)->scoped();
-// Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('floors.rooms', FloorRoomController::class)->scoped();
+Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('residences.buildings', ResidenceBuildingController::class)->scoped();
+Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('buildings.floors', BuildingFloorController::class)->scoped();
+Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('floors.rooms', FloorRoomController::class)->scoped();
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('contracts', ContractController::class)->scoped();
 
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('users', UserController::class)->only(['index', 'show', 'update', 'destroy'])->scoped();
@@ -70,10 +70,10 @@ Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('role
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('permissions', PermissionController::class)->scoped();
 
 // Student management routes
-Route::middleware(['auth', 'verified', 'checkRole:staff,admin,super_admin'])->resource('students', StudentController::class)->scoped();
+Route::middleware(['auth', 'verified', 'checkRole:super_admin,staff,admin'])->resource('students', StudentController::class)->scoped();
 
 // Billing period routes
-Route::middleware(['auth', 'verified', 'checkRole:staff,admin,super_admin'])->resource('billing_periods', BillingPeriodController::class)->scoped();
+Route::middleware(['auth', 'verified', 'checkRole:super_admin,staff,admin'])->resource('billing_periods', BillingPeriodController::class)->scoped();
 
 // Payment method routes
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('payment_methods', PaymentMethodController::class)->scoped();
@@ -82,10 +82,10 @@ Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('paym
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('payment_statuses', PaymentStatusController::class)->scoped();
 
 // Event payment type routes
-Route::middleware(['auth', 'verified', 'checkRole:staff,admin,super_admin'])->resource('event_payment_types', EventPaymentTypeController::class)->scoped();
+Route::middleware(['auth', 'verified', 'checkRole:super_admin,staff,admin'])->resource('event_payment_types', EventPaymentTypeController::class)->scoped();
 
 // Payment history routes
-Route::middleware(['auth', 'verified', 'checkRole:staff,teller,admin,super_admin'])->group(function () {
+Route::middleware(['auth', 'verified', 'checkRole:super_admin,staff,teller,admin'])->group(function () {
     Route::resource('payment_histories', PaymentHistoryController::class)->scoped();
     Route::post('payment_histories/export', [PaymentHistoryController::class, 'export'])->name('payment_histories.export');
 });

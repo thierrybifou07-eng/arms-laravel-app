@@ -120,11 +120,11 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="" class="menu-link">
-                        <div data-i18n="My Course">Building</div>
+                    <a href="{{ route('students.index') }}" class="menu-link">
+                        <div data-i18n="My Course">Students</div>
                     </a>
                 </li>
-                <li class="menu-item">
+{{--                 <li class="menu-item">
                     <a href="app-academy-course-details.html" class="menu-link">
                         <div data-i18n="Course Details">Floor</div>
                     </a>
@@ -133,7 +133,7 @@
                     <a href="app-academy-course-details.html" class="menu-link">
                         <div data-i18n="Course Details">Rooms</div>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </li>
         <!-- Academy menu end -->
