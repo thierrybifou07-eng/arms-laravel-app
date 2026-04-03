@@ -85,6 +85,10 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->belongsToMany(Role::class)->withTimestamps();
     }
+    public function students()
+    {
+        return $this->hasOne(Student::class);
+    }
 
     // create the hasRole method for the middleware
     public function hasRole(string $roleName): bool

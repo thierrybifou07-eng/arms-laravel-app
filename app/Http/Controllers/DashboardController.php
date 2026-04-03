@@ -49,8 +49,6 @@ class DashboardController extends Controller
             'validatedPayments' => Payment::whereHas('status', fn ($q) => $q->where('code', 'validated'))->count(),
             'pendingPayments' => Payment::whereHas('status', fn ($q) => $q->where('code', 'pending'))->count(),
             'processingPayments' => Payment::whereHas('status', fn ($q) => $q->where('code', 'processing'))->count(),
-            'totalBillingPeriods' => BillingPeriod::count(),
-            'activeBillingPeriods' => BillingPeriod::where('is_active', true)->count(),
             'totalPaymentHistories' => PaymentHistory::count(),
             'recentHistories' => PaymentHistory::latest()->take(5)->get(),
             'recentPayments' => Payment::with(['contract.student', 'status'])->latest()->take(10)->get(),
@@ -69,7 +67,6 @@ class DashboardController extends Controller
             'totalPayments' => Payment::count(),
             'validatedPayments' => Payment::whereHas('status', fn ($q) => $q->where('code', 'validated'))->count(),
             'pendingPayments' => Payment::whereHas('status', fn ($q) => $q->where('code', 'pending'))->count(),
-            'totalBillingPeriods' => BillingPeriod::count(),
             'recentPayments' => Payment::with(['contract.student', 'status'])->latest()->take(10)->get(),
             'recentContracts' => Contract::with(['student', 'room', 'status'])->latest()->take(5)->get(),
         ];

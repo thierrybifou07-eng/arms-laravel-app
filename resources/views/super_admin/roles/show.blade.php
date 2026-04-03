@@ -5,7 +5,6 @@
         <h1 class="h4 mb-3">Role Details</h1>
 
         <div class="card card-body">
-            <p><strong>Name :</strong> {{ $role->name }}</p>
             <p><strong>Label :</strong> {{ $role->label }}</p>
 
             <p class="mb-1"><strong>Permissions :</strong></p>

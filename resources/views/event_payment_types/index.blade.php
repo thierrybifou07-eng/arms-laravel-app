@@ -16,7 +16,7 @@
                 </a>
                 @endcan
             </div>
-            @if ($event_payment_types->count() > 0)
+            @if ($eventPaymentTypes->count() > 0)
                 <div class="table-responsive table-hover text-nowrap">
                     <table class="table">
                         <thead class="table-dark">
@@ -28,7 +28,7 @@
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                            @foreach ($event_payment_types as $type)
+                            @foreach ($eventPaymentTypes as $type)
                                 <tr>
                                     <td><span class="fw-medium">{{ $type->name }}</span></td>
                                     <td>{{ number_format($type->amount, 2, ',', ' ') }} DZD</td>
@@ -73,9 +73,9 @@
                 </div>
             @endif
         </div>
-        @if ($event_payment_types->count() > 0)
+        @if ($eventPaymentTypes->count() > 0)
             <div class="demo-inline-spacing mx-5">
-                {{ $event_payment_types->links() }}
+                {{ $eventPaymentTypes->links() }}
             </div>
         @endif
     </div>

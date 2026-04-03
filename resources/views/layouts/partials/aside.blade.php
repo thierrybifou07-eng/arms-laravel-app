@@ -64,53 +64,16 @@
     <ul class="menu-inner py-1">
         <!-- Dashboards -->
         <li class="menu-item active">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <a href="{{ route('dashboard') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-smile"></i>
                 <div class="text-truncate" data-i18n="Dashboards">Dashboard</div>
-                <span class="badge rounded-pill bg-danger ms-auto">5</span>
             </a>
-            <ul class="menu-sub">
-                <li class="menu-item active">
-                    <a href="{{ route('dashboard') }}" class="menu-link">
-                        <div class="text-truncate" data-i18n="Analytics">Analytics</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/html/vertical-menu-template/dashboards-crm.html"
-                        target="_blank" class="menu-link">
-                        <div class="text-truncate" data-i18n="CRM">CRM</div>
-
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/html/vertical-menu-template/app-ecommerce-dashboard.html"
-                        target="_blank" class="menu-link">
-                        <div class="text-truncate" data-i18n="eCommerce">eCommerce</div>
-
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/html/vertical-menu-template/app-logistics-dashboard.html"
-                        target="_blank" class="menu-link">
-                        <div class="text-truncate" data-i18n="Logistics">Logistics</div>
-
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/html/vertical-menu-template/app-academy-dashboard.html"
-                        target="_blank" class="menu-link">
-                        <div class="text-truncate" data-i18n="Academy">Academy</div>
-
-                    </a>
-                </li>
-
-            </ul>
         </li>
         <!-- Residences -->
         <!-- Academy menu start -->
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base bx bx-book-open"></i>
+                <i class="menu-icon icon-base bx bx-home"></i>
                 <div data-i18n="Academy">Residences</div>
             </a>
             <ul class="menu-sub">
@@ -124,37 +87,9 @@
                         <div data-i18n="My Course">Students</div>
                     </a>
                 </li>
-{{--                 <li class="menu-item">
-                    <a href="app-academy-course-details.html" class="menu-link">
-                        <div data-i18n="Course Details">Floor</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="app-academy-course-details.html" class="menu-link">
-                        <div data-i18n="Course Details">Rooms</div>
-                    </a>
-                </li> --}}
             </ul>
         </li>
-        <!-- Academy menu end -->
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base bx bx-car"></i>
-                <div data-i18n="Logistics">Logistics</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="app-logistics-dashboard.html" class="menu-link">
-                        <div data-i18n="Dashboard">Dashboard</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="app-logistics-fleet.html" class="menu-link">
-                        <div data-i18n="Fleet">Fleet</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
+        <!-- Contracts payments menu -->
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base bx bx-food-menu"></i>
@@ -171,32 +106,6 @@
                         <div data-i18n="Preview">Create</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="{{ route('payments.index') }}" class="menu-link">
-                        <div data-i18n="Edit">Payments</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="app-invoice-add.html" class="menu-link">
-                        <div data-i18n="Add">Add</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <!-- Academics Section -->
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base bx bx-school"></i>
-                <div data-i18n="Academics">Académiques</div>
-            </a>
-            <ul class="menu-sub">
-                @can('viewAny', App\Models\Student::class)
-                <li class="menu-item">
-                    <a href="{{ route('students.index') }}" class="menu-link">
-                        <div data-i18n="Students">Étudiants</div>
-                    </a>
-                </li>
-                @endcan
             </ul>
         </li>
         <!-- Finance Section -->
@@ -206,49 +115,26 @@
                 <div data-i18n="Finance">Finance</div>
             </a>
             <ul class="menu-sub">
-                @can('viewAny', App\Models\BillingPeriod::class)
-                <li class="menu-item">
-                    <a href="{{ route('billing_periods.index') }}" class="menu-link">
-                        <div data-i18n="Billing Periods">Périodes de Facturation</div>
-                    </a>
-                </li>
+                @can('viewAny', App\Models\Payment::class)
+                    <li class="menu-item">
+                        <a href="{{ route('payments.index') }}" class="menu-link">
+                            <div data-i18n="Edit">Payments</div>
+                        </a>
+                    </li>
                 @endcan
                 @can('viewAny', App\Models\PaymentHistory::class)
-                <li class="menu-item">
-                    <a href="{{ route('payment_histories.index') }}" class="menu-link">
-                        <div data-i18n="Payment Histories">Historique des Paiements</div>
-                    </a>
-                </li>
+                    <li class="menu-item">
+                        <a href="{{ route('payment_histories.index') }}" class="menu-link">
+                            <div data-i18n="Payment Histories">Payments Histories</div>
+                        </a>
+                    </li>
                 @endcan
                 @can('viewAny', App\Models\EventPaymentType::class)
-                <li class="menu-item">
-                    <a href="{{ route('event_payment_types.index') }}" class="menu-link">
-                        <div data-i18n="Event Payment Types">Types de Paiement d'Événement</div>
-                    </a>
-                </li>
-                @endcan
-            </ul>
-        </li>
-        <!-- Settings Section -->
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base bx bx-cog"></i>
-                <div data-i18n="Settings">Paramètres</div>
-            </a>
-            <ul class="menu-sub">
-                @can('viewAny', App\Models\PaymentMethod::class)
-                <li class="menu-item">
-                    <a href="{{ route('payment_methods.index') }}" class="menu-link">
-                        <div data-i18n="Payment Methods">Méthodes de Paiement</div>
-                    </a>
-                </li>
-                @endcan
-                @can('viewAny', App\Models\PaymentStatus::class)
-                <li class="menu-item">
-                    <a href="{{ route('payment_statuses.index') }}" class="menu-link">
-                        <div data-i18n="Payment Statuses">Statuts de Paiement</div>
-                    </a>
-                </li>
+                    <li class="menu-item">
+                        <a href="{{ route('event_payment_types.index') }}" class="menu-link">
+                            <div data-i18n="Event Payment Types">Event Payment Types</div>
+                        </a>
+                    </li>
                 @endcan
             </ul>
         </li>
@@ -291,220 +177,19 @@
         </li>
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base bx bx-dock-top"></i>
-                <div data-i18n="Pages">Pages</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <div data-i18n="User Profile">User Profile</div>
-                    </a>
-                    <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a href="pages-profile-user.html" class="menu-link">
-                                <div data-i18n="Profile">Profile</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="pages-profile-teams.html" class="menu-link">
-                                <div data-i18n="Teams">Teams</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="pages-profile-projects.html" class="menu-link">
-                                <div data-i18n="Projects">Projects</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="pages-profile-connections.html" class="menu-link">
-                                <div data-i18n="Connections">Connections</div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <div data-i18n="Account Settings">Account Settings</div>
-                    </a>
-                    <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a href="pages-account-settings-account.html" class="menu-link">
-                                <div data-i18n="Account">Account</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="pages-account-settings-security.html" class="menu-link">
-                                <div data-i18n="Security">Security</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="pages-account-settings-billing.html" class="menu-link">
-                                <div data-i18n="Billing &amp; Plans">Billing &amp; Plans</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="pages-account-settings-notifications.html" class="menu-link">
-                                <div data-i18n="Notifications">Notifications</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="pages-account-settings-connections.html" class="menu-link">
-                                <div data-i18n="Connections">Connections</div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <a href="pages-faq.html" class="menu-link">
-                        <div data-i18n="FAQ">FAQ</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="pages-pricing.html" class="menu-link">
-                        <div data-i18n="Pricing">Pricing</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <div data-i18n="Misc">Misc</div>
-                    </a>
-                    <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a href="pages-misc-error.html" class="menu-link" target="_blank">
-                                <div data-i18n="Error">Error</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="pages-misc-under-maintenance.html" class="menu-link" target="_blank">
-                                <div data-i18n="Under Maintenance">Under Maintenance</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="pages-misc-comingsoon.html" class="menu-link" target="_blank">
-                                <div data-i18n="Coming Soon">Coming Soon</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="pages-misc-not-authorized.html" class="menu-link" target="_blank">
-                                <div data-i18n="Not Authorized">Not Authorized</div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base bx bx-lock-open-alt"></i>
                 <div data-i18n="Authentications">Authentications</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <div data-i18n="Login">Login</div>
-                    </a>
-                    <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a href="auth-login-basic.html" class="menu-link" target="_blank">
-                                <div data-i18n="Basic">Basic</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="auth-login-cover.html" class="menu-link" target="_blank">
-                                <div data-i18n="Cover">Cover</div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <div data-i18n="Register">Register</div>
-                    </a>
-                    <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a href="auth-register-basic.html" class="menu-link" target="_blank">
-                                <div data-i18n="Basic">Basic</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="auth-register-cover.html" class="menu-link" target="_blank">
-                                <div data-i18n="Cover">Cover</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="auth-register-multisteps.html" class="menu-link" target="_blank">
-                                <div data-i18n="Multi-steps">Multi-steps</div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <div data-i18n="Verify Email">Verify Email</div>
                     </a>
-                    <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a href="auth-verify-email-basic.html" class="menu-link" target="_blank">
-                                <div data-i18n="Basic">Basic</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="auth-verify-email-cover.html" class="menu-link" target="_blank">
-                                <div data-i18n="Cover">Cover</div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <div data-i18n="Reset Password">Reset Password</div>
-                    </a>
-                    <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a href="auth-reset-password-basic.html" class="menu-link" target="_blank">
-                                <div data-i18n="Basic">Basic</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="auth-reset-password-cover.html" class="menu-link" target="_blank">
-                                <div data-i18n="Cover">Cover</div>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <div data-i18n="Forgot Password">Forgot Password</div>
                     </a>
-                    <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a href="auth-forgot-password-basic.html" class="menu-link" target="_blank">
-                                <div data-i18n="Basic">Basic</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="auth-forgot-password-cover.html" class="menu-link" target="_blank">
-                                <div data-i18n="Cover">Cover</div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <div data-i18n="Two Steps">Two Steps</div>
-                    </a>
-                    <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a href="auth-two-steps-basic.html" class="menu-link" target="_blank">
-                                <div data-i18n="Basic">Basic</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="auth-two-steps-cover.html" class="menu-link" target="_blank">
-                                <div data-i18n="Cover">Cover</div>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
             </ul>
         </li>

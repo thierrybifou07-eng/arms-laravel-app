@@ -3,15 +3,12 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\PendingUserController;
 use App\Http\Controllers\Admin\UserRoleController;
-use App\Http\Controllers\BillingPeriodController;
 use App\Http\Controllers\BuildingFloorController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\EventPaymentTypeController;
 use App\Http\Controllers\FloorRoomController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentHistoryController;
-use App\Http\Controllers\PaymentMethodController;
-use App\Http\Controllers\PaymentStatusController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResidenceBuildingController;
@@ -28,8 +25,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->prefix('super-admin')->name('super_admin')->group(function () {
-    Route::resource('roles', RoleController::class);
-    Route::resource('permissions', PermissionController::class);
+    Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
+    Route::get('roles/{role}', [RoleController::class, 'show'])->name('roles.show');
+    Route::get('permissions', [PermissionController::class, 'index'])->name('permissions.index');
     Route::get('users/{user}/roles', [UserRoleController::class, 'edit'])->name('user.roles.edit');
     Route::put('users/{user}/roles', [UserRoleController::class, 'update'])->name('user.roles.update');
 });
@@ -71,16 +69,6 @@ Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('perm
 
 // Student management routes
 Route::middleware(['auth', 'verified', 'checkRole:super_admin,staff,admin'])->resource('students', StudentController::class)->scoped();
-
-// Billing period routes
-Route::middleware(['auth', 'verified', 'checkRole:super_admin,staff,admin'])->resource('billing_periods', BillingPeriodController::class)->scoped();
-
-// Payment method routes
-Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('payment_methods', PaymentMethodController::class)->scoped();
-
-// Payment status routes  
-Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('payment_statuses', PaymentStatusController::class)->scoped();
-
 // Event payment type routes
 Route::middleware(['auth', 'verified', 'checkRole:super_admin,staff,admin'])->resource('event_payment_types', EventPaymentTypeController::class)->scoped();
 

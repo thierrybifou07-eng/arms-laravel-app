@@ -1,4 +1,25 @@
 <!-- Staff Dashboard -->
+<div class="card mb-4">
+    <div class="d-flex align-items-start row">
+        <div class="col-sm-7">
+            <div class="card-body">
+                <h5 class="card-title text-primary mb-3">Bienvenue {{ Auth::user()->firstname }}
+                    {{ Auth::user()->lastname }}! 🎉</h5>
+                <p class="mb-3">Vous êtes connecté en tant que
+                    <strong>{{ Auth::user()->roles->first()->label }}</strong></p>
+                <a href="{{ route('profile.show') }}" class="btn btn-sm btn-outline-primary">
+                    <i class="icon-base bx bx-user me-1"></i> Vue Profil
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-5 text-center text-sm-left">
+            <div class="card-body pb-0 px-0 px-md-6">
+                <img src="{{ asset('admin-template/assets/img/illustrations/man-with-laptop.png') }}" height="175"
+                    alt="Welcome">
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-lg-4 col-md-6 mb-4">
         <div class="card">
@@ -62,8 +83,10 @@
                         @forelse($dashboardData['recentContracts'] ?? [] as $contract)
                             <tr>
                                 <td>{{ $contract->student?->surname ?? 'N/A' }}</td>
-                                <td>{{ $contract->room?->floor?->building?->name ?? 'N/A' }}/F{{ $contract->room?->floor?->number ?? 'N/A' }}/R{{ $contract->room?->number ?? 'N/A' }}</td>
-                                <td><span class="badge bg-success">{{ $contract->status?->label ?? 'Unknown' }}</span></td>
+                                <td>{{ $contract->room?->floor?->building?->name ?? 'N/A' }}/F{{ $contract->room?->floor?->number ?? 'N/A' }}/R{{ $contract->room?->number ?? 'N/A' }}
+                                </td>
+                                <td><span class="badge bg-success">{{ $contract->status?->label ?? 'Unknown' }}</span>
+                                </td>
                                 <td>{{ optional($contract->start_date)->format('d/m/Y') ?? 'N/A' }}</td>
                             </tr>
                         @empty
