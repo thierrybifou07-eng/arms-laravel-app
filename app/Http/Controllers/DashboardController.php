@@ -6,7 +6,7 @@ use App\Models\BillingPeriod;
 use App\Models\Contract;
 use App\Models\Payment;
 use App\Models\PaymentHistory;
-use App\Models\Student;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -41,7 +41,7 @@ class DashboardController extends Controller
     {
         return [
             'role' => 'super_admin',
-            'totalStudents' => Student::count(),
+            'totalStudents' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->count(),
             'totalContracts' => Contract::count(),
             'activeContracts' => Contract::whereHas('status', fn ($q) => $q->where('code', 'active'))->count(),
             'pendingContracts' => Contract::whereHas('status', fn ($q) => $q->where('code', 'pending'))->count(),
@@ -52,7 +52,7 @@ class DashboardController extends Controller
             'totalPaymentHistories' => PaymentHistory::count(),
             'recentHistories' => PaymentHistory::latest()->take(5)->get(),
             'recentPayments' => Payment::with(['contract.student', 'status'])->latest()->take(10)->get(),
-            'recentContracts' => Contract::with(['student', 'room', 'status'])->latest()->take(5)->get(),
+            'recentContracts' => Contract::with(['user', 'room', 'status'])->latest()->take(5)->get(),
         ];
     }
 
@@ -60,14 +60,14 @@ class DashboardController extends Controller
     {
         return [
             'role' => 'admin',
-            'totalStudents' => Student::count(),
+            'totalStudents' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->count(),
             'totalContracts' => Contract::count(),
             'activeContracts' => Contract::whereHas('status', fn ($q) => $q->where('code', 'active'))->count(),
             'pendingContracts' => Contract::whereHas('status', fn ($q) => $q->where('code', 'pending'))->count(),
             'totalPayments' => Payment::count(),
             'validatedPayments' => Payment::whereHas('status', fn ($q) => $q->where('code', 'validated'))->count(),
             'pendingPayments' => Payment::whereHas('status', fn ($q) => $q->where('code', 'pending'))->count(),
-            'recentPayments' => Payment::with(['contract.student', 'status'])->latest()->take(10)->get(),
+            'recentPayments' => Payment::with(['contract.user', 'status'])->latest()->take(10)->get(),
             'recentContracts' => Contract::with(['student', 'room', 'status'])->latest()->take(5)->get(),
         ];
     }
@@ -76,13 +76,13 @@ class DashboardController extends Controller
     {
         return [
             'role' => 'staff',
-            'totalStudents' => Student::count(),
+            'totalStudents' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->count(),
             'totalContracts' => Contract::count(),
             'activeContracts' => Contract::whereHas('status', fn ($q) => $q->where('code', 'active'))->count(),
             'pendingContracts' => Contract::whereHas('status', fn ($q) => $q->where('code', 'pending'))->count(),
-            'recentContracts' => Contract::with(['student', 'room', 'status'])->latest()->take(5)->get(),
+            'recentContracts' => Contract::with(['user', 'room', 'status'])->latest()->take(5)->get(),
             'totalBillingPeriods' => BillingPeriod::count(),
-            'recentPayments' => Payment::with(['contract.student', 'status'])->latest()->take(10)->get(),
+            'recentPayments' => Payment::with(['contract.user', 'status'])->latest()->take(10)->get(),
         ];
     }
 
@@ -102,24 +102,23 @@ class DashboardController extends Controller
 
     private function getStudentStats($user)
     {
-        $student = $user->student;
+        $contracts = $user->contracts;
 
-        if (! $student) {
-            return ['role' => 'student', 'message' => 'Pas de contrat assigné'];
+        if (! $contracts->count()) {
+            return ['role' => 'student', 'message' => 'No contracts assigned'];
         }
 
-        $contracts = $student->contracts;
-        $payments = Payment::whereHas('contract', fn ($q) => $q->where('student_id', $student->id))->get();
+        $payments = Payment::whereHas('contract', fn ($q) => $q->where('user_id', $user->id))->get();
 
         return [
             'role' => 'student',
-            'studentName' => $student->given_name . ' ' . $student->surname,
+            'studentName' => $user->firstname . ' ' . $user->lastname,
             'totalContracts' => $contracts->count(),
             'activeContracts' => $contracts->filter(fn ($c) => $c->status->code === 'active')->count(),
             'totalPayments' => $payments->count(),
             'PaidPayments' => $payments->filter(fn ($p) => $p->status->code === 'validated')->count(),
             'pendingPayments' => $payments->filter(fn ($p) => $p->status->code === 'pending')->count(),
-            'contracts' => $contracts,
+            'recentContracts' => $contracts,
             'payments' => $payments,
         ];
     }

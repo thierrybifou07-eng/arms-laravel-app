@@ -8,7 +8,7 @@ use App\Models\ContractStatus;
 use App\Models\Payment;
 use App\Models\PaymentStatus;
 use App\Models\Room;
-use App\Models\Student;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +25,7 @@ class ContractController extends Controller
      */
     public function index()
     {
-        $query = Contract::with(['student', 'room.floor.building', 'status', 'billingPeriod'])->latest();
+        $query = Contract::with(['user', 'room.floor.building', 'status', 'billingPeriod'])->latest();
 
         if (! auth()->user()->hasRole('super_admin')) {
             $archivedId = ContractStatus::getIdByCodeOrFail('archived');
@@ -55,7 +55,7 @@ class ContractController extends Controller
     public function create()
     {
         return view('contracts.create', [
-            'students' => Student::all(),
+            'students' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->get(),
             'rooms' => Room::all(),
             'billingPeriods' => BillingPeriod::all(),
         ]);
@@ -68,7 +68,7 @@ class ContractController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'student_id' => 'required|exists:students,id',
+            'user_id' => 'required|exists:users,id',
             'room_id' => 'required|exists:rooms,id',
             'billing_period_id' => 'required|exists:billing_periods,id',
             'start_date' => 'required|date',
@@ -108,7 +108,7 @@ class ContractController extends Controller
      */
     public function show(Contract $contract)
     {
-        $contract->load(['student', 'room', 'payments']);
+        $contract->load(['user', 'room', 'payments']);
 
         return view('contracts.show', compact('contract'));
     }
@@ -120,7 +120,7 @@ class ContractController extends Controller
     {
         return view('contracts.edit', [
             'contracts' => $contract,
-            'students' => Student::all(),
+            'students' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->get(),
             'rooms' => Room::all(),
             'billingPeriods' => BillingPeriod::all(),
         ]);

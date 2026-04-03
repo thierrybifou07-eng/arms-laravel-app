@@ -82,11 +82,11 @@
                         <div data-i18n="Dashboard">Residence</div>
                     </a>
                 </li>
-                <li class="menu-item">
+{{--                 <li class="menu-item">
                     <a href="{{ route('students.index') }}" class="menu-link">
                         <div data-i18n="My Course">Students</div>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </li>
         <!-- Contracts payments menu -->

@@ -85,7 +85,7 @@
                         @forelse($dashboardData['recentPayments'] ?? [] as $payment)
                             <tr>
                                 <td>#{{ $payment->id }}</td>
-                                <td>{{ $payment->contract?->student?->surname ?? 'N/A' }}</td>
+                                <td>{{ $payment->contract?->user?->firstname ?? 'N/A' }} {{ $payment->contract?->user?->lastname ?? '' }}</td>
                                 <td>{{ number_format($payment->expected_amount ?? 0, 0, ',', ' ') }} DZD</td>
                                 <td><span
                                         class="badge @if ($payment->status?->code === 'validated') bg-success @elseif($payment->status?->code === 'processing') bg-info @else bg-warning @endif">{{ $payment->status?->label ?? 'Unknown' }}</span>

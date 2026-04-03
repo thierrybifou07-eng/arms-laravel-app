@@ -22,7 +22,7 @@
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">
                             <h3 class="mb-0">{{ $dashboardData['totalPayments'] ?? 0 }}</h3>
-                            <p class="text-muted mb-0">Mes Paiements <span class="badge bg-success ms-2">{{ $dashboardData['paidPayments'] ?? 0 }}</span></p>
+                            <p class="text-muted mb-0">Mes Paiements <span class="badge bg-success ms-2">{{ $dashboardData['PaidPayments'] ?? 0 }}</span></p>
                         </div>
                         <i class="icon-base bx bx-money text-success" style="font-size: 2rem;"></i>
                     </div>

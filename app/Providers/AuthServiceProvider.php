@@ -20,7 +20,6 @@ use App\Models\ResidenceStatus;
 use App\Models\Role;
 use App\Models\Room;
 use App\Models\RoomStatus;
-use App\Models\Student;
 use App\Models\User;
 use App\Models\UserStatus;
 use App\Policies\BillingPeriodPolicy;
@@ -41,7 +40,6 @@ use App\Policies\ResidenceStatusPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\RoomPolicy;
 use App\Policies\RoomStatusPolicy;
-use App\Policies\StudentPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\UserStatusPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -55,9 +53,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // User & Student Policies
+        // User Policies
         User::class => UserPolicy::class,
-        Student::class => StudentPolicy::class,
 
         // Real Estate Policies
         Residence::class => ResidencePolicy::class,

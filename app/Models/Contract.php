@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Contract extends Model
 {
     protected $fillable = [
-        'student_id',
+        'user_id',
         'room_id',
         'contract_status_id',
         'billing_period_id',
@@ -21,10 +21,10 @@ class Contract extends Model
         'end_date' => 'date',
     ];
 
-    // relationship with student
-    public function student()
+    // relationship with user
+    public function user()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(User::class);
     }
 
     // relationship with room

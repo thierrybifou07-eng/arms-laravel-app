@@ -36,7 +36,7 @@
                     @foreach($payments as $payment)
                         <tr class="{{ $payment->isOverdue() ? 'table-danger' : '' }}">
                             <td>#{{ $payment->contract->id }}</td>
-                            <td>{{ $payment->contract->student->surname }}</td>
+                            <td>{{ $payment->contract->user->firstname }} {{ $payment->contract->user->lastname }}</td>
 
                             <td>{{ $payment->due_date?->format('d/m/Y') }}</td>
 

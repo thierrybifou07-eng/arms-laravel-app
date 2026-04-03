@@ -14,7 +14,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResidenceBuildingController;
 use App\Http\Controllers\ResidenceController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -67,8 +66,6 @@ Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('user
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('roles', RoleController::class)->scoped();
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('permissions', PermissionController::class)->scoped();
 
-// Student management routes
-Route::middleware(['auth', 'verified', 'checkRole:super_admin,staff,admin'])->resource('students', StudentController::class)->scoped();
 // Event payment type routes
 Route::middleware(['auth', 'verified', 'checkRole:super_admin,staff,admin'])->resource('event_payment_types', EventPaymentTypeController::class)->scoped();
 

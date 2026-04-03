@@ -85,9 +85,11 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->belongsToMany(Role::class)->withTimestamps();
     }
-    public function students()
+
+    // Relationship with contracts (user can have many contracts)
+    public function contracts()
     {
-        return $this->hasOne(Student::class);
+        return $this->hasMany(Contract::class);
     }
 
     // create the hasRole method for the middleware

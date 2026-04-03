@@ -103,8 +103,8 @@ class PaymentController extends Controller
             PaymentHistory::create([
                 'payment_id' => $payment->id,
                 'amount' => $payment->paid_amount,
-                'old_balance' => $contract->student->balance ?? 0,
-                'new_balance' => ($contract->student->balance ?? 0) + $payment->paid_amount,
+                'old_balance' => $contract->user->balance ?? 0,
+                'new_balance' => ($contract->user->balance ?? 0) + $payment->paid_amount,
             ]);
 
             $contract->refresh();

@@ -97,7 +97,7 @@
                         @forelse($dashboardData['recentPayments'] ?? [] as $payment)
                             <tr>
                                 <td>#{{ $payment->id }}</td>
-                                <td>{{ $payment->contract?->student?->surname ?? 'N/A' }}</td>
+                                <td>{{ $payment->contract?->user?->firstname ?? 'N/A' }} {{ $payment->contract?->user?->lastname ?? '' }}</td>
                                 <td>{{ number_format($payment->expected_amount ?? 0, 0, ',', ' ') }} DZD</td>
                                 <td><span
                                         class="badge @if ($payment->status?->code === 'validated') bg-success @else bg-warning @endif">{{ $payment->status?->label ?? 'Unknown' }}</span>
@@ -131,7 +131,7 @@
                     <tbody>
                         @forelse($dashboardData['recentContracts'] ?? [] as $contract)
                             <tr>
-                                <td>{{ $contract->student?->surname ?? 'N/A' }}</td>
+                                <td>{{ $contract->user?->firstname ?? 'N/A' }} {{ $contract->user?->lastname ?? '' }}</td>
                                 <td>{{ $contract->room?->floor?->building?->name ?? 'N/A' }}/F{{ $contract->room?->floor?->number ?? 'N/A' }}/R{{ $contract->room?->number ?? 'N/A' }}
                                 </td>
                                 <td><span class="badge bg-success">{{ $contract->status?->label ?? 'Unknown' }}</span>

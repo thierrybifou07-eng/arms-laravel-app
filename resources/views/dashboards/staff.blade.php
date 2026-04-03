@@ -82,7 +82,7 @@
                     <tbody>
                         @forelse($dashboardData['recentContracts'] ?? [] as $contract)
                             <tr>
-                                <td>{{ $contract->student?->surname ?? 'N/A' }}</td>
+                                <td>{{ $contract->user?->firstname ?? 'N/A' }} {{ $contract->user?->lastname ?? '' }}</td>
                                 <td>{{ $contract->room?->floor?->building?->name ?? 'N/A' }}/F{{ $contract->room?->floor?->number ?? 'N/A' }}/R{{ $contract->room?->number ?? 'N/A' }}
                                 </td>
                                 <td><span class="badge bg-success">{{ $contract->status?->label ?? 'Unknown' }}</span>
