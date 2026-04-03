@@ -2,73 +2,99 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
-     public function index()
+    public function index()
     {
-        $roles = Role::all();
+        $roles = Role::with(['permissions', 'users'])
+            ->orderBy('name')
+            ->get();
 
-        return view('roles.index', compact('roles'));
+        return view('super_admin.roles.index', compact('roles'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
+        $permissions = Permission::orderBy('label')->get();
 
+        return view('super_admin.roles.create', compact('permissions'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id, role $role)
-    {
-        return view('roles.show', compact('role'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id, role $role)
-    {
-
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id, role $role)
-    {
-        $validated=$request->validate([
-            'name' => ['requireding', 'max:50'],
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:50', 'unique:roles,name'],
             'label' => ['required', 'string', 'max:255'],
-
+            'permissions' => ['nullable', 'array'],
+            'permissions.*' => ['integer', 'exists:permissions,id'],
         ]);
-        $role->update($validated);
 
-        return redirect()->route('roles.index')->with('success', 'Le role à bien été mise à jour');
+        $role = Role::create([
+            'name' => $validated['name'],
+            'label' => $validated['label'],
+        ]);
 
+        $role->permissions()->sync($validated['permissions'] ?? []);
+
+        return redirect()
+            ->route('roles.index')
+            ->with('success', 'The role has been successfully created.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id, role $role)
+    public function show(Role $role)
     {
-        $role->delete();
-                return redirect()->route('roles.index')->with('success', 'Le role à bien été supprimée');
+        $role->load(['permissions', 'users']);
 
+        return view('super_admin.roles.show', compact('role'));
+    }
+
+    public function edit(Role $role)
+    {
+        $permissions = Permission::orderBy('label')->get();
+        $role->load('permissions');
+
+        return view('super_admin.roles.edit', compact('role', 'permissions'));
+    }
+
+    public function update(Request $request, Role $role)
+    {
+        $validated = $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('roles', 'name')->ignore($role->id),
+            ],
+            'label' => ['required', 'string', 'max:255'],
+            'permissions' => ['nullable', 'array'],
+            'permissions.*' => ['integer', 'exists:permissions,id'],
+        ]);
+
+        $role->update([
+            'name' => $validated['name'],
+            'label' => $validated['label'],
+        ]);
+
+        $role->permissions()->sync($validated['permissions'] ?? []);
+
+        return redirect()
+            ->route('roles.index')
+            ->with('success', 'The role has been successfully updated.');
+    }
+
+    public function destroy(Role $role)
+    {
+        $role->permissions()->detach();
+        $role->users()->detach();
+        $role->delete();
+
+        return redirect()
+            ->route('roles.index')
+            ->with('success', 'The role has been successfully deleted.');
     }
 }

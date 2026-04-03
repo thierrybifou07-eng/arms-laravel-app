@@ -158,7 +158,7 @@ class ContractController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Contract $contract)
+    public function archived(Contract $contract)
     {
         if ($contract->status->code === 'active') {
             return back()->withErrors(['contract' => 'Active contracts cannot be archived directly. Cancelled or expire it first.']);

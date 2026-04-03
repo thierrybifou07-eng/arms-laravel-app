@@ -25,7 +25,7 @@ class ResidenceFactory extends Factory
             'city' => fake()->city(),
             'address' => fake()->address(),
             'capacity' => fake()->numberBetween(1, 10),
-            'residence_status_id' => fake()->randomElement([ResidenceStatus::getIdByCode(ResidenceStatus::ACTIVE), ResidenceStatus::getIdByCode(ResidenceStatus::PENDING), ResidenceStatus::getIdByCode(ResidenceStatus::CLOSED), ResidenceStatus::getIdByCode(ResidenceStatus::RENEW)]), // Default to 'active' status
+            'residence_status_id' => fake()->randomElement([ResidenceStatus::getIdByCode(ResidenceStatus::ACTIVE), ResidenceStatus::getIdByCode(ResidenceStatus::CLOSED), ResidenceStatus::getIdByCode(ResidenceStatus::RENEW)]), // Default to 'active' status
 
         ];
     }

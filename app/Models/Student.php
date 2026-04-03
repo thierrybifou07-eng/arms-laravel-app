@@ -23,6 +23,12 @@ class Student extends Model
         ];
     }
 
+    // relationship with user
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     // relationship with contracts
     public function contracts()
     {

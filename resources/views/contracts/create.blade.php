@@ -27,7 +27,7 @@
                         <div class="position-relative"><select name="student_id" id="student_id" class="select2 form-select"
                                 tabindex="-1" aria-hidden="true">
                                 @foreach($students as $student)
-                                    <option value="{{ $student->id }}">{{ $student->surname }} {{ $student->given_name }}
+                                    <option value="{{ $student->id }}">{{ $student->user_id->firstname }} {{ $student->user_id->lastname }}
                                     </option>
                                 @endforeach
                             </select>
@@ -188,7 +188,7 @@
 
                     switch (code) {
                         case 'once':
-                            amount = rent * months;
+                            amount = rent * (months);
                             break;
                         case 'monthly':
                             amount = rent;
@@ -248,7 +248,7 @@
 
                     let current = new Date(start);
 
-                    while (current < end) {
+                    while (current <= end) {
                         html += `
                         <li class="list-group-item d-flex justify-content-between">
                             <span>${formatDate(current)}</span>

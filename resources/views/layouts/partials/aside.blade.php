@@ -120,11 +120,11 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="" class="menu-link">
-                        <div data-i18n="My Course">Building</div>
+                    <a href="{{ route('students.index') }}" class="menu-link">
+                        <div data-i18n="My Course">Students</div>
                     </a>
                 </li>
-                <li class="menu-item">
+{{--                 <li class="menu-item">
                     <a href="app-academy-course-details.html" class="menu-link">
                         <div data-i18n="Course Details">Floor</div>
                     </a>
@@ -133,7 +133,7 @@
                     <a href="app-academy-course-details.html" class="menu-link">
                         <div data-i18n="Course Details">Rooms</div>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </li>
         <!-- Academy menu end -->
@@ -183,6 +183,75 @@
                 </li>
             </ul>
         </li>
+        <!-- Academics Section -->
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon icon-base bx bx-school"></i>
+                <div data-i18n="Academics">Académiques</div>
+            </a>
+            <ul class="menu-sub">
+                @can('viewAny', App\Models\Student::class)
+                <li class="menu-item">
+                    <a href="{{ route('students.index') }}" class="menu-link">
+                        <div data-i18n="Students">Étudiants</div>
+                    </a>
+                </li>
+                @endcan
+            </ul>
+        </li>
+        <!-- Finance Section -->
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon icon-base bx bx-money"></i>
+                <div data-i18n="Finance">Finance</div>
+            </a>
+            <ul class="menu-sub">
+                @can('viewAny', App\Models\BillingPeriod::class)
+                <li class="menu-item">
+                    <a href="{{ route('billing_periods.index') }}" class="menu-link">
+                        <div data-i18n="Billing Periods">Périodes de Facturation</div>
+                    </a>
+                </li>
+                @endcan
+                @can('viewAny', App\Models\PaymentHistory::class)
+                <li class="menu-item">
+                    <a href="{{ route('payment_histories.index') }}" class="menu-link">
+                        <div data-i18n="Payment Histories">Historique des Paiements</div>
+                    </a>
+                </li>
+                @endcan
+                @can('viewAny', App\Models\EventPaymentType::class)
+                <li class="menu-item">
+                    <a href="{{ route('event_payment_types.index') }}" class="menu-link">
+                        <div data-i18n="Event Payment Types">Types de Paiement d'Événement</div>
+                    </a>
+                </li>
+                @endcan
+            </ul>
+        </li>
+        <!-- Settings Section -->
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon icon-base bx bx-cog"></i>
+                <div data-i18n="Settings">Paramètres</div>
+            </a>
+            <ul class="menu-sub">
+                @can('viewAny', App\Models\PaymentMethod::class)
+                <li class="menu-item">
+                    <a href="{{ route('payment_methods.index') }}" class="menu-link">
+                        <div data-i18n="Payment Methods">Méthodes de Paiement</div>
+                    </a>
+                </li>
+                @endcan
+                @can('viewAny', App\Models\PaymentStatus::class)
+                <li class="menu-item">
+                    <a href="{{ route('payment_statuses.index') }}" class="menu-link">
+                        <div data-i18n="Payment Statuses">Statuts de Paiement</div>
+                    </a>
+                </li>
+                @endcan
+            </ul>
+        </li>
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base bx bx-user"></i>
@@ -196,36 +265,9 @@
                 </li>
 
                 <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <div data-i18n="View">View</div>
+                    <a href="{{ route('activate_accountpending_users.index') }}" class="menu-link">
+                        <div data-i18n="View">Edit status</div>
                     </a>
-                    <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a href="app-user-view-account.html" class="menu-link">
-                                <div data-i18n="Account">Account</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="app-user-view-security.html" class="menu-link">
-                                <div data-i18n="Security">Security</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="app-user-view-billing.html" class="menu-link">
-                                <div data-i18n="Billing &amp; Plans">Billing &amp; Plans</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="app-user-view-notifications.html" class="menu-link">
-                                <div data-i18n="Notifications">Notifications</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="app-user-view-connections.html" class="menu-link">
-                                <div data-i18n="Connections">Connections</div>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
             </ul>
         </li>
