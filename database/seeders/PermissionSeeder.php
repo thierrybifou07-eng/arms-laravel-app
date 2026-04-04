@@ -24,9 +24,16 @@ class PermissionSeeder extends Seeder
 
             // Residences
             ['name' => 'view_residences', 'label' => 'View residences'],
+            ['name' => 'assign_residences', 'label' => 'Assign residences'],
             ['name' => 'create_residence', 'label' => 'Create residence'],
             ['name' => 'update_residence', 'label' => 'Update residence'],
-            ['name' => 'delete_residence', 'label' => 'Delete rooms'],
+            ['name' => 'delete_residence', 'label' => 'Delete residence'],
+
+            // Buildings
+            ['name' => 'view_buildings', 'label' => 'View buildings'],
+            ['name' => 'create_buildings', 'label' => 'Create buildings'],
+            ['name' => 'update_buildings', 'label' => 'Update buildings'],
+            ['name' => 'delete_buildings', 'label' => 'Delete buildings'],
 
             // Rooms
             ['name' => 'view_rooms', 'label' => 'View rooms'],
@@ -49,7 +56,7 @@ class PermissionSeeder extends Seeder
             // Reports
             ['name' => 'view_reports', 'label' => 'View reports'],
             ['name' => 'view_residence_report', 'label' => 'View residence report'],
-            ['name' => 'view building report', 'label' => 'View building report'],
+            ['name' => 'view_building_report', 'label' => 'View building report']
         ];
         foreach ($permissions as $permission) {
             Permission::updateOrCreate(

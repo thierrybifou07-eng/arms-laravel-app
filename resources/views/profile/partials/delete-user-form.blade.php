@@ -1,73 +1,83 @@
-<div class="card">
-    <div class="card-header">{{ __('Delete Account') }}</div>
+<div class="card h-100">
+
+    <h5 class="card-header">Delete Account</h5>
 
     <div class="card-body">
-        <div class="mb-3">
-            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
-        </div>
 
-        <div class="row mb-0">
-            <div class="col-md-6">
-                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
-                    {{ __('Delete Account') }}
-                </button>
+        <div class="mb-6 col-12 mb-0">
+            <div class="alert alert-warning">
+                <h5 class="alert-heading mb-1">
+                    Are you sure you want to delete your account?
+                </h5>
+                <p class="mb-0">
+                    Once you delete your account, there is no going back.
+                    Please be certain.
+                </p>
             </div>
         </div>
-    </div>
-</div>
+        <form id="deleteAccountForm" method="POST" action="{{ route('profile.destroy') }}">
 
-<!-- Modal -->
-<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="deleteAccountModalLabel">
-            {{ __('Are you sure you want to delete your account?') }}
-        </h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
-        </div>
-        <form id="deleteAccountForm" method="post" action="{{ route('profile.destroy') }}" class="p-6">
             @csrf
-            @method('delete')
+            @method('DELETE')
 
-            <div>
-                <input type="password" class="form-control @error('password', 'userDeletion') is-invalid @enderror" name="password" placeholder="{{ __('Password') }}" required>
+            <!-- Checkbox -->
+            <div class="form-check my-4">
+                <input class="form-check-input" type="checkbox" id="accountActivation">
 
+                <label class="form-check-label" for="accountActivation">
+                    I confirm I want to delete my account
+                </label>
+            </div>
+
+            <!-- PASSWORD FIELD (hidden) -->
+
+
+
+            <div class="col-lg-12 d-none" id="passwordContainer">
+                <label for="deletePassword" class="form-label">Confirm your password</label>
+
+                <input type="password" name="password"
+                    class="form-control @error('password', 'userDeletion') is-invalid @enderror" id="deletePassword"
+                    placeholder="Enter your password" required>
                 @error('password', 'userDeletion')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
+                <div class="invalid-feedback" id="passwordError"></div>
             </div>
         </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-            {{ __('Cancel') }}
-        </button>
-        <button type="submit" class="btn btn-danger" form="deleteAccountForm">
-            {{ __('Delete Account') }}
-        </button>
-      </div>
+
+        <div class="col-lg-6 d-flex align-items-end mt-2"> <!-- Align the button to the bottom -->
+            <button type="submit" form="deleteAccountForm" class="btn btn-danger deactivate-account mb-1" id="deleteBtn"
+                disabled>
+                Delete Account
+            </button>
+        </div>
+
     </div>
-  </div>
-</div>
-
-@push('scripts')
-    @php $shouldOpenModal = $errors->userDeletion->isNotEmpty(); @endphp
-
     <script>
-        let shouldOpenModal = {{ Js::from($shouldOpenModal) }};
+        document.addEventListener("DOMContentLoaded", function () {
 
-        if (shouldOpenModal) {
-            window.addEventListener('load', function() {
-                let deleteAccountModal = new bootstrap.Modal('#deleteAccountModal');
-                deleteAccountModal.toggle();
+            const checkbox = document.getElementById("accountActivation");
+            const passwordBox = document.getElementById("passwordContainer");
+            const deleteBtn = document.getElementById("deleteBtn");
+            if (!checkbox) return;
+
+            checkbox.addEventListener("change", function () {
+
+                if (checkbox.checked) {
+                    passwordContainer.classList.remove("d-none")
+                    deleteBtn.disabled = false;
+
+                } else {
+                    passwordContainer.classList.add("d-none")
+                    deleteBtn.disabled = true;
+
+                }
+
             });
-        }
+
+        });
     </script>
-@endPush
+</div>

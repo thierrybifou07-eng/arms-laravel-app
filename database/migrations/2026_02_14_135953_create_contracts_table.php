@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('given_name');
             $table->string('middlename')->nullable();
             $table->string('identification_number')->unique();
-            $table->string('phone')->unique();
-            $table->string('email')->unique()->nullable();
             $table->timestamps();
         });
         Schema::create('contracts', function (Blueprint $table) {
@@ -35,7 +33,7 @@ return new class extends Migration
             $table->foreignId('room_id')
                 ->constrained()
                 ->restrictOnDelete();
-            $table->decimal('amount', 10, 2);
+            $table->decimal('rent_amount', 10, 2);
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();

@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Residence extends Model
+{
+    use HasFactory;
+
+    protected static function newFactory()
+    {
+        return \Database\Factories\ResidenceFactory::new();
+    }
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'residence_status_id',
+        'name',
+        'city',
+        'address',
+        'capacity',
+    ];
+
+    // relationship with the manager
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    // Assign a status
+
+    public function status()
+    {
+        return $this->belongsTo(ResidenceStatus::class, 'residence_status_id');
+    }
+    // relationship with buildings
+
+    public function buildings()
+    {
+        return $this->hasMany(Building::class);
+    }
+}
