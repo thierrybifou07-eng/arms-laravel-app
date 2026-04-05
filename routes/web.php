@@ -3,21 +3,17 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\PendingUserController;
 use App\Http\Controllers\Admin\UserRoleController;
-use App\Http\Controllers\BillingPeriodController;
 use App\Http\Controllers\BuildingFloorController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\EventPaymentTypeController;
 use App\Http\Controllers\FloorRoomController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentHistoryController;
-use App\Http\Controllers\PaymentMethodController;
-use App\Http\Controllers\PaymentStatusController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResidenceBuildingController;
 use App\Http\Controllers\ResidenceController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,8 +24,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->prefix('super-admin')->name('super_admin')->group(function () {
-    Route::resource('roles', RoleController::class);
-    Route::resource('permissions', PermissionController::class);
+    Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
+    Route::get('roles/{role}', [RoleController::class, 'show'])->name('roles.show');
+    Route::get('permissions', [PermissionController::class, 'index'])->name('permissions.index');
     Route::get('users/{user}/roles', [UserRoleController::class, 'edit'])->name('user.roles.edit');
     Route::put('users/{user}/roles', [UserRoleController::class, 'update'])->name('user.roles.update');
 });
@@ -42,15 +39,17 @@ Route::middleware(['auth', 'verified', 'checkRole:admin'])->prefix('activate-acc
 /*
 Past route for the creation of contrac
 */
+Route::middleware(['auth', 'verified', 'checkRole:admin,teller'])->group(function () {
 Route::get('/buildings/{residence}', [ContractController::class, 'getBuildings']);
 Route::get('/floors/{building}', [ContractController::class, 'getFloors']);
 Route::get('/rooms/{floor}', [ContractController::class, 'getRooms']);
+});
 Route::get('/super_admin/dashboard', function () {
     return view('super_admin.dashboard');
 })->middleware(['auth', 'verified', 'checkRole:super_admin'])->name('super_admin.dashboard');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified', 'checkRole:student,super_admin,staff,teller,admin'])->group(function () {
     Route::get('/profile/view', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -69,18 +68,6 @@ Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('user
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('roles', RoleController::class)->scoped();
 Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('permissions', PermissionController::class)->scoped();
 
-// Student management routes
-Route::middleware(['auth', 'verified', 'checkRole:super_admin,staff,admin'])->resource('students', StudentController::class)->scoped();
-
-// Billing period routes
-Route::middleware(['auth', 'verified', 'checkRole:super_admin,staff,admin'])->resource('billing_periods', BillingPeriodController::class)->scoped();
-
-// Payment method routes
-Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('payment_methods', PaymentMethodController::class)->scoped();
-
-// Payment status routes  
-Route::middleware(['auth', 'verified', 'checkRole:super_admin'])->resource('payment_statuses', PaymentStatusController::class)->scoped();
-
 // Event payment type routes
 Route::middleware(['auth', 'verified', 'checkRole:super_admin,staff,admin'])->resource('event_payment_types', EventPaymentTypeController::class)->scoped();
 
@@ -90,15 +77,14 @@ Route::middleware(['auth', 'verified', 'checkRole:super_admin,staff,teller,admin
     Route::post('payment_histories/export', [PaymentHistoryController::class, 'export'])->name('payment_histories.export');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified', 'checkRole:super_admin,staff,teller,admin'])->group(function () {
     Route::resource('payments', PaymentController::class)->only('index');
     Route::get('/payments/{payment}', [PaymentController::class, 'payForm'])->name('payments.pay.form');
     Route::get('/payments/{payment}/pay', [PaymentController::class, 'showPay'])->name('payments.show.pay');
     Route::post('/payments/{payment}/pay', [PaymentController::class, 'pay'])->name('payments.pay');
     Route::post('/payments/{payment}/validate', [PaymentController::class, 'validatePayment'])->name('payments.validate');
     Route::post('/payments/{payment}/cancel', [PaymentController::class, 'cancel'])->name('payments.cancel');
-
-    /*     Route::patch('/contracts/{contract}/archived', ContractController::class, 'archived')->name('contracts.archive');
-     */
+/*     Route::patch('/contracts/{contract}/archived', ContractController::class, 'archived')->name('contracts.archive');
+ */    
 });
 require __DIR__.'/auth.php';

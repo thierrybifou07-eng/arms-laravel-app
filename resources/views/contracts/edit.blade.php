@@ -24,7 +24,7 @@
                     <div class="col-md-6">
                         <label class="form-label">Student</label>
                         <input type="text" class="form-control"
-                            value="{{ $contracts->student->surname }} {{ $contracts->student->given_name }}" readonly>
+                            value="{{ $contracts->user->firstname }} {{ $contracts->user->lastname }}" readonly>
                     </div>
 
                     <div class="col-md-6">

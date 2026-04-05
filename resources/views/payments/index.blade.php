@@ -20,57 +20,69 @@
 
         <div class="table-responsive text-nowrap">
             <table class="table">
-                <thead>
+                <thead class="table-dark">
                     <tr>
                         <th>Contract</th>
                         <th>Student</th>
                         <th>Due Date</th>
                         <th>Expected(FCFA)</th>
                         <th>Paid(FCFA)</th>
-                        <th>Tip amount(FCFA)</th>
+                        {{-- <th>Tip amount(FCFA)</th> --}}
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($payments as $payment)
+                    @foreach ($payments as $payment)
                         <tr class="{{ $payment->isOverdue() ? 'table-danger' : '' }}">
                             <td>#{{ $payment->contract->id }}</td>
-                            <td>{{ $payment->contract->student->surname }}</td>
+                            <td>{{ $payment->contract->user->firstname }} {{ $payment->contract->user->lastname }}</td>
 
                             <td>{{ $payment->due_date?->format('d/m/Y') }}</td>
 
                             <td>{{ number_format($payment->expected_amount, 0, ',', ' ') }}</td>
                             <td>{{ number_format($payment->paid_amount, 0, ',', ' ') }}</td>
-                            <td>{{ number_format($payment->tip_amount, 0, ',', ' ') }}</td>
-
+                            {{--                             <td>{{ number_format($payment->tip_amount, 0, ',', ' ') }}</td>
+ --}}
                             <td>
-                                @php $status = $payment->status->code ?? '' @endphp
+                                <a href="{{ route('payments.show.pay', $payment) }}" class="">
+                                    @php $status = $payment->status->code ?? '' @endphp
 
-                                @if($payment->isOverdue())
-                                    <span class="badge bg-danger">Overdue</span>
-                                @elseif($status === 'pending')
-                                    <span class="badge bg-label-warning">Pending</span>
-                                @elseif($status === 'processing')
-                                    <span class="badge bg-label-info">Processing</span>
-                                @elseif($status === 'validated')
-                                    <span class="badge bg-label-success">Validated</span>
-                                @elseif($status === 'cancelled')
-                                    <span class="badge bg-label-danger">Cancelled</span>
-                                @endif
+                                    @if ($payment->isOverdue())
+                                        <span class="badge bg-danger">Overdue</span>
+                                    @elseif($status === 'pending')
+                                        <span class="badge bg-label-warning">Pending</span>
+                                    @elseif($status === 'processing')
+                                        <span class="badge bg-label-info">Processing</span>
+                                    @elseif($status === 'validated')
+                                        <span class="badge bg-label-success">Validated</span>
+                                    @elseif($status === 'cancelled')
+                                        <span class="badge bg-label-danger">Cancelled</span>
+                                    @endif
+                                </a>
                             </td>
 
                             <td>
-                                <div class="inline-block">
-                                    @if ($payment->status->code === 'pending' || $payment->status->code === 'cancelled' || $payment->status->code === 'overdue')
-                                        <a href="{{ route('payments.pay.form', $payment) }}" class="btn btn-sm btn-primary">
+                                <div class="d-flex flex-row gap-1">
+                                    {{-- PAY --}}
+                                    @if (
+                                        $payment->status->code === 'pending' ||
+                                            $payment->status->code === 'cancelled' ||
+                                            $payment->status->code === 'overdue')
+                                        <a href="{{ route('payments.pay.form', $payment) }}"
+                                            class="btn btn-sm btn-primary">
                                             Pay
                                         </a>
                                     @endif
+                                    {{-- VALIDATE --}}
+                                    @if ($payment->status->code === 'processing')
+                                        <form method="POST" action="{{ route('payments.validate', $payment) }}"
+                                            class="mt-3">
+                                            @csrf
+                                            <button class="btn btn-success">Validate</button>
+                                        </form>
+                                    @endif
 
-                                    <a href="{{ route('payments.show.pay', $payment) }}" class="btn btn-sm btn-info">
-                                        View
-                                    </a>
                                 </div>
                             </td>
                         </tr>

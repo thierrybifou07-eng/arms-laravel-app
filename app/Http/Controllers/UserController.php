@@ -6,13 +6,32 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserStatus;
 
+use App\Models\Role;
+
 class UserController extends Controller
 {
      public function index()
     {
-        $users = User::all();
+        $query = User::with('roles', 'userStatus');
 
-        return view('super_admin.users.index', compact('users'));
+        // Filtre par rôle
+        if (request('role')) {
+            $query->whereHas('roles', fn ($q) => $q->where('name', request('role')));
+        }
+
+        // Recherche par nom, prénom ou email
+        if (request('search')) {
+            $search = request('search');
+            $query->where('firstname', 'like', "%$search%")
+                  ->orWhere('lastname', 'like', "%$search%")
+                  ->orWhere('email', 'like', "%$search%")
+                  ->orWhere('phone', 'like', "%$search%");
+        }
+
+        $users = $query->latest()->paginate(15);
+        $roles = Role::all();
+
+        return view('super_admin.users.index', compact('users', 'roles'));
     }
 
     /**

@@ -28,7 +28,7 @@
                             @foreach ($contracts as $contract)
                                 <tr>
                                     <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
-                                        <span>{{ $contract->student->surname }} {{ $contract->student->given_name }}</span>
+                                        <span>{{ $contract->user->firstname }} {{ $contract->user->lastname }}</span>
                                     </td>
                                     <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
                                         <span>({{ $contract->room->floor->building->name }})/Floor

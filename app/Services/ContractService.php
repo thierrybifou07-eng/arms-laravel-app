@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Contract;
 use App\Models\ContractStatus;
 use App\Models\Room;
-use App\Models\Student;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -66,27 +66,26 @@ class ContractService
     public function renewContract(Contract $contract, array $newDates): Contract
     {
         $newContract = Contract::create([
-            'student_id' => $contract->student_id,
+            'user_id' => $contract->user_id,
             'room_id' => $contract->room_id,
-            'contract_status_id' => $contract->contract_status_id,
+            'contract_status_id' => ContractStatus::where('code', 'pending')->first()->id,
             'billing_period_id' => $contract->billing_period_id,
+            'rent_amount' => $newDates['rent_amount'] ?? $contract->rent_amount,
             'start_date' => $newDates['start_date'],
             'end_date' => $newDates['end_date'],
-            'monthly_amount' => $newDates['monthly_amount'] ?? $contract->monthly_amount,
-            'terms' => $contract->terms,
         ]);
 
         return $newContract;
     }
 
     /**
-     * Get active contracts for a student
+     * Get active contracts for a user
      */
-    public function getActiveContractsForStudent(Student $student): Collection
+    public function getActiveContractsForUser(User $user): Collection
     {
-        return $student->contracts()
+        return $user->contracts()
             ->whereHas('status', function ($query) {
-                $query->where('code', 'approved');
+                $query->where('code', 'active');
             })
             ->with('room', 'status')
             ->get();
@@ -98,7 +97,7 @@ class ContractService
     public function getContractsByRoom(Room $room): Collection
     {
         return $room->contracts()
-            ->with('student', 'status')
+            ->with('user', 'status')
             ->orderBy('start_date', 'DESC')
             ->get();
     }
@@ -110,7 +109,7 @@ class ContractService
     {
         $conflicts = $room->contracts()
             ->whereHas('status', function ($query) {
-                $query->where('code', 'approved');
+                $query->whereIn('code', ['pending', 'active']);
             })
             ->where(function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('start_date', [$startDate, $endDate])

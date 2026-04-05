@@ -9,7 +9,9 @@
                 </div>
 
                 <div class="card-body">
-                    <p><strong>Student:</strong> {{ $contract->student->surname }} {{ $contract->student->given_name }}</p>
+                    <p><strong>Student:</strong> {{ $contract->user->firstname }} {{ $contract->user->lastname }}</p>
+                    <p><strong>Email:</strong> {{ $contract->user->email }}</p>
+                    <p><strong>Phone:</strong> {{ $contract->user->phone }}</p>
                     <p><strong>Room:</strong> B({{ $contract->room->floor->building->name }}), Floor
                         {{ $contract->room->floor->number }}, Room {{ $contract->room->number }}
                     </p>
