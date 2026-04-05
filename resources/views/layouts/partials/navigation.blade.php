@@ -459,15 +459,6 @@
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="pages-account-settings-billing.html">
-                                <span class="d-flex align-items-center align-middle">
-                                    <i class="flex-shrink-0 icon-base bx bx-credit-card icon-md me-3"></i><span
-                                        class="flex-grow-1 align-middle">Billing Plan</span>
-                                    <span class="flex-shrink-0 badge rounded-pill bg-danger">4</span>
-                                </span>
-                            </a>
-                        </li>
-                        <li>
                             <div class="dropdown-divider my-1"></div>
                         </li>
                         <li>

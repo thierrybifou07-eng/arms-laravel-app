@@ -23,10 +23,10 @@ class CheckUserStatus
         $userStatus = strtolower(trim(optional($user->userStatus)->code));
 
         if ($userStatus === 'pending') {
-            abort(403, 'Your account is pending approval. Please wait for the administrator to activate your account.');
+            return response()->view('errors.pending', [], 403);
         }
         if ($userStatus === 'disabled') {
-            abort(403, 'Your account has been disabled. Please contact the administrator for more information.');
+            return response()->view('errors.disabled', [], 403);
         }
         if ($userStatus !== 'active') {
             abort(403, 'Your account is not active. Please contact the administrator.');

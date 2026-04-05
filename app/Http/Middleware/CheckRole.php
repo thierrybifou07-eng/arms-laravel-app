@@ -25,6 +25,6 @@ class CheckRole
                 return $next($request);
             }
         }
-        abort(403, 'Unauthorized access');
+            return response()->view('errors.denied', [], 403);
     }
 }

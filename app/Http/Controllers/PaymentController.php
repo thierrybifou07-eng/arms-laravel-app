@@ -61,15 +61,15 @@ class PaymentController extends Controller
 
         $paidAmount = (float) $validated['paid_amount'];
         $expected = (float) $payment->expected_amount;
-/*         $tip = max(0, $paidAmount - $expected);
- */
+        if ($paidAmount < $expected) {
+            return back()->withErrors(['paid_amount' => 'Le montant payé est inférieur au montant attendu.']);
+        }
         $processingStatus = PaymentStatus::getIdByCodeOrFail('processing');
 
         DB::transaction(function () use ($payment, $paidAmount/* , $tip */, $validated, $processingStatus) {
             $payment->update([
                 'paid_amount' => $paidAmount,
-/*                 'tip_amount' => $tip,
- */                'payment_method_id' => $validated['payment_method_id'],
+                'payment_method_id' => $validated['payment_method_id'],
                 'payment_status_id' => $processingStatus,
                 'payment_date' => now(),
             ]);
