@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('content')
-    <div class="col-xxl-12">
         <div class="card my-5">
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -14,9 +13,10 @@
                 <div class="d-flex gap-2 flex-wrap">
                     <!-- Filtre par rôle -->
                     <form method="GET" action="{{ route('users.index') }}" class="d-flex gap-2">
-                        <select name="role" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
+                        <select name="role" class="form-select form-select-sm" style="width: auto;"
+                            onchange="this.form.submit()">
                             <option value="">All Roles</option>
-                            @foreach($roles as $role)
+                            @foreach ($roles as $role)
                                 <option value="{{ $role->name }}" {{ request('role') === $role->name ? 'selected' : '' }}>
                                     {{ $role->label }}
                                 </option>
@@ -25,13 +25,12 @@
 
                         <!-- Barre de recherche -->
                         <div class="input-group input-group-sm" style="width: 250px;">
-                            <input type="text" name="search" class="form-control" 
-                                   placeholder="Search by name, email..." 
-                                   value="{{ request('search') }}">
+                            <input type="text" name="search" class="form-control" placeholder="Search by name, email..."
+                                value="{{ request('search') }}">
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="bx bx-search"></i>
                             </button>
-                            @if(request('search') || request('role'))
+                            @if (request('search') || request('role'))
                                 <a href="{{ route('users.index') }}" class="btn btn-outline-danger btn-sm">
                                     <i class="bx bx-x"></i> Clear
                                 </a>
@@ -43,7 +42,7 @@
 
             @if ($users->count() > 0)
                 <div class="table-responsive text-nowrap table-hover">
-                    <table class="table table-sm mb-0">
+                    <table class="table table-sm">
                         <thead class="table-dark">
                             <tr>
                                 <th class="text-center" style="width: 5%">#</th>
@@ -74,17 +73,25 @@
                                     <td class="text-start">
                                         @switch($user->userStatus->code ?? '')
                                             @case('pending')
-                                                <span class="badge bg-label-info">{{ $user->userStatus->label ?? 'Pending' }}</span>
-                                                @break
+                                                <span
+                                                    class="badge bg-label-info">{{ $user->userStatus->label ?? 'Pending' }}</span>
+                                            @break
+
                                             @case('active')
-                                                <span class="badge bg-label-success">{{ $user->userStatus->label ?? 'Active' }}</span>
-                                                @break
+                                                <span
+                                                    class="badge bg-label-success">{{ $user->userStatus->label ?? 'Active' }}</span>
+                                            @break
+
                                             @case('suspended')
-                                                <span class="badge bg-label-warning">{{ $user->userStatus->label ?? 'Suspended' }}</span>
-                                                @break
+                                                <span
+                                                    class="badge bg-label-warning">{{ $user->userStatus->label ?? 'Suspended' }}</span>
+                                            @break
+
                                             @case('disabled')
-                                                <span class="badge bg-label-secondary">{{ $user->userStatus->label ?? 'Disabled' }}</span>
-                                                @break
+                                                <span
+                                                    class="badge bg-label-secondary">{{ $user->userStatus->label ?? 'Disabled' }}</span>
+                                            @break
+
                                             @default
                                                 <span class="badge bg-label-light">Unknown</span>
                                         @endswitch
@@ -95,19 +102,24 @@
                                                 @switch($role->name)
                                                     @case('super_admin')
                                                         <span class="badge bg-label-success me-1">{{ $role->label }}</span>
-                                                        @break
+                                                    @break
+
                                                     @case('admin')
                                                         <span class="badge bg-label-primary me-1">{{ $role->label }}</span>
-                                                        @break
+                                                    @break
+
                                                     @case('staff')
                                                         <span class="badge bg-label-danger me-1">{{ $role->label }}</span>
-                                                        @break
+                                                    @break
+
                                                     @case('teller')
                                                         <span class="badge bg-label-warning me-1">{{ $role->label }}</span>
-                                                        @break
+                                                    @break
+
                                                     @case('student')
                                                         <span class="badge bg-label-info me-1">{{ $role->label }}</span>
-                                                        @break
+                                                    @break
+
                                                     @default
                                                         <span class="badge bg-label-light me-1">{{ $role->label }}</span>
                                                 @endswitch
@@ -118,8 +130,8 @@
                                     </td>
                                     <td class="text-center">
                                         <div class="avatar avatar-sm">
-                                            <img src="{{ $user->avatar() }}" alt="Avatar" 
-                                                 class="rounded-circle" width="32" height="32">
+                                            <img src="{{ $user->avatar() }}" alt="Avatar" class="rounded-circle"
+                                                width="32" height="32">
                                         </div>
                                     </td>
                                     <td>
@@ -131,14 +143,15 @@
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="{{ route('users.show', $user) }}">
                                                     <i class="bx bx-show-alt me-1"></i>View</a>
-                                                <a class="dropdown-item" href="{{ route('super_adminuser.roles.edit', $user) }}">
+                                                <a class="dropdown-item"
+                                                    href="{{ route('super_adminuser.roles.edit', $user) }}">
                                                     <i class="bx bx-user-check me-1"></i>Assign Role</a>
-                                                <a class="dropdown-item" href="{{ route('activate_accountpending_users.edit', $user) }}">
+                                                <a class="dropdown-item"
+                                                    href="{{ route('activate_accountpending_users.edit', $user) }}">
                                                     <i class="bx bx-edit me-1"></i>Edit Status</a>
                                                 <hr class="dropdown-divider">
-                                                <form method="POST" action="{{ route('users.destroy', $user) }}" 
-                                                      style="display: inline;" 
-                                                      onsubmit="return confirm('Are you sure?');">
+                                                <form method="POST" action="{{ route('users.destroy', $user) }}"
+                                                    style="display: inline;" onsubmit="return confirm('Are you sure?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="dropdown-item text-danger">
@@ -152,11 +165,52 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <hr>
                 </div>
-
                 <!-- Pagination -->
-                <div class="d-flex justify-content-center mt-4">
-                    {{ $users->links('pagination::bootstrap-4') }}
+                <div class="row mx-3 justify-content-between">
+                    <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
+                        <div class="dt-info" aria-live="polite" role="status">Showing {{ $users->firstItem() ?? 0 }}
+                            to {{ $users->lastItem() ?? 0 }} of {{ $users->total() }} users</div>
+                    </div>
+                    <div class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">
+                        <div class="dt-paging">
+                            <nav aria-label="pagination">
+                                <ul class="pagination">
+                                    {{-- Previous Button --}}
+                                    <li class="dt-paging-button page-item {{ $users->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link previous" href="{{ $users->previousPageUrl() }}" {{ $users->onFirstPage() ? 'aria-disabled=true' : '' }}>
+                                            <i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>
+                                        </a>
+                                    </li>
+
+                                    {{-- Pagination Elements --}}
+                                    @foreach ($users->getUrlRange(1, $users->lastPage()) as $page => $url)
+                                        @if ($page == $users->currentPage())
+                                            <li class="dt-paging-button page-item active">
+                                                <span class="page-link" aria-current="page">{{ $page }}</span>
+                                            </li>
+                                        @elseif ($page == 1 || $page == $users->lastPage() || ($page >= $users->currentPage() - 2 && $page <= $users->currentPage() + 2))
+                                            <li class="dt-paging-button page-item">
+                                                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                            </li>
+                                        @elseif ($page == 2 || $page == $users->lastPage() - 1)
+                                            <li class="dt-paging-button page-item disabled">
+                                                <span class="page-link ellipsis">…</span>
+                                            </li>
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Next Button --}}
+                                    <li class="dt-paging-button page-item {{ $users->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link next" href="{{ $users->nextPageUrl() }}" {{ !$users->hasMorePages() ? 'aria-disabled=true' : '' }}>
+                                            <i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
                 </div>
             @else
                 <div class="alert alert-info text-center py-5 mb-0">
@@ -165,5 +219,4 @@
                 </div>
             @endif
         </div>
-    </div>
 @endsection

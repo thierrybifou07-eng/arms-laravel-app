@@ -18,7 +18,7 @@
 
         </div>
 
-        <div class="table-responsive text-nowrap">
+        <div class="table-responsive text-nowrap table-hover">
             <table class="table">
                 <thead class="table-dark">
                     <tr>
@@ -89,6 +89,56 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+        <!-- Pagination -->
+        <div class="row mx-3 mt-3 justify-content-between">
+            <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
+                <div class="dt-info" aria-live="polite" role="status">Showing {{ $payments->firstItem() ?? 0 }}
+                    to {{ $payments->lastItem() ?? 0 }} of {{ $payments->total() }} payments</div>
+            </div>
+            <div class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">
+                <div class="dt-paging">
+                    <nav aria-label="pagination">
+                        <ul class="pagination">
+                            {{-- Previous Button --}}
+                            <li class="dt-paging-button page-item {{ $payments->onFirstPage() ? 'disabled' : '' }}">
+                                <a class="page-link previous" href="{{ $payments->previousPageUrl() }}"
+                                    {{ $payments->onFirstPage() ? 'aria-disabled=true' : '' }}>
+                                    <i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>
+                                </a>
+                            </li>
+
+                            {{-- Pagination Elements --}}
+                            @foreach ($payments->getUrlRange(1, $payments->lastPage()) as $page => $url)
+                                @if ($page == $payments->currentPage())
+                                    <li class="dt-paging-button page-item active">
+                                        <span class="page-link" aria-current="page">{{ $page }}</span>
+                                    </li>
+                                @elseif (
+                                    $page == 1 ||
+                                        $page == $payments->lastPage() ||
+                                        ($page >= $payments->currentPage() - 2 && $page <= $payments->currentPage() + 2))
+                                    <li class="dt-paging-button page-item">
+                                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                    </li>
+                                @elseif ($page == 2 || $page == $payments->lastPage() - 1)
+                                    <li class="dt-paging-button page-item disabled">
+                                        <span class="page-link ellipsis">…</span>
+                                    </li>
+                                @endif
+                            @endforeach
+
+                            {{-- Next Button --}}
+                            <li class="dt-paging-button page-item {{ $payments->hasMorePages() ? '' : 'disabled' }}">
+                                <a class="page-link next" href="{{ $payments->nextPageUrl() }}"
+                                    {{ !$payments->hasMorePages() ? 'aria-disabled=true' : '' }}>
+                                    <i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

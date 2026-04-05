@@ -36,23 +36,29 @@
                                     </td>
                                     <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
                                         @switch($contract->status->code)
-                                        @case('pending')
-                                        <span class="badge bg-label-warning">{{ $contract->status->label }}</span>
-                                        @break
-                                        @case('active')
-                                        <span class="badge bg-label-success">{{ $contract->status->label }}</span>
-                                        @break
-                                        @case('overdue')
-                                        <span class="badge bg-label-danger">{{ $contract->status->label }}</span>
-                                        @break
-                                        @case('expired')
-                                        <span class="badge bg-label-secondary">{{ $contract->status->label }}</span>
-                                        @break
-                                        @case('archived')
-                                        <span class="badge bg-label-dark">{{ $contract->status->label }}</span>
-                                        @break
-                                        @default
-                                        <span class="badge bg-label-info">{{ $contract->status->label ?? 'Unknown' }}</span>
+                                            @case('pending')
+                                                <span class="badge bg-label-warning">{{ $contract->status->label }}</span>
+                                            @break
+
+                                            @case('active')
+                                                <span class="badge bg-label-success">{{ $contract->status->label }}</span>
+                                            @break
+
+                                            @case('overdue')
+                                                <span class="badge bg-label-danger">{{ $contract->status->label }}</span>
+                                            @break
+
+                                            @case('expired')
+                                                <span class="badge bg-label-secondary">{{ $contract->status->label }}</span>
+                                            @break
+
+                                            @case('archived')
+                                                <span class="badge bg-label-dark">{{ $contract->status->label }}</span>
+                                            @break
+
+                                            @default
+                                                <span
+                                                    class="badge bg-label-info">{{ $contract->status->label ?? 'Unknown' }}</span>
                                         @endswitch
                                     </td>
                                     <td>
@@ -78,7 +84,7 @@
                                                     <i class="icon-base bx bx-show-alt me-1"></i>view</a>
                                                 <a class="dropdown-item" href="{{ route('contracts.edit', $contract) }}"><i
                                                         class="icon-base bx bx-edit me-1"></i> Edit</a>
-                                {{--                 <hr class="dropdown-divider">
+                                                {{--                 <hr class="dropdown-divider">
                                                 <form method="POST" action="{{ route('contracts.archive', $contract) }}">
                                                     @method('PATCH')
                                                     @csrf
@@ -93,6 +99,59 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <hr>
+                </div>
+                <!-- Pagination -->
+                <div class="row mx-3 justify-content-between">
+                    <div
+                        class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
+                        <div class="dt-info" aria-live="polite" role="status">Showing {{ $contracts->firstItem() ?? 0 }}
+                            to {{ $contracts->lastItem() ?? 0 }} of {{ $contracts->total() }} users</div>
+                    </div>
+                    <div
+                        class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">
+                        <div class="dt-paging">
+                            <nav aria-label="pagination">
+                                <ul class="pagination">
+                                    {{-- Previous Button --}}
+                                    <li class="dt-paging-button page-item {{ $contracts->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link previous" href="{{ $contracts->previousPageUrl() }}"
+                                            {{ $contracts->onFirstPage() ? 'aria-disabled=true' : '' }}>
+                                            <i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>
+                                        </a>
+                                    </li>
+
+                                    {{-- Pagination Elements --}}
+                                    @foreach ($contracts->getUrlRange(1, $contracts->lastPage()) as $page => $url)
+                                        @if ($page == $contracts->currentPage())
+                                            <li class="dt-paging-button page-item active">
+                                                <span class="page-link" aria-current="page">{{ $page }}</span>
+                                            </li>
+                                        @elseif (
+                                            $page == 1 ||
+                                                $page == $contracts->lastPage() ||
+                                                ($page >= $contracts->currentPage() - 2 && $page <= $contracts->currentPage() + 2))
+                                            <li class="dt-paging-button page-item">
+                                                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                            </li>
+                                        @elseif ($page == 2 || $page == $contracts->lastPage() - 1)
+                                            <li class="dt-paging-button page-item disabled">
+                                                <span class="page-link ellipsis">…</span>
+                                            </li>
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Next Button --}}
+                                    <li class="dt-paging-button page-item {{ $contracts->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link next" href="{{ $contracts->nextPageUrl() }}"
+                                            {{ !$contracts->hasMorePages() ? 'aria-disabled=true' : '' }}>
+                                            <i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
                 </div>
             @else
                 <div class="text-center py-5">

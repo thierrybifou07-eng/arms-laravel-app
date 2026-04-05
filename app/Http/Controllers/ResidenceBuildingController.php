@@ -15,7 +15,7 @@ class ResidenceBuildingController extends Controller
      */
     public function index(Residence $residence)
     {
-        $buildings = $residence->buildings()->with('status')->get();
+        $buildings = $residence->buildings()->with('status')->paginate(15);
 
         return view('buildings.index', compact('residence', 'buildings'));
     }
@@ -66,8 +66,8 @@ class ResidenceBuildingController extends Controller
      */
     public function edit(string $id, Residence $residence, Building $building)
     {
-        // Not yet adding building dingstatus here
-        return view('buildings.edit', compact('residence', 'building'));
+        $statuses = BuildingStatus::all();
+        return view('buildings.edit', compact('residence', 'building', 'statuses'));
 
     }
 

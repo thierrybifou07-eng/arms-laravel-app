@@ -15,7 +15,7 @@ class BuildingFloorController extends Controller
      */
     public function index(Building $building)
     {
-        $floors = $building->floors()->with('status')->get();
+        $floors = $building->floors()->with('status')->paginate(15);
 
         return view('floors.index', compact('building', 'floors'));
     }
@@ -68,8 +68,8 @@ class BuildingFloorController extends Controller
      */
     public function edit(string $id, Building $building, Floor $floor)
     {
-        // Not yet adding buidingstatus here
-        return view('floors.edit', compact('building', 'floor'));
+        $statuses = FloorStatus::all();
+        return view('floors.edit', compact('building', 'floor', 'statuses'));
 
     }
 

@@ -15,7 +15,7 @@ class FloorRoomController extends Controller
      */
     public function index(Floor $floor)
     {
-        $rooms = $floor->rooms()->with('status')->get();
+        $rooms = $floor->rooms()->with('status')->paginate(15);
 
         return view('rooms.index', compact('floor', 'rooms'));
     }
@@ -66,8 +66,8 @@ class FloorRoomController extends Controller
      */
     public function edit(string $id, Floor $floor, Room $room)
     {
-        // Not yet adding buidingstatus here
-        return view('rooms.edit', compact('floor', 'room'));
+        $statuses = RoomStatus::all();
+        return view('rooms.edit', compact('floor', 'room', 'statuses'));
 
     }
 

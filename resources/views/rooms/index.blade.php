@@ -68,6 +68,52 @@
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Pagination -->
+                <div class="row mx-3 justify-content-between mt-3">
+                    <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
+                        <div class="dt-info" aria-live="polite" role="status">Showing {{ $rooms->firstItem() ?? 0 }}
+                            to {{ $rooms->lastItem() ?? 0 }} of {{ $rooms->total() }} entries</div>
+                    </div>
+                    <div class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">
+                        <div class="dt-paging">
+                            <nav aria-label="pagination">
+                                <ul class="pagination">
+                                    {{-- Previous Button --}}
+                                    <li class="dt-paging-button page-item {{ $rooms->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link previous" href="{{ $rooms->previousPageUrl() }}" {{ $rooms->onFirstPage() ? 'aria-disabled=true' : '' }}>
+                                            <i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>
+                                        </a>
+                                    </li>
+
+                                    {{-- Pagination Elements --}}
+                                    @foreach ($rooms->getUrlRange(1, $rooms->lastPage()) as $page => $url)
+                                        @if ($page == $rooms->currentPage())
+                                            <li class="dt-paging-button page-item active">
+                                                <span class="page-link" aria-current="page">{{ $page }}</span>
+                                            </li>
+                                        @elseif ($page == 1 || $page == $rooms->lastPage() || ($page >= $rooms->currentPage() - 2 && $page <= $rooms->currentPage() + 2))
+                                            <li class="dt-paging-button page-item">
+                                                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                            </li>
+                                        @elseif ($page == 2 || $page == $rooms->lastPage() - 1)
+                                            <li class="dt-paging-button page-item disabled">
+                                                <span class="page-link ellipsis">…</span>
+                                            </li>
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Next Button --}}
+                                    <li class="dt-paging-button page-item {{ $rooms->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link next" href="{{ $rooms->nextPageUrl() }}" {{ !$rooms->hasMorePages() ? 'aria-disabled=true' : '' }}>
+                                            <i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
             @else
                 <div class="text-center py-5">
                     <div class="demo-inline-spacing mx-5">
