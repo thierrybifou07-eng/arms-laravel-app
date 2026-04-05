@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class checkUserStatus
+class CheckUserStatus
 {
     /**
      * Handle an incoming request.
@@ -15,20 +15,23 @@ class checkUserStatus
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user=$request->user();
-        if (!$user) {
+        $user = $request->user();
+
+        if (! $user) {
             abort(403, 'User not authenticated');
         }
-        if ($user->status !== 'active') {
-            abort(403, 'Your account is not active. Please contact the administrator.');
-        }
-        if ($user->status === 'pending') {
+        $userStatus = strtolower(trim(optional($user->userStatus)->code));
+
+        if ($userStatus === 'pending') {
             abort(403, 'Your account is pending approval. Please wait for the administrator to activate your account.');
         }
-        if ($user->status === 'disabled') {
+        if ($userStatus === 'disabled') {
             abort(403, 'Your account has been disabled. Please contact the administrator for more information.');
         }
-        return $next($request);
+        if ($userStatus !== 'active') {
+            abort(403, 'Your account is not active. Please contact the administrator.');
+        }
 
+        return $next($request);
     }
 }

@@ -77,7 +77,7 @@ class User extends Authenticatable implements HasMedia
     //  belongs to 'cause the fk is in the users table
     public function userStatus()
     {
-        return $this->belongsTo(\App\Models\UserStatus::class);
+        return $this->belongsTo(\App\Models\UserStatus::class, 'user_status_id');
     }
 
     // Assigning role to many users
