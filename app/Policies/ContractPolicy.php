@@ -111,7 +111,7 @@ class ContractPolicy
 
         // Student can view their own contract's payment history
         if ($user->hasRole(Role::STUDENT)) {
-            return $user->id === $model->student->user_id;
+            return $user->id === $model->user_id;
         }
 
         return false;

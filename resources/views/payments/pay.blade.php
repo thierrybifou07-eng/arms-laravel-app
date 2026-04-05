@@ -55,12 +55,6 @@
                 </div>
             </form>
 
-            {{-- VALIDATE --}}
-            <form method="POST" action="{{ route('payments.validate', $payment) }}" class="mt-3">
-                @csrf
-                <button class="btn btn-success">Validate</button>
-            </form>
-
             {{-- CANCEL --}}
             <form method="POST" action="{{ route('payments.cancel', $payment) }}" class="mt-2">
                 @csrf

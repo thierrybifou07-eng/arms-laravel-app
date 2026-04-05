@@ -4,7 +4,6 @@
     <div class="col-xxl-12">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1 class="h4 mb-0">Manage permissions</h1>
-            <a href="{{ route('permissions.create') }}" class="btn btn-primary">New permission</a>
         </div>
 
         @if(session('success'))

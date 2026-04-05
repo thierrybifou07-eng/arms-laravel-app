@@ -39,15 +39,17 @@ Route::middleware(['auth', 'verified', 'checkRole:admin'])->prefix('activate-acc
 /*
 Past route for the creation of contrac
 */
+Route::middleware(['auth', 'verified', 'checkRole:admin,teller'])->group(function () {
 Route::get('/buildings/{residence}', [ContractController::class, 'getBuildings']);
 Route::get('/floors/{building}', [ContractController::class, 'getFloors']);
 Route::get('/rooms/{floor}', [ContractController::class, 'getRooms']);
+});
 Route::get('/super_admin/dashboard', function () {
     return view('super_admin.dashboard');
 })->middleware(['auth', 'verified', 'checkRole:super_admin'])->name('super_admin.dashboard');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified', 'checkRole:student,super_admin,staff,teller,admin'])->group(function () {
     Route::get('/profile/view', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -75,15 +77,14 @@ Route::middleware(['auth', 'verified', 'checkRole:super_admin,staff,teller,admin
     Route::post('payment_histories/export', [PaymentHistoryController::class, 'export'])->name('payment_histories.export');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified', 'checkRole:super_admin,staff,teller,admin'])->group(function () {
     Route::resource('payments', PaymentController::class)->only('index');
     Route::get('/payments/{payment}', [PaymentController::class, 'payForm'])->name('payments.pay.form');
     Route::get('/payments/{payment}/pay', [PaymentController::class, 'showPay'])->name('payments.show.pay');
     Route::post('/payments/{payment}/pay', [PaymentController::class, 'pay'])->name('payments.pay');
     Route::post('/payments/{payment}/validate', [PaymentController::class, 'validatePayment'])->name('payments.validate');
     Route::post('/payments/{payment}/cancel', [PaymentController::class, 'cancel'])->name('payments.cancel');
-
-    /*     Route::patch('/contracts/{contract}/archived', ContractController::class, 'archived')->name('contracts.archive');
-     */
+/*     Route::patch('/contracts/{contract}/archived', ContractController::class, 'archived')->name('contracts.archive');
+ */    
 });
 require __DIR__.'/auth.php';
