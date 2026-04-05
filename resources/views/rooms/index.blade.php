@@ -50,10 +50,11 @@
                                                 <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="{{ route('buildings.floors.index', $floor) }}"><i
-                                                        class="icon-base bx bx-show-alt me-1"></i> View</a>
+                                                <a class="dropdown-item" href="{{ route('floors.rooms.show', [$floor, $room]) }}"><i
+                                                        class="icon-base bx bx-show-alt me-1"></i> Show</a>
                                                 <a class="dropdown-item" href="{{ route('floors.rooms.edit', [$floor, $room]) }}"><i
                                                         class="icon-base bx bx-edit me-1"></i> Edit</a>
+                                                <hr class="dropdown-divider">
                                                 <form method="POST" action="{{ route('floors.rooms.destroy', [$floor, $room]) }}">
                                                     @csrf
                                                     @method('DELETE')

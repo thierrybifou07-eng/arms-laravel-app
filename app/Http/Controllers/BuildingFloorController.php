@@ -35,6 +35,12 @@ class BuildingFloorController extends Controller
      */
     public function store(Request $request, Building $building)
     {
+        // Check if building capacity is not exceeded
+        $existingCount = $building->floors()->count();
+        if ($existingCount >= $building->capacity) {
+            return back()->withErrors(['capacity' => "You have reached the maximum number of floors ({$building->capacity}) for this building."]);
+        }
+
         $validated = $request->validate([
             // Adding floor status
 

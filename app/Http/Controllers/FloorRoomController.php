@@ -34,6 +34,12 @@ class FloorRoomController extends Controller
      */
     public function store(Request $request, Floor $floor)
     {
+        // Check if floor capacity is not exceeded
+        $existingCount = $floor->rooms()->count();
+        if ($existingCount >= $floor->capacity) {
+            return back()->withErrors(['capacity' => "You have reached the maximum number of rooms ({$floor->capacity}) for this floor."]);
+        }
+
         $validated = $request->validate([
             // Adding room status
             'room_status_id' => ['required', 'exists:room_statuses,id'],

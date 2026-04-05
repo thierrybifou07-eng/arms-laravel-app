@@ -8,35 +8,48 @@
                 </div>
             @endif
 
-            <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-3">
-                <h5 class="mb-0">Users Management</h5>
-                <div class="d-flex gap-2 flex-wrap">
-                    <!-- Filtre par rôle -->
-                    <form method="GET" action="{{ route('users.index') }}" class="d-flex gap-2">
-                        <select name="role" class="form-select form-select-sm" style="width: auto;"
-                            onchange="this.form.submit()">
-                            <option value="">All Roles</option>
-                            @foreach ($roles as $role)
-                                <option value="{{ $role->name }}" {{ request('role') === $role->name ? 'selected' : '' }}>
-                                    {{ $role->label }}
-                                </option>
-                            @endforeach
-                        </select>
-
-                        <!-- Barre de recherche -->
-                        <div class="input-group input-group-sm" style="width: 250px;">
-                            <input type="text" name="search" class="form-control" placeholder="Search by name, email..."
-                                value="{{ request('search') }}">
-                            <button class="btn btn-outline-secondary" type="submit">
+            <div class="card-header">
+                <h5 class="mb-3">Users Management</h5>
+                <div class="row mx-3 my-0 justify-content-between align-items-end gap-3">
+                    <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
+                        <div class="dt-length">
+                            <label for="user-length" class="form-label">Show
+                                <select name="length" id="user-length" class="form-select form-select-sm d-inline-block ms-2" style="width: auto;">
+                                    <option value="7">7</option>
+                                    <option value="10" selected>10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                entries</label>
+                        </div>
+                    </div>
+                    <div class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0 gap-2 flex-wrap">
+                        <form method="GET" action="{{ route('users.index') }}" class="d-flex gap-2 align-items-end flex-wrap">
+                            <div>
+                                <label for="user-status" class="form-label">Status</label>
+                                <select name="status" id="user-status" class="form-select form-select-sm">
+                                    <option value="">All Statuses</option>
+                                    <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
+                                    <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                                    <option value="suspended" {{ request('status') === 'suspended' ? 'selected' : '' }}>Suspended</option>
+                                    <option value="disabled" {{ request('status') === 'disabled' ? 'selected' : '' }}>Disabled</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="user-search" class="form-label">Search</label>
+                                <input type="search" name="search" id="user-search" class="form-control form-control-sm" placeholder="Name, email..." value="{{ request('search') }}">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm">
                                 <i class="bx bx-search"></i>
                             </button>
-                            @if (request('search') || request('role'))
-                                <a href="{{ route('users.index') }}" class="btn btn-outline-danger btn-sm">
-                                    <i class="bx bx-x"></i> Clear
+                            @if (request('search') || request('status'))
+                                <a href="{{ route('users.index') }}" class="btn btn-secondary btn-sm">
+                                    <i class="bx bx-x"></i> Reset
                                 </a>
                             @endif
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
 

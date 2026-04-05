@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="col-xxl-12 my-4">
+    <div class="col-xxl-7 my-4">
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h5 class="mb-0">Residence Details</h5>
@@ -52,7 +52,7 @@
                         <p class="form-control-plaintext">{{ $residence->updated_at?->format('d/m/Y H:i') }}</p>
                     </div>
                 </div>
-                <div class="row justify-content-end mt-4">
+                <div class="row justify-content-start mt-4">
                     <div class="col-sm-10">
                         <a href="{{ route('residences.edit', $residence) }}" class="btn btn-primary">Edit</a>
                         <a href="{{ route('residences.buildings.index', $residence) }}" class="btn btn-info">View Buildings</a>

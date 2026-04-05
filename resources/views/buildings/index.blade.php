@@ -52,11 +52,15 @@
                                             </button>
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item"
+                                                    href="{{ route('residences.buildings.show', [$residence, $building]) }}"><i
+                                                        class="icon-base bx bx-show-alt me-1"></i> Show</a>
+                                                <a class="dropdown-item"
                                                     href="{{ route('buildings.floors.index', $building) }}"><i
-                                                        class="icon-base bx bx-show-alt me-1"></i> View</a>
+                                                        class="icon-base bx bx-folder me-1"></i> View Floors</a>
                                                 <a class="dropdown-item"
                                                     href="{{ route('residences.buildings.edit', [$residence, $building]) }}"><i
                                                         class="icon-base bx bx-edit me-1"></i> Edit</a>
+                                                <hr class="dropdown-divider">
                                                 <form method="POST"
                                                     action="{{ route('residences.buildings.destroy', [$residence, $building]) }}">
                                                     @csrf

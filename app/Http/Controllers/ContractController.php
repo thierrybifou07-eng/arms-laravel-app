@@ -32,6 +32,19 @@ class ContractController extends Controller
             $query->where('contract_status_id', '!=', $archivedId);
         }
 
+        // Apply status filter before pagination
+        if (request('status') && request('status') !== '') {
+            $status = request('status');
+            if ($status === 'overdue') {
+                // Filter for overdue payments logic
+                $query->whereIn('contract_status_id', [
+                    ContractStatus::where('code', 'overdue')->value('id'),
+                ]);
+            } else {
+                $query->whereHas('status', fn ($q) => $q->where('code', $status));
+            }
+        }
+
         $contracts = $query->paginate(10);
 
         return view('contracts.index', compact('contracts'));
@@ -119,7 +132,7 @@ class ContractController extends Controller
     public function edit(Contract $contract)
     {
         return view('contracts.edit', [
-            'contracts' => $contract,
+            'contract' => $contract,
             'students' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->get(),
             'rooms' => Room::all(),
             'billingPeriods' => BillingPeriod::all(),

@@ -35,6 +35,12 @@ class ResidenceBuildingController extends Controller
      */
     public function store(Request $request, Residence $residence)
     {
+        // Check if residence capacity is not exceeded
+        $existingCount = $residence->buildings()->count();
+        if ($existingCount >= $residence->capacity) {
+            return back()->withErrors(['capacity' => "You have reached the maximum number of buildings ({$residence->capacity}) for this residence."]);
+        }
+
         $validated = $request->validate([
             // Adding building status
             'building_status_id' => ['required', 'exists:building_statuses,id'],

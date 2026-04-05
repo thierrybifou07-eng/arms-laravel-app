@@ -75,6 +75,7 @@ Route::middleware($adminTellerOnly)->group(function () {
     Route::get('/buildings/{residence}', [ContractController::class, 'getBuildings']);
     Route::get('/floors/{building}', [ContractController::class, 'getFloors']);
     Route::get('/rooms/{floor}', [ContractController::class, 'getRooms']);
+    Route::patch('/contracts/{contract}/archived', [ContractController::class, 'archived'])->name('contracts.archive');
 });
 
 /*
@@ -140,7 +141,7 @@ Route::middleware($staffAdminSuperAdminTeller)->group(function () {
 | Payments
 |-----------------------------------------------------------------------
 */
-Route::middleware($staffAdminSuperAdminTeller,$student)->group(function () {
+Route::middleware($staffAdminSuperAdminTeller, $student)->group(function () {
     Route::resource('payments', PaymentController::class)->only('index');
     Route::get('/payments/{payment}', [PaymentController::class, 'payForm'])->name('payments.pay.form');
     Route::get('/payments/{payment}/pay', [PaymentController::class, 'showPay'])->name('payments.show.pay');
@@ -154,9 +155,5 @@ Route::middleware($student)->group(function () {
     Route::post('/payments/{payment}/pay', [PaymentController::class, 'pay'])->name('payments.pay');
     Route::post('/payments/{payment}/cancel', [PaymentController::class, 'cancel'])->name('payments.cancel');
 });
-
-/*
-Route::patch('/contracts/{contract}/archived', [ContractController::class, 'archived'])->name('contracts.archive');
-*/
 
 require __DIR__.'/auth.php';

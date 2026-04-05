@@ -8,13 +8,31 @@
             </div>
         @endif
         <div class="card my-5">
+            <!-- Status Filter -->
+            <div class="card-header pb-0">
+                <form method="GET" action="{{ route('contracts.index') }}" class="d-flex gap-2 align-items-end">
+                    <div class="col-md-3">
+                        <label for="status" class="form-label">Filter by Status</label>
+                        <select name="status" id="status" class="form-select">
+                            <option value="">All Statuses</option>
+                            <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                            <option value="overdue" {{ request('status') === 'overdue' ? 'selected' : '' }}>Overdue</option>
+                            <option value="expired" {{ request('status') === 'expired' ? 'selected' : '' }}>Expired</option>
+                            <option value="archived" {{ request('status') === 'archived' ? 'selected' : '' }}>Archived</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <a href="{{ route('contracts.index') }}" class="btn btn-secondary">Reset</a>
+                </form>
+            </div>
 
             @if ($contracts->count() > 0)
                 <div class="table-responsive table-hover text-nowrap">
                     <table class="table">
                         <thead class="table-dark">
                             <tr>
-                                <th>Students</th>
+                                <th>Customer</th>
                                 <th>Rooms</th>
                                 <th>Status</th>
                                 <th>Billing Periods</th>
@@ -81,17 +99,17 @@
                                             </button>
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="{{ route('contracts.show', $contract) }}">
-                                                    <i class="icon-base bx bx-show-alt me-1"></i>view</a>
+                                                    <i class="icon-base bx bx-show-alt me-1"></i>View</a>
                                                 <a class="dropdown-item" href="{{ route('contracts.edit', $contract) }}"><i
                                                         class="icon-base bx bx-edit me-1"></i> Edit</a>
-                                                {{--                 <hr class="dropdown-divider">
+                                                <hr class="dropdown-divider">
                                                 <form method="POST" action="{{ route('contracts.archive', $contract) }}">
                                                     @method('PATCH')
                                                     @csrf
                                                     <button class="dropdown-item text-danger" type="submit">
-                                                        <i class="icon-base bx bx-trash me-1"></i>Archived
+                                                        <i class="icon-base bx bx-trash me-1"></i>Archive
                                                     </button>
-                                                </form> --}}
+                                                </form>
                                             </div>
                                         </div>
                                     </td>

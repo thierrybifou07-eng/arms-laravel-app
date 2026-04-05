@@ -16,7 +16,7 @@
             @endif
 
 
-            <form method="POST" action="{{ route('contracts.update', $contracts->id) }}">
+            <form method="POST" action="{{ route('contracts.update', $contract->id) }}">
                 @method('PUT')
                 @csrf
 
@@ -24,31 +24,31 @@
                     <div class="col-md-6">
                         <label class="form-label">Student</label>
                         <input type="text" class="form-control"
-                            value="{{ $contracts->user->firstname }} {{ $contracts->user->lastname }}" readonly>
+                            value="{{ $contract->user->firstname }} {{ $contract->user->lastname }}" readonly>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Room</label>
                         <input type="text" class="form-control"
-                            value="Room {{ $contracts->room->number }} — {{ $contracts->room->floor->building->name }}"
+                            value="Room {{ $contract->room->number }} — {{ $contract->room->floor->building->name }}"
                             readonly>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Billing Period</label>
-                        <input type="text" class="form-control" value="{{ $contracts->billingPeriod->label }}" readonly>
+                        <input type="text" class="form-control" value="{{ $contract->billingPeriod->label }}" readonly>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label" for="start_date">Start date</label>
                         <input type="date" name="start_date" id="start_date" class="form-control"
-                            value="{{ \Carbon\Carbon::parse($contracts->start_date)->format('Y-m-d') }}" required>
+                            value="{{ \Carbon\Carbon::parse($contract->start_date)->format('Y-m-d') }}" required>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label" for="end_date">End date</label>
                         <input type="date" name="end_date" id="end_date" class="form-control"
-                            value="{{ \Carbon\Carbon::parse($contracts->end_date)->format('Y-m-d') }}" required>
+                            value="{{ \Carbon\Carbon::parse($contract->end_date)->format('Y-m-d') }}" required>
                     </div>
                 </div>
 
