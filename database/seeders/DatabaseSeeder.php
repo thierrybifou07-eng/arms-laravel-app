@@ -34,10 +34,5 @@ class DatabaseSeeder extends Seeder
             SuperAdminPermissionSeeder::class,
             EventPaymentTypeSeeder::class,
         ]);
-        // Select status active by default
-        $activeId = UserStatus::getIdByCode(UserStatus::ACTIVE);
-        User::factory()->count(10)->create([
-            'user_status_id' => $activeId,
-        ]);
     }
 }
