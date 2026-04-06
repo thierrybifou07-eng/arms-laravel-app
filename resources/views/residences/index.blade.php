@@ -7,8 +7,46 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex justify-content-start">
+                <h5 class="m-1">Residences</h5>
+            </div>
+            <div class="d-flex justify-content-end">
+                <a href="{{ route('residences.create') }}" class="btn rounded-pill btn-primary">New Residence</a>
+            </div>
+        </div>
         <div class="card my-5">
-
+            <!-- Filters -->
+            <div class="row m-3 gap-3">
+                <form method="GET" action="{{ route('residences.index') }}" class="d-flex flex-wrap" x-data>
+                    <div class="d-md-flex justify-content-between align-items-end dt-layout-start col-md-auto me-auto mt-0">
+                        <div class="dt-length">
+                            <label for="residence-status" class="form-label">Status
+                                <select name="status" id="residence-status"
+                                    class="form-select form-select-sm d-inline-block ms-2" style="width: auto;"
+                                    onchange="this.form.submit()">
+                                    <option value="">All</option>
+                                    <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active
+                                    </option>
+                                    <option value="closed" {{ request('status') === 'closed' ? 'selected' : '' }}>
+                                        Closed</option>
+                                    <option value="renew" {{ request('status') === 'renew' ? 'selected' : '' }}>
+                                        Renewal</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div
+                        class="d-md-flex justify-content-between align-items-end dt-layout-end col-md-auto gap-2 flex-wrap">
+                        <div>
+                            <label for="residence-search" class="form-label">Search:</label>
+                            <input type="search" name="search" id="residence-search" class="form-control form-control-sm"
+                                placeholder="Name, City, Address..." value="{{ request('search') }}"
+                                @input.debounce.500ms="$el.form.submit()">
+                        </div>
+                    </div>
+                </form>
+            </div>
             @if ($residences->count() > 0)
                 <div class="table-responsive table-hover text-nowrap">
                     <table class="table">
@@ -56,7 +94,8 @@
                                                     href="{{ route('residences.edit', $residence) }}"><i
                                                         class="icon-base bx bx-edit me-1"></i> Edit</a>
                                                 <hr class="dropdown-divider">
-                                                <form method="POST" action="{{ route('residences.destroy', $residence) }}">
+                                                <form method="POST"
+                                                    action="{{ route('residences.destroy', $residence) }}">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button class="dropdown-item text-danger" type="submit">
@@ -71,16 +110,7 @@
                         </tbody>
                     </table>
                 </div>
-            @else
-                <div class="text-center py-5">
-                    <div class="demo-inline-spacing mx-5">
-                        <a class="btn rounded-pill btn-primary" href="{{ route('residences.create') }}">
-                            No residence found, create one. </a>
-                    </div>
-                </div>
-            @endif
-
-            @if ($residences->count() > 0)
+                <hr>
                 <!-- Pagination -->
                 <div class="row mx-3 justify-content-between mt-3">
                     <div
@@ -135,14 +165,13 @@
                         </div>
                     </div>
                 </div>
-            @endif
-
-        </div>
-        @if ($residences->count() > 0)
-            <div class="demo-inline-spacing mx-5">
-                <a href="{{ route('residences.create') }}" class="btn rounded-pill btn-primary">New Residence</a>
+            @else
+            <div class="alert alert-info text-center py-5 mb-0">
+                <h5>No residence found</h5>
             </div>
-        @endif
+            @endif
+        </div>
+
     </div>
 
 @endsection

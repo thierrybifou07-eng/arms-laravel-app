@@ -1,13 +1,55 @@
 @extends('layouts.app')
 @section('content')
     <div cclass="col-xxl-12">
+
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex justify-content-start">
+                <h5 class="m-1">Buildings</h5>
+            </div>
+            <div class="d-flex justify-content-end">
+                <a href="{{ route('residences.buildings.create', $residence) }}" class="btn rounded-pill btn-primary">New
+                    Building</a>
+            </div>
+        </div>
         <div class="card my-5">
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+            <!-- Filters -->
+            <div class="row m-3 gap-3">
+                <form method="GET" action="{{ route('residences.buildings.index', $residence) }}" class="d-flex flex-wrap"
+                    x-data>
+                    <div class="d-md-flex justify-content-between align-items-end dt-layout-start col-md-auto me-auto mt-0">
+                        <div class="dt-length">
+                            <label for="building-status" class="form-label">Status
+                                <select name="status" id="building-status"
+                                    class="form-select form-select-sm d-inline-block ms-2" style="width: auto;"
+                                    onchange="this.form.submit()">
+                                    <option value="">All</option>
+                                    <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active
+                                    </option>
+                                    <option value="closed" {{ request('status') === 'closed' ? 'selected' : '' }}>
+                                        Closed</option>
+                                    <option value="renew" {{ request('status') === 'renew' ? 'selected' : '' }}>
+                                        Renewal</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div
+                        class="d-md-flex justify-content-between align-items-end dt-layout-end col-md-auto gap-2 flex-wrap">
+                        <div>
+                            <label for="building-search" class="form-label">Search:</label>
+                            <input type="search" name="search" id="building-search" class="form-control form-control-sm"
+                                placeholder="Name..." value="{{ request('search') }}"
+                                @input.debounce.500ms="$el.form.submit()">
+                        </div>
+                    </div>
+                </form>
+            </div>
             @if ($buildings->count() > 0)
                 <div class="table-responsive text-nowrap table-hover">
                     <table class="table">
@@ -75,8 +117,8 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <hr>
                 </div>
+                <hr>
                 <!-- Pagination -->
                 <div class="row mx-3 justify-content-between">
                     <div
@@ -90,7 +132,8 @@
                             <nav aria-label="pagination">
                                 <ul class="pagination">
                                     {{-- Previous Button --}}
-                                    <li class="dt-paging-button page-item {{ $buildings->onFirstPage() ? 'disabled' : '' }}">
+                                    <li
+                                        class="dt-paging-button page-item {{ $buildings->onFirstPage() ? 'disabled' : '' }}">
                                         <a class="page-link previous" href="{{ $buildings->previousPageUrl() }}"
                                             {{ $buildings->onFirstPage() ? 'aria-disabled=true' : '' }}>
                                             <i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>
@@ -118,7 +161,8 @@
                                     @endforeach
 
                                     {{-- Next Button --}}
-                                    <li class="dt-paging-button page-item {{ $buildings->hasMorePages() ? '' : 'disabled' }}">
+                                    <li
+                                        class="dt-paging-button page-item {{ $buildings->hasMorePages() ? '' : 'disabled' }}">
                                         <a class="page-link next" href="{{ $buildings->nextPageUrl() }}"
                                             {{ !$buildings->hasMorePages() ? 'aria-disabled=true' : '' }}>
                                             <i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>
@@ -130,21 +174,10 @@
                     </div>
                 </div>
             @else
-                <div class="text-center py-5">
-                    <div class="demo-inline-spacing mx-5">
-
-                        <a class="btn rounded-pill btn-primary"
-                            href="{{ route('residences.buildings.create', $residence) }}">
-                            No building found, create one. </a>
-                    </div>
+                <div class="alert alert-info text-center py-5 mb-0">
+                    <h5>No building found</h5>
                 </div>
             @endif
         </div>
-        @if ($buildings->count() > 0)
-            <div class="demo-inline-spacing mx-5">
-                <a href="{{ route('residences.buildings.create', $residence) }}" class="btn rounded-pill btn-primary">New
-                    Building</a>
-            </div>
-        @endif
     </div>
 @endsection

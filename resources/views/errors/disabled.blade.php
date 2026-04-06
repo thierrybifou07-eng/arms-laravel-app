@@ -1,7 +1,6 @@
 @extends('layouts.errors')
-@section('content')
+@section('error')
 
-    <body>
         <!-- Content -->
         <!-- Error -->
         <div class="container-xxl container-p-y">

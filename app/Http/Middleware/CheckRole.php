@@ -15,9 +15,9 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        $user=$request->user();
+        $user = $request->user();
 
-        if (!$user) {
+        if (! $user) {
             abort(403, 'Unauthorized access');
         }
         foreach ($roles as $role) {
@@ -25,6 +25,7 @@ class CheckRole
                 return $next($request);
             }
         }
-            return response()->view('errors.denied', [], 403);
+
+        return response()->view('errors.denied', [], 403);
     }
 }

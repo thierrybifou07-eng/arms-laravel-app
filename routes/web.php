@@ -37,6 +37,7 @@ $adminOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:admin'];
 $adminTellerOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:admin,teller'];
 $student = ['auth', 'verified', 'checkUserStatus', 'checkRole:student'];
 $staffAdminSuperAdminTeller = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,teller,admin'];
+$every = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,teller,admin,student'];
 $profileAccess = ['auth', 'verified', 'checkUserStatus', 'checkRole:student,super_admin,staff,teller,admin'];
 $eventPaymentTypeAccess = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,admin'];
 
@@ -88,7 +89,7 @@ Route::get('/super_admin/dashboard', function () {
 })->middleware($superAdminOnly)->name('super_admin.dashboard');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware($authVerifiedStatus)
+    ->middleware($every)
     ->name('dashboard');
 
 /*

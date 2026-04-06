@@ -13,7 +13,22 @@ class ResidenceController extends Controller
      */
     public function index()
     {
-        $residences = Residence::with('status')->paginate(6);
+        $query = Residence::with('status');
+
+        // Filtre par statut
+        if (request('status')) {
+            $query->whereHas('status', fn ($q) => $q->where('code', request('status')));
+        }
+
+        // Recherche par nom ou ville
+        if (request('search')) {
+            $search = request('search');
+            $query->where('name', 'like', "%$search%")
+                  ->orWhere('city', 'like', "%$search%")
+                  ->orWhere('address', 'like', "%$search%");
+        }
+
+        $residences = $query->latest()->paginate(10)->withQueryString();
 
         return view('residences.index', compact('residences'));
     }

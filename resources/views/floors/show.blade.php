@@ -46,12 +46,12 @@
                         <p class="form-control-plaintext">{{ $floor->updated_at?->format('d/m/Y H:i') }}</p>
                     </div>
                 </div>
-                <div class="row justify-content-end mt-4">
-                    <div class="col-sm-10">
-                        <a href="{{ route('buildings.floors.edit', [$building, $floor]) }}" class="btn btn-primary">Edit</a>
-                        <a href="{{ route('floors.rooms.index', $floor) }}" class="btn btn-info">View Rooms</a>
-                    </div>
-                </div>
+            </div>
+        </div>
+        <div class="row justify-content-start mt-4">
+            <div class="col-sm-10">
+                <a href="{{ route('buildings.floors.edit', [$building, $floor]) }}" class="btn btn-primary">Edit</a>
+                <a href="{{ route('floors.rooms.index', $floor) }}" class="btn btn-info">View Rooms</a>
             </div>
         </div>
     </div>

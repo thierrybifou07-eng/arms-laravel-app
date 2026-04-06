@@ -7,26 +7,52 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex justify-content-start">
+                <h5 class="m-1">Contracts</h5>
+            </div>
+            <div class="d-flex justify-content-end">
+                <a href="{{ route('contracts.create') }}" class="btn rounded-pill btn-primary">New Contract</a>
+            </div>
+        </div>
         <div class="card my-5">
             <!-- Status Filter -->
-            <div class="card-header pb-0">
-                <form method="GET" action="{{ route('contracts.index') }}" class="d-flex gap-2 align-items-end">
-                    <div class="col-md-3">
-                        <label for="status" class="form-label">Filter by Status</label>
-                        <select name="status" id="status" class="form-select">
-                            <option value="">All Statuses</option>
-                            <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
-                            <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
-                            <option value="overdue" {{ request('status') === 'overdue' ? 'selected' : '' }}>Overdue</option>
-                            <option value="expired" {{ request('status') === 'expired' ? 'selected' : '' }}>Expired</option>
-                            <option value="archived" {{ request('status') === 'archived' ? 'selected' : '' }}>Archived</option>
-                        </select>
+            <div class="row m-3 gap-3">
+                <form method="GET" action="{{ route('contracts.index') }}" class="d-flex flex-wrap" x-data>
+                    <div class="d-md-flex justify-content-between align-items-end dt-layout-start col-md-auto me-auto mt-0">
+                        <div class="dt-length">
+                            <label for="contract-status" class="form-label">Status
+                                <select name="status" id="contract-status"
+                                    class="form-select form-select-sm d-inline-block ms-2" style="width: auto;"
+                                    onchange="this.form.submit()">
+                                    <option value="">All</option>
+                                    <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending
+                                    </option>
+                                    <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>
+                                        Active</option>
+                                    <option value="overdue" {{ request('status') === 'overdue' ? 'selected' : '' }}>
+                                        Overdue</option>
+                                    <option value="archived" {{ request('status') === 'archived' ? 'selected' : '' }}>
+                                        Archived</option>
+                                    <option value="expired" {{ request('status') === 'expired' ? 'selected' : '' }}>
+                                        Expired</option>
+                                    <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>
+                                        Cancelled</option>
+                                </select>
+                            </label>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Filter</button>
-                    <a href="{{ route('contracts.index') }}" class="btn btn-secondary">Reset</a>
+                    <div
+                        class="d-md-flex justify-content-between align-items-end dt-layout-end col-md-auto gap-2 flex-wrap">
+                        <div>
+                            <label for="contract-search" class="form-label">Search:</label>
+                            <input type="search" name="search" id="contract-search" class="form-control form-control-sm"
+                                placeholder="Name, Number, Rent..." value="{{ request('search') }}"
+                                @input.debounce.500ms="$el.form.submit()">
+                        </div>
+                    </div>
                 </form>
             </div>
-
             @if ($contracts->count() > 0)
                 <div class="table-responsive table-hover text-nowrap">
                     <table class="table">
@@ -50,7 +76,8 @@
                                     </td>
                                     <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
                                         <span>({{ $contract->room->floor->building->name }})/Floor
-                                            {{ $contract->room->floor->number }}/Room {{ $contract->room->number }}</span>
+                                            {{ $contract->room->floor->number }}/Room
+                                            {{ $contract->room->number }}</span>
                                     </td>
                                     <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
                                         @switch($contract->status->code)
@@ -117,13 +144,14 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <hr>
                 </div>
-                <!-- Pagination -->
+                <hr>
+                 <!-- Pagination -->
                 <div class="row mx-3 justify-content-between">
                     <div
                         class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
-                        <div class="dt-info" aria-live="polite" role="status">Showing {{ $contracts->firstItem() ?? 0 }}
+                        <div class="dt-info" aria-live="polite" role="status">Showing
+                            {{ $contracts->firstItem() ?? 0 }}
                             to {{ $contracts->lastItem() ?? 0 }} of {{ $contracts->total() }} users</div>
                     </div>
                     <div
@@ -132,7 +160,8 @@
                             <nav aria-label="pagination">
                                 <ul class="pagination">
                                     {{-- Previous Button --}}
-                                    <li class="dt-paging-button page-item {{ $contracts->onFirstPage() ? 'disabled' : '' }}">
+                                    <li
+                                        class="dt-paging-button page-item {{ $contracts->onFirstPage() ? 'disabled' : '' }}">
                                         <a class="page-link previous" href="{{ $contracts->previousPageUrl() }}"
                                             {{ $contracts->onFirstPage() ? 'aria-disabled=true' : '' }}>
                                             <i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>
@@ -160,7 +189,8 @@
                                     @endforeach
 
                                     {{-- Next Button --}}
-                                    <li class="dt-paging-button page-item {{ $contracts->hasMorePages() ? '' : 'disabled' }}">
+                                    <li
+                                        class="dt-paging-button page-item {{ $contracts->hasMorePages() ? '' : 'disabled' }}">
                                         <a class="page-link next" href="{{ $contracts->nextPageUrl() }}"
                                             {{ !$contracts->hasMorePages() ? 'aria-disabled=true' : '' }}>
                                             <i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>
@@ -172,20 +202,14 @@
                     </div>
                 </div>
             @else
-                <div class="text-center py-5">
-                    <div class="demo-inline-spacing mx-5">
-                        <a class="btn rounded-pill btn-primary" href="{{ route('contracts.create') }}">
-                            No contract found, create one. </a>
+                <div class="text-center mb-5">
+                    <div class="demo-inline-spacing mx-5 align-items-center">
+                        <p> <strong>No contract found.</strong></p>
+                        </p>
                     </div>
                 </div>
             @endif
-
         </div>
-        @if ($contracts->count() > 0)
-            <div class="demo-inline-spacing mx-5">
-                <a href="{{ route('contracts.create') }}" class="btn rounded-pill btn-primary">New contract</a>
-            </div>
-        @endif
-    </div>
 
+    </div>
 @endsection

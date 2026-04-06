@@ -52,11 +52,11 @@
                         <p class="form-control-plaintext">{{ $room->updated_at?->format('d/m/Y H:i') }}</p>
                     </div>
                 </div>
-                <div class="row justify-content-end mt-4">
-                    <div class="col-sm-10">
-                        <a href="{{ route('floors.rooms.edit', [$floor, $room]) }}" class="btn btn-primary">Edit</a>
-                    </div>
-                </div>
+            </div>
+        </div>
+        <div class="row justify-content-end mt-4">
+            <div class="col-sm-10">
+                <a href="{{ route('floors.rooms.edit', [$floor, $room]) }}" class="btn btn-primary">Edit</a>
             </div>
         </div>
     </div>

@@ -13,23 +13,35 @@ class PaymentController extends Controller
 {
     public function index()
     {
-        $payments = Payment::with(['contract.user', 'status'])->latest()->paginate(15);
+        $query = Payment::with(['contract.user', 'status']);
 
-        // filtre
-        if (request('status') === 'overdue') {
-            $payments = $payments->getCollection()->filter(fn ($p) => $p->isOverdue());
+        // Filtre par statut
+        if (request('status')) {
+            $status = request('status');
+            if ($status === 'overdue') {
+                // Pour les paiements en retard
+                $query->whereRaw('DATE(due_date) < CURDATE() AND payment_status_id != (SELECT id FROM payment_statuses WHERE code = "validated")');
+            } else {
+                $query->whereHas('status', fn ($q) => $q->where('code', $status));
+            }
         }
 
-        if (request('status') === 'pending') {
-            $payments = $payments->where('payment_statuses.code', 'pending');
-        }
-        if (request('status') === 'processing') {
-            $payments = $payments->where('payment_statuses.code', 'processing');
+        // Recherche par contrat ou étudiant
+        if (request('search')) {
+            $search = request('search');
+            $query->whereHas('contract', fn ($q) => 
+                $q->where('id', 'like', "%$search%")
+                  ->orWhereHas('user', fn ($u) => 
+                      $u->where('firstname', 'like', "%$search%")
+                        ->orWhere('lastname', 'like', "%$search%")
+                        ->orWhere('email', 'like', "%$search%")
+                  )
+            );
         }
 
-        if (request('status') === 'validated') {
-            $payments = $payments->where('payment_statuses.code', 'validated');
-        }
+        $payments = $query->latest()->paginate(10)->withQueryString();
+
+         return view('payments.index', compact('payments'));
 
         return view('payments.index', compact('payments'));
     }

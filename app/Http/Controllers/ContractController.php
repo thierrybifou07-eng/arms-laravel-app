@@ -45,7 +45,23 @@ class ContractController extends Controller
             }
         }
 
-        $contracts = $query->paginate(10);
+        // Apply search filter
+        if (request('search')) {
+            $search = request('search');
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('user', fn ($u) => 
+                    $u->where('firstname', 'like', "%$search%")
+                      ->orWhere('lastname', 'like', "%$search%")
+                     /*  ->orWhere('email', 'like', "%$search%") */
+                  )
+                  ->orWhereHas('room', fn ($r) =>
+                    $r->where('number', 'like', "%$search%")
+                    ->orWhere('rent_amount', 'like', "%$search%")
+                  );
+            });
+        }
+
+        $contracts = $query->paginate(10)->withQueryString();
 
         return view('contracts.index', compact('contracts'));
     }
