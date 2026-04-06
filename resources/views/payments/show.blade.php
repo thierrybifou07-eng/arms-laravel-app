@@ -21,8 +21,8 @@
                         <span class="badge bg-label-danger">Cancelled</span>
                     @endif
                 </p>
-                <p><strong>Student:</strong> {{ $payment->contract->student->surname }}
-                    {{ $payment->contract->student->given_name }}
+                <p><strong>Student:</strong> {{ $payment->contract->user->firstname }}
+                    {{ $payment->contract->user->lastname }}
                 </p>
                 <p><strong>Status:</strong>
                     @php $status = $payment->status->code ?? '' @endphp

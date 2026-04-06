@@ -77,13 +77,19 @@ class User extends Authenticatable implements HasMedia
     //  belongs to 'cause the fk is in the users table
     public function userStatus()
     {
-        return $this->belongsTo(\App\Models\UserStatus::class);
+        return $this->belongsTo(\App\Models\UserStatus::class, 'user_status_id');
     }
 
     // Assigning role to many users
     public function roles()
     {
         return $this->belongsToMany(Role::class)->withTimestamps();
+    }
+
+    // Relationship with contracts (user can have many contracts)
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class);
     }
 
     // create the hasRole method for the middleware

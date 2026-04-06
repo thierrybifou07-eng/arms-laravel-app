@@ -23,11 +23,12 @@
                 @csrf
                 <div class="row g-6">
                     <div class="col-md-6">
-                        <label for="student_id" class="form-label">Student</label>
-                        <div class="position-relative"><select name="student_id" id="student_id" class="select2 form-select"
+                        <label for="user_id" class="form-label">Student</label>
+                        <div class="position-relative"><select name="user_id" id="user_id" class="select2 form-select"
                                 tabindex="-1" aria-hidden="true">
+                                <option value="">Select a student</option>
                                 @foreach($students as $student)
-                                    <option value="{{ $student->id }}">{{ $student->user_id->firstname }} {{ $student->user_id->lastname }}
+                                    <option value="{{ $student->id }}">{{ $student->firstname }} {{ $student->lastname }}
                                     </option>
                                 @endforeach
                             </select>
@@ -111,7 +112,7 @@
     </div>
     @push('scripts')
         <script>$(document).ready(function () {
-                $('#student_id, #residence, #building, #floor, #room_id, #billing_period')
+                $('#user_id, #residence, #building, #floor, #room_id, #billing_period')
                     .select2({ width: '100%', placeholder: 'Select option' });
 
                 $('#residence').on('change', function () {

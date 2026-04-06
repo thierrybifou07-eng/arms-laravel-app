@@ -15,7 +15,20 @@ class FloorRoomController extends Controller
      */
     public function index(Floor $floor)
     {
-        $rooms = $floor->rooms()->with('status')->get();
+        $query = $floor->rooms()->with('status');
+
+        // Filtre par statut
+        if (request('status')) {
+            $query->whereHas('status', fn ($q) => $q->where('code', request('status')));
+        }
+
+        // Recherche par numéro de chambre
+        if (request('search')) {
+            $search = request('search');
+            $query->where('number', 'like', "%$search%");
+        }
+
+        $rooms = $query->latest()->paginate(10)->withQueryString();
 
         return view('rooms.index', compact('floor', 'rooms'));
     }
@@ -34,6 +47,12 @@ class FloorRoomController extends Controller
      */
     public function store(Request $request, Floor $floor)
     {
+        // Check if floor capacity is not exceeded
+        $existingCount = $floor->rooms()->count();
+        if ($existingCount >= $floor->capacity) {
+            return back()->withErrors(['capacity' => "You have reached the maximum number of rooms ({$floor->capacity}) for this floor."]);
+        }
+
         $validated = $request->validate([
             // Adding room status
             'room_status_id' => ['required', 'exists:room_statuses,id'],
@@ -56,7 +75,7 @@ class FloorRoomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id, Floor $floor, Room $room)
+    public function show(Floor $floor, Room $room)
     {
         return view('rooms.show', compact('floor', 'room'));
     }
@@ -64,17 +83,17 @@ class FloorRoomController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id, Floor $floor, Room $room)
+    public function edit(Floor $floor, Room $room)
     {
-        // Not yet adding buidingstatus here
-        return view('rooms.edit', compact('floor', 'room'));
+        $statuses = RoomStatus::all();
+        return view('rooms.edit', compact('floor', 'room', 'statuses'));
 
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id, Floor $floor, Room $room)
+    public function update(Request $request, Floor $floor, Room $room)
     {
         $validated = $request->validate([
 
@@ -93,7 +112,7 @@ class FloorRoomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id, Floor $floor, Room $room)
+    public function destroy(Floor $floor, Room $room)
     {
         $room->delete();
 

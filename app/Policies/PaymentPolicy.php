@@ -30,7 +30,7 @@ class PaymentPolicy
 
         // Student can view their own payments
         if ($user->hasRole(Role::STUDENT)) {
-            return $user->id === $model->contract->student->user_id;
+            return $user->id === $model->contract->user_id;
         }
 
         return false;

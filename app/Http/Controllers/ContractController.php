@@ -8,7 +8,7 @@ use App\Models\ContractStatus;
 use App\Models\Payment;
 use App\Models\PaymentStatus;
 use App\Models\Room;
-use App\Models\Student;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,14 +25,43 @@ class ContractController extends Controller
      */
     public function index()
     {
-        $query = Contract::with(['student', 'room.floor.building', 'status', 'billingPeriod'])->latest();
+        $query = Contract::with(['user', 'room.floor.building', 'status', 'billingPeriod'])->latest();
 
         if (! auth()->user()->hasRole('super_admin')) {
             $archivedId = ContractStatus::getIdByCodeOrFail('archived');
             $query->where('contract_status_id', '!=', $archivedId);
         }
 
-        $contracts = $query->paginate(10);
+        // Apply status filter before pagination
+        if (request('status') && request('status') !== '') {
+            $status = request('status');
+            if ($status === 'overdue') {
+                // Filter for overdue payments logic
+                $query->whereIn('contract_status_id', [
+                    ContractStatus::where('code', 'overdue')->value('id'),
+                ]);
+            } else {
+                $query->whereHas('status', fn ($q) => $q->where('code', $status));
+            }
+        }
+
+        // Apply search filter
+        if (request('search')) {
+            $search = request('search');
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('user', fn ($u) => 
+                    $u->where('firstname', 'like', "%$search%")
+                      ->orWhere('lastname', 'like', "%$search%")
+                     /*  ->orWhere('email', 'like', "%$search%") */
+                  )
+                  ->orWhereHas('room', fn ($r) =>
+                    $r->where('number', 'like', "%$search%")
+                    ->orWhere('rent_amount', 'like', "%$search%")
+                  );
+            });
+        }
+
+        $contracts = $query->paginate(10)->withQueryString();
 
         return view('contracts.index', compact('contracts'));
     }
@@ -55,7 +84,7 @@ class ContractController extends Controller
     public function create()
     {
         return view('contracts.create', [
-            'students' => Student::all(),
+            'students' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->get(),
             'rooms' => Room::all(),
             'billingPeriods' => BillingPeriod::all(),
         ]);
@@ -68,7 +97,7 @@ class ContractController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'student_id' => 'required|exists:students,id',
+            'user_id' => 'required|exists:users,id',
             'room_id' => 'required|exists:rooms,id',
             'billing_period_id' => 'required|exists:billing_periods,id',
             'start_date' => 'required|date',
@@ -108,7 +137,7 @@ class ContractController extends Controller
      */
     public function show(Contract $contract)
     {
-        $contract->load(['student', 'room', 'payments']);
+        $contract->load(['user', 'room', 'payments']);
 
         return view('contracts.show', compact('contract'));
     }
@@ -119,8 +148,8 @@ class ContractController extends Controller
     public function edit(Contract $contract)
     {
         return view('contracts.edit', [
-            'contracts' => $contract,
-            'students' => Student::all(),
+            'contract' => $contract,
+            'students' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->get(),
             'rooms' => Room::all(),
             'billingPeriods' => BillingPeriod::all(),
         ]);

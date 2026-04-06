@@ -4,7 +4,6 @@
     <div class="col-xxl-12">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1 class="h4 mb-0">Manage permissions</h1>
-            <a href="{{ route('permissions.create') }}" class="btn btn-primary">New permission</a>
         </div>
 
         @if(session('success'))
@@ -18,7 +17,6 @@
                             <th>Name</th>
                             <th>Label</th>
                             <th>Roles</th>
-                            <th class="text-start">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -33,28 +31,6 @@
                                         <span class="text-muted">No role</span>
                                     @endforelse
                                 </td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                            data-bs-toggle="dropdown">
-                                            <i class="icon-base bx bx-dots-vertical-rounded"></i>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="{{ route('permissions.show', $permission) }}">
-                                                <i class="icon-base bx bx-show-alt me-1"></i>view</a>
-                                            <a class="dropdown-item" href="{{ route('permissions.edit', $permission) }}"><i
-                                                    class="icon-base bx bx-edit me-1"></i>Edit status</a>
-                                            <hr class="dropdown-divider">
-                                            <form action="{{ route('permissions.destroy', $permission) }}" method="POST"
-                                                class="d-inline" onsubmit="return confirm('Delete this permissions ?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="dropdown-item"><i
-                                                        class="icon-base bx bx-trash me-1"></i>Delete</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </td>
                             </tr>
                         @empty
                             <tr>
@@ -64,6 +40,54 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Pagination -->
+            @if ($permissions->count() > 0)
+                <div class="row mx-3 justify-content-between mt-3">
+                    <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
+                        <div class="dt-info" aria-live="polite" role="status">Showing {{ $permissions->firstItem() ?? 0 }}
+                            to {{ $permissions->lastItem() ?? 0 }} of {{ $permissions->total() }} entries</div>
+                    </div>
+                    <div class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">
+                        <div class="dt-paging">
+                            <nav aria-label="pagination">
+                                <ul class="pagination">
+                                    {{-- Previous Button --}}
+                                    <li class="dt-paging-button page-item {{ $permissions->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link previous" href="{{ $permissions->previousPageUrl() }}" {{ $permissions->onFirstPage() ? 'aria-disabled=true' : '' }}>
+                                            <i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>
+                                        </a>
+                                    </li>
+
+                                    {{-- Pagination Elements --}}
+                                    @foreach ($permissions->getUrlRange(1, $permissions->lastPage()) as $page => $url)
+                                        @if ($page == $permissions->currentPage())
+                                            <li class="dt-paging-button page-item active">
+                                                <span class="page-link" aria-current="page">{{ $page }}</span>
+                                            </li>
+                                        @elseif ($page == 1 || $page == $permissions->lastPage() || ($page >= $permissions->currentPage() - 2 && $page <= $permissions->currentPage() + 2))
+                                            <li class="dt-paging-button page-item">
+                                                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                            </li>
+                                        @elseif ($page == 2 || $page == $permissions->lastPage() - 1)
+                                            <li class="dt-paging-button page-item disabled">
+                                                <span class="page-link ellipsis">…</span>
+                                            </li>
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Next Button --}}
+                                    <li class="dt-paging-button page-item {{ $permissions->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link next" href="{{ $permissions->nextPageUrl() }}" {{ !$permissions->hasMorePages() ? 'aria-disabled=true' : '' }}>
+                                            <i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 @endsection

@@ -38,6 +38,10 @@ class UserRoleController extends Controller
         if ($user->hasRole(Role::SUPER_ADMIN) && auth()->id() !== $user->id) {
             abort(403, 'Impossible to modify the role of another super admin');
         }
+        // Critic protection
+        if ($user->hasRole(Role::SUPER_ADMIN) && auth()->id() === $user->id) {
+            abort(403, 'Impossible to modify yourself');
+        }
 
         return redirect()
             ->route('users.index')

@@ -30,7 +30,7 @@ class PaymentHistoryPolicy
 
         // Student can view their own payment histories
         if ($user->hasRole(Role::STUDENT)) {
-            return $user->id === $model->payment->contract->student->user_id;
+            return $user->id === $model->payment->contract->user_id;
         }
 
         return false;

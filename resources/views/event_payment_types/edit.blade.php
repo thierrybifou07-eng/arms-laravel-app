@@ -18,19 +18,19 @@
                 </div>
             @endif
             <div class="card-body">
-                <form method="POST" action="{{ route('event_payment_types.update', $event_payment_type) }}">
+                <form method="POST" action="{{ route('event_payment_types.update', $eventPaymentType) }}">
                     @csrf
                     @method('PUT')
                     
                     <div class="row mb-6">
-                        <label class="col-sm-2 col-form-label" for="name">Nom *</label>
+                        <label class="col-sm-2 col-form-label" for="code">Nom *</label>
                         <div class="col-sm-10">
                             <div class="input-group input-group-merge">
                                 <span class="input-group-text"><i class="icon-base bx bx-tag"></i></span>
-                                <input type="text" name="name" id="name" value="{{ old('name', $event_payment_type->name) }}"
-                                    class="form-control @error('name') is-invalid @enderror" required>
+                                <input type="text" name="code" id="code" value="{{ old('code', $eventPaymentType->code) }}"
+                                    class="form-control @error('code') is-invalid @enderror" required>
                             </div>
-                            @error('name')<span class="invalid-feedback">{{ $message }}</span>@enderror
+                            @error('code')<span class="invalid-feedback">{{ $message }}</span>@enderror
                         </div>
                     </div>
 
@@ -39,7 +39,7 @@
                         <div class="col-sm-10">
                             <div class="input-group input-group-merge">
                                 <span class="input-group-text"><i class="icon-base bx bx-money"></i></span>
-                                <input type="number" step="0.01" name="amount" id="amount" value="{{ old('amount', $event_payment_type->amount) }}"
+                                <input type="number" step="0.01" name="amount" id="amount" value="{{ old('amount', $eventPaymentType->amount) }}"
                                     class="form-control @error('amount') is-invalid @enderror" required>
                             </div>
                             @error('amount')<span class="invalid-feedback">{{ $message }}</span>@enderror
@@ -51,7 +51,7 @@
                         <div class="col-sm-10">
                             <div class="input-group input-group-merge">
                                 <span class="input-group-text"><i class="icon-base bx bx-code"></i></span>
-                                <input type="text" name="code" id="code" value="{{ old('code', $event_payment_type->code) }}"
+                                <input type="text" name="code" id="code" value="{{ old('code', $eventPaymentType->code) }}"
                                     class="form-control @error('code') is-invalid @enderror" required>
                             </div>
                             @error('code')<span class="invalid-feedback">{{ $message }}</span>@enderror
@@ -61,7 +61,7 @@
                     <div class="row justify-content-end">
                         <div class="col-sm-10">
                             <button type="submit" class="btn btn-primary me-2">Mettre à Jour</button>
-                            <a href="{{ route('event_payment_types.show', $event_payment_type) }}" class="btn btn-secondary">Annuler</a>
+                            <a href="{{ route('event_payment_types.show', $eventPaymentType) }}" class="btn btn-secondary">Annuler</a>
                         </div>
                     </div>
                 </form>

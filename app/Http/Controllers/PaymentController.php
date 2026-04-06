@@ -13,23 +13,35 @@ class PaymentController extends Controller
 {
     public function index()
     {
-        $payments = Payment::with(['contract.student', 'status'])->latest()->paginate(15);
+        $query = Payment::with(['contract.user', 'status']);
 
-        // filtre
-        if (request('status') === 'overdue') {
-            $payments = $payments->getCollection()->filter(fn ($p) => $p->isOverdue());
+        // Filtre par statut
+        if (request('status')) {
+            $status = request('status');
+            if ($status === 'overdue') {
+                // Pour les paiements en retard
+                $query->whereRaw('DATE(due_date) < CURDATE() AND payment_status_id != (SELECT id FROM payment_statuses WHERE code = "validated")');
+            } else {
+                $query->whereHas('status', fn ($q) => $q->where('code', $status));
+            }
         }
 
-        if (request('status') === 'pending') {
-            $payments = $payments->where('payment_statuses.code', 'pending');
-        }
-        if (request('status') === 'processing') {
-            $payments = $payments->where('payment_statuses.code', 'processing');
+        // Recherche par contrat ou étudiant
+        if (request('search')) {
+            $search = request('search');
+            $query->whereHas('contract', fn ($q) => 
+                $q->where('id', 'like', "%$search%")
+                  ->orWhereHas('user', fn ($u) => 
+                      $u->where('firstname', 'like', "%$search%")
+                        ->orWhere('lastname', 'like', "%$search%")
+                        ->orWhere('email', 'like', "%$search%")
+                  )
+            );
         }
 
-        if (request('status') === 'validated') {
-            $payments = $payments->where('payment_statuses.code', 'validated');
-        }
+        $payments = $query->latest()->paginate(10)->withQueryString();
+
+         return view('payments.index', compact('payments'));
 
         return view('payments.index', compact('payments'));
     }
@@ -61,31 +73,31 @@ class PaymentController extends Controller
 
         $paidAmount = (float) $validated['paid_amount'];
         $expected = (float) $payment->expected_amount;
-        $tip = max(0, $paidAmount - $expected);
-
+        if ($paidAmount < $expected) {
+            return back()->withErrors(['paid_amount' => 'Le montant payé est inférieur au montant attendu.']);
+        }
         $processingStatus = PaymentStatus::getIdByCodeOrFail('processing');
 
-        DB::transaction(function () use ($payment, $paidAmount, $tip, $validated, $processingStatus) {
+        DB::transaction(function () use ($payment, $paidAmount/* , $tip */, $validated, $processingStatus) {
             $payment->update([
                 'paid_amount' => $paidAmount,
-                'tip_amount' => $tip,
                 'payment_method_id' => $validated['payment_method_id'],
                 'payment_status_id' => $processingStatus,
                 'payment_date' => now(),
             ]);
         });
 
-        return back()->with('success', 'Paiement soumis pour validation.');
+        return back()->with('success', 'Payment submitted for validation.');
     }
 
     public function validatePayment(Payment $payment)
     {
         if ($payment->payment_status_id === PaymentStatus::getIdByCodeOrFail('validated')) {
-            return back()->withErrors(['payment' => 'Déjà validé.']);
+            return back()->withErrors(['payment' => 'Already validated.']);
         }
 
         if ($payment->paid_amount < $payment->expected_amount) {
-            return back()->withErrors(['payment' => 'Montant insuffisant.']);
+            return back()->withErrors(['payment' => 'Insufficient amount.']);
         }
 
         $validatedStatus = PaymentStatus::getIdByCodeOrFail('validated');
@@ -103,8 +115,8 @@ class PaymentController extends Controller
             PaymentHistory::create([
                 'payment_id' => $payment->id,
                 'amount' => $payment->paid_amount,
-                'old_balance' => $contract->student->balance ?? 0,
-                'new_balance' => ($contract->student->balance ?? 0) + $payment->paid_amount,
+                'old_balance' => $contract->user->balance ?? 0,
+                'new_balance' => ($contract->user->balance ?? 0) + $payment->paid_amount,
             ]);
 
             $contract->refresh();
@@ -112,19 +124,19 @@ class PaymentController extends Controller
             $contract->checkExpired();
         });
 
-        return back()->with('success', 'Paiement validé avec succès.');
+        return back()->with('success', 'Payment validated successfully.');
     }
 
     public function cancel(Payment $payment)
     {
         if ($payment->paid_amount > 0) {
-            return back()->withErrors(['payment' => 'Impossible d\'annuler un paiement effectué.']);
+            return back()->withErrors(['payment' => 'Cannot cancel a payment that has been paid.']);
         }
 
         $cancelledStatus = PaymentStatus::getIdByCodeOrFail('cancelled');
 
         $payment->update(['payment_status_id' => $cancelledStatus]);
 
-        return back()->with('success', 'Le paiement a été annulé.');
+        return back()->with('success', 'The payment has been cancelled.');
     }
 }

@@ -12,8 +12,6 @@ class UserStatus extends Model
 
     public const ACTIVE = 'active';
 
-    public const SUSPENDED = 'suspended';
-
     public const DISABLED = 'disabled';
 
     // create the function(undefinded here) to call in the dbseeder

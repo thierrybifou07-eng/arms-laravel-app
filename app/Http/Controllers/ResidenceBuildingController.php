@@ -15,7 +15,21 @@ class ResidenceBuildingController extends Controller
      */
     public function index(Residence $residence)
     {
-        $buildings = $residence->buildings()->with('status')->get();
+        $query = $residence->buildings()->with('status');
+
+        // Filtre par statut
+        if (request('status')) {
+            $query->whereHas('status', fn ($q) => $q->where('code', request('status')));
+        }
+
+        // Recherche par nom ou adresse
+        if (request('search')) {
+            $search = request('search');
+            $query->where('name', 'like', "%$search%")
+                  /* ->orWhere('address', 'like', "%$search%") */;
+        }
+
+        $buildings = $query->latest()->paginate(10)->withQueryString();
 
         return view('buildings.index', compact('residence', 'buildings'));
     }
@@ -35,6 +49,12 @@ class ResidenceBuildingController extends Controller
      */
     public function store(Request $request, Residence $residence)
     {
+        // Check if residence capacity is not exceeded
+        $existingCount = $residence->buildings()->count();
+        if ($existingCount >= $residence->capacity) {
+            return back()->withErrors(['capacity' => "You have reached the maximum number of buildings ({$residence->capacity}) for this residence."]);
+        }
+
         $validated = $request->validate([
             // Adding building status
             'building_status_id' => ['required', 'exists:building_statuses,id'],
@@ -56,7 +76,7 @@ class ResidenceBuildingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id, Residence $residence, Building $building)
+    public function show(Residence $residence, Building $building)
     {
         return view('buildings.show', compact('residence', 'building'));
     }
@@ -64,17 +84,17 @@ class ResidenceBuildingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id, Residence $residence, Building $building)
+    public function edit(Residence $residence, Building $building)
     {
-        // Not yet adding building dingstatus here
-        return view('buildings.edit', compact('residence', 'building'));
+        $statuses = BuildingStatus::all();
+        return view('buildings.edit', compact('residence', 'building', 'statuses'));
 
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id, Residence $residence, Building $building)
+    public function update(Request $request, Residence $residence, Building $building)
     {
         $validated = $request->validate([
 

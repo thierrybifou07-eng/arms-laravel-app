@@ -16,8 +16,45 @@ class PaymentHistoryController extends Controller
     {
         $this->authorize('viewAny', PaymentHistory::class);
         
-        $paymentHistories = PaymentHistory::with('payment')->paginate(20);
-        return view('payment_histories.index', compact('paymentHistories'));
+        $user = auth()->user();
+        $query = PaymentHistory::with(['payment' => function ($q) {
+            $q->with(['contract' => function ($q2) {
+                $q2->with(['user', 'room.floor.building.residence']);
+            }]);
+        }]);
+
+        // Filter based on user role
+        if ($user->hasRole('super_admin')) {
+            // Super admin sees all payment histories
+        } elseif ($user->hasRole('admin') || $user->hasRole('teller')) {
+            // Admin/Teller sees payment histories for residences they manage
+            $query->whereHas('payment.contract.room.floor.building.residence', fn ($q) =>
+                $q->whereHas('users', fn ($q2) => $q2->where('users.id', $user->id))
+            );
+        } elseif ($user->hasRole('staff')) {
+            // Staff sees payment histories they recorded
+            $query->where('recorded_by', $user->id);
+        } elseif ($user->hasRole('student')) {
+            // Student sees only their own payment histories
+            $query->whereHas('payment.contract', fn ($q) => $q->where('user_id', $user->id));
+        }
+
+        // Apply search filter
+        if (request('search')) {
+            $search = request('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('payment_id', 'like', "%$search%")
+                  ->orWhereHas('payment.contract.user', fn ($u) =>
+                      $u->where('firstname', 'like', "%$search%")
+                        ->orWhere('lastname', 'like', "%$search%")
+                        ->orWhere('email', 'like', "%$search%")
+                  );
+            });
+        }
+
+        $payment_histories = $query->latest()->paginate(10)->withQueryString();
+        
+        return view('payment_histories.index', compact('payment_histories'));
     }
 
     /**
