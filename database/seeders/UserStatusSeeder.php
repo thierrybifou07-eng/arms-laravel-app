@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
-
 
 class UserStatusSeeder extends Seeder
 {
@@ -20,10 +18,6 @@ class UserStatusSeeder extends Seeder
                 'updated_at' => now()],
             ['code' => 'active',
                 'label' => 'Active Account',
-                'created_at' => now(),
-                'updated_at' => now()],
-            ['code' => 'suspended',
-                'label' => 'Suspended Account',
                 'created_at' => now(),
                 'updated_at' => now()],
             ['code' => 'disabled',

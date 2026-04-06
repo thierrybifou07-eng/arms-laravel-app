@@ -72,23 +72,12 @@
         <!-- Residences -->
         <!-- Academy menu start -->
         <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <a href="{{ route('residences.index') }}" class="menu-link">
                 <i class="menu-icon icon-base bx bx-home"></i>
                 <div data-i18n="Academy">Residences</div>
             </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ route('residences.index') }}" class="menu-link">
-                        <div data-i18n="Dashboard">Residence</div>
-                    </a>
-                </li>
-{{--                 <li class="menu-item">
-                    <a href="{{ route('students.index') }}" class="menu-link">
-                        <div data-i18n="My Course">Students</div>
-                    </a>
-                </li> --}}
-            </ul>
         </li>
+
         <!-- Contracts payments menu -->
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">

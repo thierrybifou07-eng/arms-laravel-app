@@ -7,8 +7,48 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="d-flex justify-content-start">
+                <h5 class="m-1">floors</h5>
+            </div>
+            <div class="d-flex justify-content-end">
+                <a href="{{ route('buildings.floors.create', $building) }}" class="btn rounded-pill btn-primary">New
+                    Floor</a>
+            </div>
+        </div>
         <div class="card my-5">
-
+            <!-- Filters -->
+            <div class="row m-3 gap-3">
+                <form method="GET" action="{{ route('buildings.floors.index', $building) }}" class="d-flex flex-wrap"
+                    x-data>
+                    <div class="d-md-flex justify-content-between align-items-end dt-layout-start col-md-auto me-auto mt-0">
+                        <div class="dt-length">
+                            <label for="floor-status" class="form-label">Status
+                                <select name="status" id="floor-status"
+                                    class="form-select form-select-sm d-inline-block ms-2" style="width: auto;"
+                                    onchange="this.form.submit()">
+                                    <option value="">All</option>
+                                    <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active
+                                    </option>
+                                    <option value="closed" {{ request('status') === 'closed' ? 'selected' : '' }}>
+                                        Closed</option>
+                                    <option value="renew" {{ request('status') === 'renew' ? 'selected' : '' }}>
+                                        Renewal</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div
+                        class="d-md-flex justify-content-between align-items-end dt-layout-end col-md-auto gap-2 flex-wrap">
+                        <div>
+                            <label for="floor-search" class="form-label">Search:</label>
+                            <input type="search" name="search" id="floor-search" class="form-control form-control-sm"
+                                placeholder="Number..." value="{{ request('search') }}"
+                                @input.debounce.500ms="$el.form.submit()">
+                        </div>
+                    </div>
+                </form>
+            </div>
             @if ($floors->count() > 0)
                 <div class="table-responsive text-nowrap table-hover">
                     <table class="table">
@@ -17,7 +57,6 @@
                                 <th>Number</th>
                                 <th>Capacity</th>
                                 <th>Created Date</th>
-                                <th>Updated Date</th>
                                 <th>Status</th>
                                 <th class="text-center">Actions</th>
                             </tr>
@@ -34,11 +73,7 @@
                                         {{ $floor->created_at }}
                                     </td>
                                     <td>
-                                        {{ $floor->updated_at }}
-                                    </td>
-                                    <td>
                                         <span class="badge bg-label-primary me-1">{{ $floor->status->label }}</span>
-
                                     </td>
                                     <td>
                                         <div class="dropdown">
@@ -47,11 +82,16 @@
                                                 <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="{{ route('floors.rooms.index', $floor) }}"><i
-                                                        class="icon-base bx bx-show-alt me-1"></i> View</a>
+                                                <a class="dropdown-item"
+                                                    href="{{ route('buildings.floors.show', [$building, $floor]) }}"><i
+                                                        class="icon-base bx bx-show-alt me-1"></i> Show</a>
+                                                <a class="dropdown-item"
+                                                    href="{{ route('floors.rooms.index', $floor) }}"><i
+                                                        class="icon-base bx bx-folder me-1"></i> View Rooms</a>
                                                 <a class="dropdown-item"
                                                     href="{{ route('buildings.floors.edit', [$building, $floor]) }}"><i
                                                         class="icon-base bx bx-edit me-1"></i> Edit</a>
+                                                <hr class="dropdown-divider">
                                                 <form method="POST"
                                                     action="{{ route('buildings.floors.destroy', [$building, $floor]) }}">
                                                     @csrf
@@ -67,21 +107,63 @@
                         </tbody>
                     </table>
                 </div>
-            @else
-                <div class="text-center py-5">
-                    <div class="demo-inline-spacing mx-5">
+                <hr>
+                <!-- Pagination -->
+                <div class="row mx-3 justify-content-between mt-3">
+                    <div
+                        class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
+                        <div class="dt-info" aria-live="polite" role="status">Showing {{ $floors->firstItem() ?? 0 }}
+                            to {{ $floors->lastItem() ?? 0 }} of {{ $floors->total() }} entries</div>
+                    </div>
+                    <div
+                        class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">
+                        <div class="dt-paging">
+                            <nav aria-label="pagination">
+                                <ul class="pagination">
+                                    {{-- Previous Button --}}
+                                    <li class="dt-paging-button page-item {{ $floors->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link previous" href="{{ $floors->previousPageUrl() }}"
+                                            {{ $floors->onFirstPage() ? 'aria-disabled=true' : '' }}>
+                                            <i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>
+                                        </a>
+                                    </li>
 
-                        <a class="btn rounded-pill btn-primary" href="{{ route('buildings.floors.create', $building) }}">
-                            No floor found, create one. </a>
+                                    {{-- Pagination Elements --}}
+                                    @foreach ($floors->getUrlRange(1, $floors->lastPage()) as $page => $url)
+                                        @if ($page == $floors->currentPage())
+                                            <li class="dt-paging-button page-item active">
+                                                <span class="page-link" aria-current="page">{{ $page }}</span>
+                                            </li>
+                                        @elseif (
+                                            $page == 1 ||
+                                                $page == $floors->lastPage() ||
+                                                ($page >= $floors->currentPage() - 2 && $page <= $floors->currentPage() + 2))
+                                            <li class="dt-paging-button page-item">
+                                                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                            </li>
+                                        @elseif ($page == 2 || $page == $floors->lastPage() - 1)
+                                            <li class="dt-paging-button page-item disabled">
+                                                <span class="page-link ellipsis">…</span>
+                                            </li>
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Next Button --}}
+                                    <li class="dt-paging-button page-item {{ $floors->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link next" href="{{ $floors->nextPageUrl() }}"
+                                            {{ !$floors->hasMorePages() ? 'aria-disabled=true' : '' }}>
+                                            <i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
                 </div>
-            @endif
-        </div>
-        <div class="demo-inline-spacing mx-5">
-            <a href="" class="btn rounded-pill btn-secondary">Back</a>
-            @if ($floors->count() > 0)
-                <a href="{{ route('buildings.floors.create', $building) }}" class="btn rounded-pill btn-primary">New
-                    floor</a>
+            @else
+            <div class="alert alert-info text-center py-5 mb-0">
+                <h5>No floor found</h5>
+            </div>
             @endif
         </div>
 

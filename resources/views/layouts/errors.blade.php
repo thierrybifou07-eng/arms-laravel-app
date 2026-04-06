@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html lang="en" class="layout-menu-fixed layout-compact" data-assets-path="{{ asset('admin-template/assets') }}/"
+<html lang="en" class="layout-wide" data-assets-path="{{ asset('admin-template/assets') }}/"
     data-template="vertical-menu-template-free">
 
 <head>
@@ -8,12 +8,11 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>ERROR</title>
 
     <meta name="description" content="" />
-    <!-- CSS Select2 -->
-    <!-- Select2 CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('admin-template/assets') }}/img/favicon/favicon.ico" />
 
     <!-- Fonts -->
@@ -38,9 +37,9 @@
 
     <!-- endbuild -->
 
-    <link rel="stylesheet" href="{{ asset('admin-template/assets') }}/vendor/libs/apex-charts/apex-charts.css" />
-
     <!-- Page CSS -->
+    <!-- Page -->
+    <link rel="stylesheet" href="{{ asset('admin-template/assets') }}/vendor/css/pages/page-misc.css" />
 
     <!-- Helpers -->
     <script src="{{ asset('admin-template/assets') }}/vendor/js/helpers.js"></script>
@@ -49,60 +48,16 @@
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
 
     <script src="{{ asset('admin-template/assets') }}/js/config.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
 <body>
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar">
-        <div class="layout-container">
-            <!-- Menu -->
 
-            @include('layouts.partials.aside')
-            <!-- / Menu -->
-
-            <!-- Layout container -->
-            <div class="layout-page">
-                <!-- Navbar -->
-                @include('layouts.partials.navigation')
-
-
-
-                <!-- / Navbar -->
-
-                <!-- Content wrapper -->
-                <div class="content-wrapper">
-                    <!--content-->
-                    <div class="container-xxl flex-grow-1 container-p-y">
-                        <div class="row">
-                            <div class="col-xxl-12 mb-6 order-0">
-
-                                @yield('content')
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Footer -->
-                @include('layouts.partials.footer')
-                <!-- / Footer -->
-
-                <div class="content-backdrop fade"></div>
-            </div>
-            <!-- Content wrapper -->
-        </div>
-        <!-- / Layout page -->
-    </div>
-
-    <!-- Overlay -->
-    <div class="layout-overlay layout-menu-toggle"></div>
-    </div>
-    <!-- / Layout wrapper -->
+    @yield('error')
+    <!-- / Content -->
 
     <!-- Core JS -->
 
-    <script src="{{ asset('admin-template/assets') }}/vendor/libs/jquery.js"></script>
+    <script src="{{ asset('admin-template/assets') }}/vendor/libs/jquery/jquery.js"></script>
 
     <script src="{{ asset('admin-template/assets') }}/vendor/libs/popper/popper.js"></script>
     <script src="{{ asset('admin-template/assets') }}/vendor/js/bootstrap.js"></script>
@@ -114,21 +69,15 @@
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-    <script src="{{ asset('admin-template/assets') }}/vendor/libs/apex-charts/apexcharts.js"></script>
 
     <!-- Main JS -->
 
     <script src="{{ asset('admin-template/assets') }}/js/main.js"></script>
 
     <!-- Page JS -->
-    <script src="{{ asset('admin-template/assets') }}/js/dashboards-analytics.js"></script>
 
     <!-- Place this tag before closing body tag for github widget button. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <!-- JS Select2 -->
-    <!-- Select2 JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    @stack('scripts')
 </body>
 
 </html>

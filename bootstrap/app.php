@@ -11,15 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function ($middleware) {
-        // Add an alias for the middleware CheckRole
         $middleware->alias([
+            'checkUserStatus' => \App\Http\Middleware\CheckUserStatus::class,
             'checkRole' => \App\Http\Middleware\CheckRole::class,
-
-        // Add an alias for the middleware CheckPermission
-
             'checkPermission' => \App\Http\Middleware\CheckPermission::class,
         ]);
-
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
