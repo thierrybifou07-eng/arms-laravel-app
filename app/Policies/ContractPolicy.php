@@ -49,6 +49,11 @@ class ContractPolicy
      */
     public function update(User $user, Contract $model): bool
     {
+        // Cannot update expired or archived contracts
+        if (in_array($model->status->code, ['expired', 'archived'])) {
+            return false;
+        }
+
         // Super Admin, Admin can update any contract
         if ($this->isSuperAdmin($user)) {
             return true;
@@ -72,7 +77,15 @@ class ContractPolicy
      */
     public function delete(User $user, Contract $model): bool
     {
-        return $user->hasRole(Role::SUPER_ADMIN);
+        return false; // Contracts are archived instead of deleted
+    }
+
+    /**
+     * Determine if user can archive a contract
+     */
+    public function archive(User $user, Contract $model): bool
+    {
+        return $this->isSuperAdmin($user);
     }
 
     /**

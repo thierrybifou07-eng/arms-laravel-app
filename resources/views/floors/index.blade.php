@@ -7,6 +7,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="d-flex align-items-center justify-content-between gap-3">
             <div class="d-flex justify-content-start">
                 <h5 class="m-1">Floors</h5>
@@ -162,9 +172,9 @@
                     </div>
                 </div>
             @else
-            <div class="alert alert-info text-center py-5 mb-0">
-                <h5>No floor found</h5>
-            </div>
+                <div class="alert alert-info text-center py-5 mb-0">
+                    <h5>No floor found</h5>
+                </div>
             @endif
         </div>
 

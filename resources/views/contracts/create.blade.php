@@ -67,14 +67,14 @@
                         <label class="form-label" for="start_date">Start date</label>
                         <div class="position-relative">
                             <input type="date" value="{{ old('start_date') }}" id="start_date" name="start_date"
-                                class="form-control" placeholder="" required>
+                                min="{{ now()->format('Y-m-d') }}" class="form-control" placeholder="" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="end_date">End date</label>
                         <div class="position-relative">
                             <input type="date" id="end_date" value="{{ old('end_date') }}" name="end_date"
-                                class="form-control" placeholder="" required>
+                                min="{{ now()->format('Y-m-d') }}" class="form-control" placeholder="" required>
                         </div>
                     </div>
                     {{-- Billing Period --}}

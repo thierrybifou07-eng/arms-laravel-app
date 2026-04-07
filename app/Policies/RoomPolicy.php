@@ -72,7 +72,18 @@ class RoomPolicy
      */
     public function delete(User $user, Room $model): bool
     {
-        return $user->hasRole(Role::SUPER_ADMIN);
+        // Only admin can delete (not super_admin)
+        if (!$user->hasRole(Role::ADMIN)) {
+            return false;
+        }
+
+        // Cannot delete room with active contracts
+        $activeContractId = \App\Models\ContractStatus::where('code', 'active')->value('id');
+        $hasActiveContracts = $model->contracts()
+            ->where('contract_status_id', $activeContractId)
+            ->exists();
+
+        return !$hasActiveContracts;
     }
 
     /**
@@ -80,7 +91,7 @@ class RoomPolicy
      */
     public function restore(User $user, Room $model): bool
     {
-        return $user->hasRole(Role::SUPER_ADMIN);
+        return $user->hasRole(Role::ADMIN);
     }
 
     /**
@@ -88,7 +99,18 @@ class RoomPolicy
      */
     public function forceDelete(User $user, Room $model): bool
     {
-        return $user->hasRole(Role::SUPER_ADMIN);
+        // Only admin can permanently delete (not super_admin)
+        if (!$user->hasRole(Role::ADMIN)) {
+            return false;
+        }
+
+        // Cannot delete room with active contracts
+        $activeContractId = \App\Models\ContractStatus::where('code', 'active')->value('id');
+        $hasActiveContracts = $model->contracts()
+            ->where('contract_status_id', $activeContractId)
+            ->exists();
+
+        return !$hasActiveContracts;
     }
 
     /**

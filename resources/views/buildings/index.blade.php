@@ -8,13 +8,23 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="d-flex align-items-center justify-content-between gap-3">
             <div class="d-flex justify-content-start">
                 <h5 class="m-1">Buildings</h5>
             </div>
             <div class="d-flex justify-content-end gap-2">
                 <a href="{{ route('residences.index') }}" class="btn rounded btn-secondary">Back
-                    </a>
+                </a>
                 <a href="{{ route('residences.buildings.create', $residence) }}" class="btn rounded btn-primary">New
                     Building</a>
             </div>

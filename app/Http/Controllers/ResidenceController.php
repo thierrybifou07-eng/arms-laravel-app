@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Building;
 use App\Models\Residence;
 use App\Models\ResidenceStatus;
 use Illuminate\Http\Request;
@@ -24,8 +25,8 @@ class ResidenceController extends Controller
         if (request('search')) {
             $search = request('search');
             $query->where('name', 'like', "%$search%")
-                  ->orWhere('city', 'like', "%$search%")
-                  ->orWhere('address', 'like', "%$search%");
+                ->orWhere('city', 'like', "%$search%")
+                ->orWhere('address', 'like', "%$search%");
         }
 
         $residences = $query->latest()->paginate(10)->withQueryString();
@@ -105,11 +106,14 @@ class ResidenceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Residence $residence)
+    public function destroy(Residence $residence, Building $building)
     {
+        if ($residence->buildings()->exists()) {
+            return redirect()->route('residences.index')->withErrors(['message' => 'Impossible to delete a residence that contains buildings.']);
+        }
         $residence->delete();
 
-        return redirect()->route('residences.index')->with('success', 'La residence à bien été supprimée');
+        return redirect()->route('residences.index')->with('success', 'The residence has been deleted successfully');
 
     }
 }
