@@ -15,7 +15,7 @@ class PendingUserController extends Controller
 {
     public function index(): View
     {
-        $pendingUsers = User::with(['userStatus', 'roles'])
+        $pendingUsers = User::with('userStatus')
             ->whereHas('userStatus', function ($query) {
                 $query->where('code', UserStatus::PENDING);
             })

@@ -171,12 +171,12 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <a href="{{ route('verification.send') }}" class="menu-link">
                         <div data-i18n="Verify Email">Verify Email</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <a href="{{ route('password.request') }};" class="menu-link">
                         <div data-i18n="Forgot Password">Forgot Password</div>
                     </a>
                 </li>

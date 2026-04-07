@@ -12,7 +12,7 @@
                 <h5 class="m-1">Residences</h5>
             </div>
             <div class="d-flex justify-content-end">
-                <a href="{{ route('residences.create') }}" class="btn rounded-pill btn-primary">New Residence</a>
+                <a href="{{ route('residences.create') }}" class="btn rounded btn-primary">New Residence</a>
             </div>
         </div>
         <div class="card my-5">

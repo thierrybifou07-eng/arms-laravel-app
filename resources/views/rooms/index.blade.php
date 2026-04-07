@@ -11,8 +11,10 @@
             <div class="d-flex justify-content-start">
                 <h5 class="m-1">Rooms</h5>
             </div>
-            <div class="d-flex justify-content-end">
-                <a href="{{ route('floors.rooms.create', $floor) }}" class="btn rounded-pill btn-primary">New
+            <div class="d-flex justify-content-end gap-2">
+                <a href="" class="btn rounded btn-secondary">
+                    Back</a>
+                <a href="{{ route('floors.rooms.create', $floor) }}" class="btn rounded btn-primary">New
                     Room</a>
             </div>
         </div>

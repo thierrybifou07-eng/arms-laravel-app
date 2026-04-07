@@ -17,7 +17,6 @@
                             <th>Email</th>
                             <th>phone</th>
                             <th>Status</th>
-                            <th>Role</th>
                             <th class="text-end">Actions</th>
                         </tr>
                     </thead>
@@ -31,13 +30,6 @@
                                     <span class="badge bg-warning text-dark">
                                         {{ $user->userStatus?->label ?? 'Pending' }}
                                     </span>
-                                </td>
-                                <td>
-                                    @forelse($user->roles as $role)
-                                        <span class="badge bg-secondary me-1">{{ $role->label }}</span>
-                                    @empty
-                                        <span class="text-muted">No roles</span>
-                                    @endforelse
                                 </td>
                                 <td class="text-end">
                                     <a href="{{ route('activate_accountpending_users.show', $user) }}"
