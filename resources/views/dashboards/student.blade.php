@@ -42,7 +42,6 @@
                         <i class="icon-base bx bx-time-five text-warning" style="font-size: 2rem;"></i>
                     </div>
                 </div>
-                <a href="{{ route('payments.index') }}" class="btn btn-sm btn-primary">Voir tout</a>
             </div>
         </div>
     </div>
