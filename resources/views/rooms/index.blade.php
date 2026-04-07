@@ -7,12 +7,24 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="d-flex align-items-center justify-content-between gap-3">
             <div class="d-flex justify-content-start">
                 <h5 class="m-1">Rooms</h5>
             </div>
-            <div class="d-flex justify-content-end">
-                <a href="{{ route('floors.rooms.create', $floor) }}" class="btn rounded-pill btn-primary">New
+            <div class="d-flex justify-content-end gap-2">
+                <a href="" class="btn rounded btn-secondary">
+                    Back</a>
+                <a href="{{ route('floors.rooms.create', $floor) }}" class="btn rounded btn-primary">New
                     Room</a>
             </div>
         </div>
@@ -61,7 +73,6 @@
                                 <th>Capacity</th>
                                 <th>Rent(FCFA)</th>
                                 <th>Created Date</th>
-                                <th>Updated Date</th>
                                 <th>Status</th>
                                 <th class="text-center">Actions</th>
                             </tr>
@@ -166,9 +177,9 @@
                     </div>
                 </div>
             @else
-            <div class="alert alert-info text-center py-5 mb-0">
-                <h5>No room found</h5>
-            </div>
+                <div class="alert alert-info text-center py-5 mb-0">
+                    <h5>No room found</h5>
+                </div>
             @endif
         </div>
 

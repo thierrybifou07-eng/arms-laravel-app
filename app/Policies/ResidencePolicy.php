@@ -57,7 +57,20 @@ class ResidencePolicy
      */
     public function delete(User $user, Residence $model): bool
     {
-        return $user->hasRole(Role::SUPER_ADMIN);
+        // Only admin can delete (not super_admin)
+        if (!$user->hasRole(Role::ADMIN)) {
+            return false;
+        }
+
+        // Cannot delete residence with buildings/floors/rooms that have active contracts
+        $activeContractId = \App\Models\ContractStatus::where('code', 'active')->value('id');
+        $hasActiveContracts = $model->buildings()
+            ->whereHas('floors.rooms.contracts', function ($q) use ($activeContractId) {
+                $q->where('contract_status_id', $activeContractId);
+            })
+            ->exists();
+
+        return !$hasActiveContracts;
     }
 
     /**
@@ -65,7 +78,7 @@ class ResidencePolicy
      */
     public function restore(User $user, Residence $model): bool
     {
-        return $user->hasRole(Role::SUPER_ADMIN);
+        return $user->hasRole(Role::ADMIN);
     }
 
     /**
@@ -73,7 +86,20 @@ class ResidencePolicy
      */
     public function forceDelete(User $user, Residence $model): bool
     {
-        return $user->hasRole(Role::SUPER_ADMIN);
+        // Only admin can permanently delete (not super_admin)
+        if (!$user->hasRole(Role::ADMIN)) {
+            return false;
+        }
+
+        // Cannot delete residence with buildings/floors/rooms that have active contracts
+        $activeContractId = \App\Models\ContractStatus::where('code', 'active')->value('id');
+        $hasActiveContracts = $model->buildings()
+            ->whereHas('floors.rooms.contracts', function ($q) use ($activeContractId) {
+                $q->where('contract_status_id', $activeContractId);
+            })
+            ->exists();
+
+        return !$hasActiveContracts;
     }
 
     /**

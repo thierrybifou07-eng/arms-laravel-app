@@ -114,6 +114,9 @@ class FloorRoomController extends Controller
      */
     public function destroy(Floor $floor, Room $room)
     {
+        if ($room->contracts()->exists()) {
+            return redirect()->route('floors.rooms.index', $floor)->withErrors(['message' => 'Impossible to delete a room that has contracts.']);
+        }
         $room->delete();
 
         return redirect()->route('floors.rooms.index', $floor)->with('success', 'Le studio à bien été supprimée');

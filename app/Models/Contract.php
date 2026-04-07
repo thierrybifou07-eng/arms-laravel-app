@@ -90,11 +90,17 @@ class Contract extends Model
     public function checkExpired()
     {
         /*  if ($this->end_date < now()) { */
-        if ($this->end_date < now() && $this->status->code !== 'terminated') {
+        if ($this->end_date < now() && $this->status->code !== 'expired' && $this->status->code !== 'terminated') {
             $expiredId = ContractStatus::where('code', 'expired')->value('id');
+            $availableId = RoomStatus::where('code', 'available')->value('id');
 
             $this->update([
                 'contract_status_id' => $expiredId,
+            ]);
+
+            // Set room back to available
+            $this->room->update([
+                'room_status_id' => $availableId,
             ]);
         }
     }

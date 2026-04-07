@@ -1,5 +1,8 @@
 @extends('layouts.app')
 @section('content')
+
+    <h5 class="mb-3">Users Management</h5>
+    
     <div class="card my-5">
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -8,7 +11,6 @@
             </div>
         @endif
         <div class="card-header">
-            <h5 class="mb-3">Users Management</h5>
             <form method="GET" action="{{ route('users.index') }}" x-data>
                 <div class="row mx-3 my-0 justify-content-between align-items-end gap-3">
                     <div

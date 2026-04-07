@@ -67,7 +67,20 @@ class FloorPolicy
      */
     public function delete(User $user, Floor $model): bool
     {
-        return $user->hasRole(Role::SUPER_ADMIN);
+        // Only admin can delete (not super_admin)
+        if (!$user->hasRole(Role::ADMIN)) {
+            return false;
+        }
+
+        // Cannot delete floor with rooms that have active contracts
+        $activeContractId = \App\Models\ContractStatus::where('code', 'active')->value('id');
+        $hasActiveContracts = $model->rooms()
+            ->whereHas('contracts', function ($q) use ($activeContractId) {
+                $q->where('contract_status_id', $activeContractId);
+            })
+            ->exists();
+
+        return !$hasActiveContracts;
     }
 
     /**
@@ -75,7 +88,7 @@ class FloorPolicy
      */
     public function restore(User $user, Floor $model): bool
     {
-        return $user->hasRole(Role::SUPER_ADMIN);
+        return $user->hasRole(Role::ADMIN);
     }
 
     /**
@@ -83,7 +96,20 @@ class FloorPolicy
      */
     public function forceDelete(User $user, Floor $model): bool
     {
-        return $user->hasRole(Role::SUPER_ADMIN);
+        // Only admin can permanently delete (not super_admin)
+        if (!$user->hasRole(Role::ADMIN)) {
+            return false;
+        }
+
+        // Cannot delete floor with rooms that have active contracts
+        $activeContractId = \App\Models\ContractStatus::where('code', 'active')->value('id');
+        $hasActiveContracts = $model->rooms()
+            ->whereHas('contracts', function ($q) use ($activeContractId) {
+                $q->where('contract_status_id', $activeContractId);
+            })
+            ->exists();
+
+        return !$hasActiveContracts;
     }
 
     /**

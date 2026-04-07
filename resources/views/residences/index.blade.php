@@ -7,12 +7,19 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                @foreach ($errors->all() as $error)
+                    <div>{{ $error }}</div>
+                @endforeach
+            </div>
+        @endif
         <div class="d-flex align-items-center justify-content-between gap-3">
             <div class="d-flex justify-content-start">
                 <h5 class="m-1">Residences</h5>
             </div>
             <div class="d-flex justify-content-end">
-                <a href="{{ route('residences.create') }}" class="btn rounded-pill btn-primary">New Residence</a>
+                <a href="{{ route('residences.create') }}" class="btn rounded btn-primary">New Residence</a>
             </div>
         </div>
         <div class="card my-5">
@@ -166,9 +173,9 @@
                     </div>
                 </div>
             @else
-            <div class="alert alert-info text-center py-5 mb-0">
-                <h5>No residence found</h5>
-            </div>
+                <div class="alert alert-info text-center py-5 mb-0">
+                    <h5>No residence found</h5>
+                </div>
             @endif
         </div>
 

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Models\UserStatus;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -18,8 +19,8 @@ class UserSeeder extends Seeder
         $TellerRoleId = Role::getIdByName(Role::TELLER);
         $StaffRoleId = Role::getIdByName(Role::STAFF);
         $StudentRoleId = Role::getIdByName(Role::STUDENT);
-        $activateId = \App\Models\UserStatus::where('code', 'active')->first()->id;
-        $pendingId = \App\Models\UserStatus::where('code', 'pending')->first()->id;
+        $activateId = UserStatus::where('code', 'active')->first()->id;
+        $pendingId = UserStatus::where('code', 'pending')->first()->id;
         $users =
             ['firstname' => 'super',
                 'lastname' => 'admin',
@@ -110,5 +111,7 @@ class UserSeeder extends Seeder
                 'user_status_id' => $users['user_status_id'],
             ]
         )->roles()->attach($StudentRoleId);
+
+        User::factory()->count(25)->create();
     }
 }

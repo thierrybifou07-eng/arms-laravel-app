@@ -117,6 +117,7 @@ class PaymentController extends Controller
                 'amount' => $payment->paid_amount,
                 'old_balance' => $contract->user->balance ?? 0,
                 'new_balance' => ($contract->user->balance ?? 0) + $payment->paid_amount,
+                'recorded_by' => auth()->id(),
             ]);
 
             $contract->refresh();

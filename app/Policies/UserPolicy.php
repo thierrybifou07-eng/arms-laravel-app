@@ -63,8 +63,22 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        // Only Super Admin can delete users
-        return $user->hasRole(Role::SUPER_ADMIN);
+        // Only admin can delete (not super_admin)
+        if (!$user->hasRole(Role::ADMIN)) {
+            return false;
+        }
+
+        // Cannot delete student with active contracts
+        if ($model->hasRole(Role::STUDENT)) {
+            $activeContractId = \App\Models\ContractStatus::where('code', 'active')->value('id');
+            $hasActiveContracts = $model->contracts()
+                ->where('contract_status_id', $activeContractId)
+                ->exists();
+
+            return !$hasActiveContracts;
+        }
+
+        return true;
     }
 
     /**
@@ -72,7 +86,7 @@ class UserPolicy
      */
     public function restore(User $user, User $model): bool
     {
-        return $user->hasRole(Role::SUPER_ADMIN);
+        return $user->hasRole(Role::ADMIN);
     }
 
     /**
@@ -80,7 +94,22 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model): bool
     {
-        return $user->hasRole(Role::SUPER_ADMIN);
+        // Only admin can permanently delete (not super_admin)
+        if (!$user->hasRole(Role::ADMIN)) {
+            return false;
+        }
+
+        // Cannot delete student with active contracts
+        if ($model->hasRole(Role::STUDENT)) {
+            $activeContractId = \App\Models\ContractStatus::where('code', 'active')->value('id');
+            $hasActiveContracts = $model->contracts()
+                ->where('contract_status_id', $activeContractId)
+                ->exists();
+
+            return !$hasActiveContracts;
+        }
+
+        return true;
     }
 
     /**
