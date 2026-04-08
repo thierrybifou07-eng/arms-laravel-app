@@ -74,7 +74,7 @@
                                 <td>{{ number_format($payment->expected_amount, 0, ',', ' ') }}</td>
                                 <td>{{ number_format($payment->paid_amount, 0, ',', ' ') }}</td>
                                 <td>
-                                    @if (($payment->status->code === 'processing'|| $payment->status->code === 'validated') && $payment->method)
+                                    @if (($payment->status->code === 'processing' || $payment->status->code === 'validated') && $payment->method)
                                         <span class="badge bg-label-info">{{ $payment->method->label }}</span>
                                     @else
                                         <span class="text-muted">N/A</span>
@@ -86,14 +86,28 @@
 
                                         @if ($payment->isOverdue())
                                             <span class="badge bg-danger">Overdue</span>
-                                        @elseif($status === 'pending')
-                                            <span class="badge bg-label-warning">Pending</span>
-                                        @elseif($status === 'processing')
-                                            <span class="badge bg-label-info">Processing</span>
-                                        @elseif($status === 'validated')
-                                            <span class="badge bg-label-success">Validated</span>
-                                        @elseif($status === 'cancelled')
-                                            <span class="badge bg-label-danger">Cancelled</span>
+                                        @else
+                                            @switch($payment->status->code)
+                                                @case('pending')
+                                                    <span class="badge bg-label-warning">{{ $payment->status->label }}</span>
+                                                @break
+
+                                                @case('validated')
+                                                    <span class="badge bg-label-success">{{ $payment->status->label }}</span>
+                                                @break
+
+                                                @case('cancelled')
+                                                    <span class="badge bg-label-secondary">{{ $payment->status->label }}</span>
+                                                @break
+
+                                                @case('processing')
+                                                    <span class="badge bg-label-info">{{ $payment->status->label }}</span>
+                                                @break
+
+                                                @default
+                                                    <span
+                                                        class="badge bg-label-dark">{{ $payment->status->label ?? 'Unknown' }}</span>
+                                            @endswitch
                                         @endif
                                     </a>
                                 </td>
@@ -101,7 +115,7 @@
                                 <td>
                                     @if ($payment->status->code === 'validated')
                                         <a class="btn btn-sm btn-info" href="{{ route('payments.show.pay', $payment) }}">
-                                             <i class="icon-base bx bx-check me-1"></i>Show
+                                            <i class="icon-base bx bx-check me-1"></i>Show
                                         </a>
                                     @else
                                         <div class="dropdown">

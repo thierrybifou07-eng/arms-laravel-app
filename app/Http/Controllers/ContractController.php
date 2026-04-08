@@ -50,15 +50,13 @@ class ContractController extends Controller
         if (request('search')) {
             $search = request('search');
             $query->where(function ($q) use ($search) {
-                $q->whereHas('user', fn ($u) => 
-                    $u->where('firstname', 'like', "%$search%")
-                      ->orWhere('lastname', 'like', "%$search%")
-                     /*  ->orWhere('email', 'like', "%$search%") */
-                  )
-                  ->orWhereHas('room', fn ($r) =>
-                    $r->where('number', 'like', "%$search%")
-                    ->orWhere('rent_amount', 'like', "%$search%")
-                  );
+                $q->whereHas('user', fn ($u) => $u->where('firstname', 'like', "%$search%")
+                    ->orWhere('lastname', 'like', "%$search%")
+                    /*  ->orWhere('email', 'like', "%$search%") */
+                )
+                    ->orWhereHas('room', fn ($r) => $r->where('number', 'like', "%$search%")
+                      ->orWhere('rent_amount', 'like', "%$search%")
+                    );
             });
         }
 
@@ -110,23 +108,25 @@ class ContractController extends Controller
             $validated['start_date'],
             $validated['end_date'],
         )) {
-            return back()->withErrors(['room_id' => 'The room is already booked for the selected period.'], 422);
+            return back()->withErrors(['room_id' => 'The room is already booked for the selected period.']);
 
         }
         // bring Id of contract status
         $pendingId = ContractStatus::getIdByCodeOrFail('pending');
         // bring the room rent
-        $room = Room::findOrFail($validated['room_id']);
-        DB::transaction(function () use ($validated, $room, $pendingId) {
-
+        $room = Room::with('status')->findOrFail($validated['room_id']);
+        if ($room->status->code !== 'available') {
+            return back()->withErrors(['room_id' => 'Room not available']);
+        }
+        // Update room status to 'busy'
+        $busyId = \App\Models\RoomStatus::where('code', 'busy')->value('id');
+        DB::transaction(function () use ($validated, $room, $pendingId, $busyId) {
             $contract = Contract::create([
                 ...$validated,
                 'rent_amount' => $room->rent,
                 'contract_status_id' => $pendingId,
             ]);
 
-            // Update room status to 'busy'
-            $busyId = \App\Models\RoomStatus::where('code', 'busy')->value('id');
             $room->update([
                 'room_status_id' => $busyId,
             ]);

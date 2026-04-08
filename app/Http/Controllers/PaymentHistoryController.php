@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PaymentHistory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Models\Residence;
 use Illuminate\View\View;
 
 class PaymentHistoryController extends Controller
