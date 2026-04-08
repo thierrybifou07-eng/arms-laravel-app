@@ -92,6 +92,12 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(Contract::class);
     }
 
+    // Relationship with residences (admin can manage many residences)
+    public function residences()
+    {
+        return $this->belongsToMany(Residence::class);
+    }
+
     // create the hasRole method for the middleware
     public function hasRole(string $roleName): bool
     {
