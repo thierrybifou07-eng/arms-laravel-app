@@ -8,13 +8,19 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="d-flex align-items-center justify-content-between gap-3">
             <div class="d-flex justify-content-start">
                 <h5 class="m-1">Payments</h5>
             </div>
-            {{--             <div class="d-flex justify-content-end">
-                <a href="{{ route('contracts.create') }}" class="btn rounded-pill btn-primary">New Contract</a>
-            </div> --}}
         </div>
         <div class="card">
             <div class="row m-3 gap-3">
@@ -67,7 +73,8 @@
                         @foreach ($payments as $payment)
                             <tr class="{{ $payment->isOverdue() ? 'table-danger' : '' }}">
                                 <td>#{{ $payment->contract->id }}</td>
-                                <td>{{ $payment->contract->user->firstname }} {{ $payment->contract->user->lastname }}</td>
+                                <td>{{ $payment->contract->user->firstname }} {{ $payment->contract->user->lastname }}
+                                </td>
 
                                 <td>{{ $payment->due_date?->format('d/m/Y') }}</td>
 
