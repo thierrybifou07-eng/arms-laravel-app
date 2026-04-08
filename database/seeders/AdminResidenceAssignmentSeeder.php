@@ -15,7 +15,7 @@ class AdminResidenceAssignmentSeeder extends Seeder
     {
         // Get all admin users
         $admins = User::whereHas('roles', function ($q) {
-            $q->where('code', 'admin');
+            $q->where('name', 'admin');
         })->get();
 
         // Get all residences

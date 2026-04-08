@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
             'user_status_id' => UserStatus::where('code', 'active')->first()->id,
         ]);
-        $superAdmin->roles()->attach(Role::where('code', 'super_admin')->first()->id);
+        $superAdmin->roles()->attach(Role::where('name', 'super_admin')->first()->id);
 
         // Create Admin users (5)
         for ($i = 1; $i <= 5; $i++) {
@@ -36,7 +36,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'user_status_id' => UserStatus::where('code', 'active')->first()->id,
             ]);
-            $admin->roles()->attach(Role::where('code', 'admin')->first()->id);
+            $admin->roles()->attach(Role::where('name', 'admin')->first()->id);
         }
 
         // Create Staff users (15)
@@ -45,11 +45,11 @@ class UserSeeder extends Seeder
                 'firstname' => "Staff",
                 'lastname' => "User {$i}",
                 'email' => "staff{$i}@arms.test",
-                'phone' => "+237670001{$i:02d}",
+                'phone' => "+237670001" . sprintf('%02d', $i),
                 'password' => Hash::make('password'),
                 'user_status_id' => UserStatus::where('code', 'active')->first()->id,
             ]);
-            $staff->roles()->attach(Role::where('code', 'staff')->first()->id);
+            $staff->roles()->attach(Role::where('name', 'staff')->first()->id);
         }
 
         // Create Teller users (20)
@@ -58,11 +58,11 @@ class UserSeeder extends Seeder
                 'firstname' => "Teller",
                 'lastname' => "User {$i}",
                 'email' => "teller{$i}@arms.test",
-                'phone' => "+237670002{$i:02d}",
+                'phone' => "+237670002" . sprintf('%02d', $i),
                 'password' => Hash::make('password'),
                 'user_status_id' => UserStatus::where('code', 'active')->first()->id,
             ]);
-            $teller->roles()->attach(Role::where('code', 'teller')->first()->id);
+            $teller->roles()->attach(Role::where('name', 'teller')->first()->id);
         }
 
         // Create Student users (459)
@@ -79,7 +79,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'user_status_id' => $randomStatus,
             ]);
-            $student->roles()->attach(Role::where('code', 'student')->first()->id);
+            $student->roles()->attach(Role::where('name', 'student')->first()->id);
         }
 
         $this->command->info('✓ 500 users created successfully (1 super_admin, 5 admins, 15 staff, 20 tellers, 459 students)');

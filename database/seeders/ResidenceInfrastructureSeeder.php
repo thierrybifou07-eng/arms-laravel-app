@@ -26,7 +26,7 @@ class ResidenceInfrastructureSeeder extends Seeder
 
         $residences = [
             ['name' => 'Résidence Prestige', 'city' => 'Yaoundé', 'address' => 'Boulevard de la Liberté'],
-            ['name' => 'Résidence Excellence', 'city' => 'Douala', 'address' => 'Rue du Commerce'],
+            ['name' => 'Résidence Excellence', 'city' => 'Douala', 'address' => 'Ange Raphaël'],
             ['name' => 'Résidence Horizon', 'city' => 'Limbe', 'address' => 'Boulevard côtier'],
             ['name' => 'Résidence Confort', 'city' => 'Buea', 'address' => 'Rue de l\'Université'],
             ['name' => 'Résidence Royal', 'city' => 'Bafoussam', 'address' => 'Centre-ville'],

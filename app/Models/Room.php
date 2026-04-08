@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Room extends Model
 {
-     protected $fillable = [
+    use HasFactory;
+
+    protected $fillable = [
         'floor_id',
         'room_status_id',
         'number',
@@ -14,20 +17,20 @@ class Room extends Model
         'capacity',
     ];
 
-        // relationship with floor
+    // relationship with floor
 
     public function floor()
     {
         return $this->belongsTo(Floor::class);
     }
-        // relationship with contracts
+    // relationship with contracts
 
     public function contracts()
     {
         return $this->hasMany(Contract::class);
     }
 
-        // Assign a status
+    // Assign a status
 
     public function status()
     {

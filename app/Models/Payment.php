@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'contract_id',
         'payment_method_id',
@@ -16,25 +19,34 @@ class Payment extends Model
         'payment_date',
         'due_date',
     ];
-    protected $casts=[
-        'payment_date'=> 'date',
-        'due_date'=> 'date',
+
+    protected $casts = [
+        'payment_date' => 'date',
+        'due_date' => 'date',
     ];
-    public function contract(){
+
+    public function contract()
+    {
         return $this->belongsTo(Contract::class);
     }
-    public function status(){
-        return $this->belongsTo(PaymentStatus::class,'payment_status_id');
-    }
-    public function method(){
-        return $this->belongsTo(PaymentMethod::class,'payment_method_id');
-    }
-    public function isOverdue(): bool {
 
-    return $this->due_date
-        && $this->paid_amount < $this->expected_amount
-        && now()->gt($this->due_date)
-        && $this->status?->code !== 'validated'
-        && $this->status?->code !== 'cancelled';
-    } 
+    public function status()
+    {
+        return $this->belongsTo(PaymentStatus::class, 'payment_status_id');
+    }
+
+    public function method()
+    {
+        return $this->belongsTo(PaymentMethod::class, 'payment_method_id');
+    }
+
+    public function isOverdue(): bool
+    {
+
+        return $this->due_date
+            && $this->paid_amount < $this->expected_amount
+            && now()->gt($this->due_date)
+            && $this->status?->code !== 'validated'
+            && $this->status?->code !== 'cancelled';
+    }
 }

@@ -18,7 +18,7 @@ class ContractSeeder extends Seeder
     {
         // Get all student users
         $students = User::whereHas('roles', function ($q) {
-            $q->where('code', 'student');
+            $q->where('name', 'student');
         })->get();
 
         $studentCount = 0;

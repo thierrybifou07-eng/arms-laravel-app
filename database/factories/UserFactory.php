@@ -37,17 +37,6 @@ class UserFactory extends Factory
             'user_status_id' => fake()->randomElement([UserStatus::getIdByCode(UserStatus::ACTIVE), UserStatus::getIdByCode(UserStatus::PENDING), UserStatus::getIdByCode(UserStatus::DISABLED)]), // Default status
         ];
     }
-/* 
-    public function configure()
-    {
-        return $this->afterCreating(function (User $user) {
-            $role = Role::inRandomOrder()->first();
-            if ($role) {
-                $user->hasRole($role);
-            }
-        });
-    } */
-
     /**
      * Indicate that the model's email address should be unverified.
      */

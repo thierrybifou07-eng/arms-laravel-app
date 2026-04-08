@@ -9,6 +9,7 @@ class BillingPeriod extends Model
     protected $fillable = ['code', 'label'];
 
     public const ONCE = 'One-time';
+
     public const MONTHLY = 'Monthly';
 
     public const QUARTERLY = 'Quarterly';

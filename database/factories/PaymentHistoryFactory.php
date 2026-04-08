@@ -28,7 +28,7 @@ class PaymentHistoryFactory extends Factory
             'amount' => $amount,
             'old_balance' => $oldBalance,
             'new_balance' => $oldBalance - $amount,
-            'recorded_by' => fake()->numberBetween(1, 500), // Random user ID
+            'recorded_by' => fake()->numberBetween(1, 41), // Random user ID in the teams
             'notes' => fake()->sentence(),
         ];
     }
