@@ -65,7 +65,7 @@
         <!-- Dashboards -->
         <li class="menu-item active">
             <a href="{{ route('dashboard') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-smile"></i>
+                <i class="menu-icon tf-icons bx bx-pie-chart-alt-2"></i>
                 <div class="text-truncate" data-i18n="Dashboards">Dashboard</div>
             </a>
         </li>
