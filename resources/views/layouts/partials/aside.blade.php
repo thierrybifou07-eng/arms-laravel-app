@@ -182,5 +182,15 @@
                 </li>
             </ul>
         </li>
+        
+        @can('view-audit-logs')
+        <li class="menu-divider my-2"></li>
+        <li class="menu-item">
+            <a href="{{ route('audit-logs.index') }}" class="menu-link">
+                <i class="menu-icon icon-base bx bx-history"></i>
+                <div data-i18n="Audit Logs">Audit Logs</div>
+            </a>
+        </li>
+        @endcan
     </ul>
 </aside>

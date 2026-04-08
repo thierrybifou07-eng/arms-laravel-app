@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             BillingPeriodSeeder::class,
             PaymentMethodSeeder::class,
             EventPaymentTypeSeeder::class,
+            AuditTypeSeeder::class,
         ]);
 
         // 2. Seed core data

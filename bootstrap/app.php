@@ -16,6 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'checkRole' => \App\Http\Middleware\CheckRole::class,
             'checkPermission' => \App\Http\Middleware\CheckPermission::class,
         ]);
+        // Add audit middleware for login/logout tracking
+        $middleware->append(\App\Http\Middleware\AuditLoginLogout::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

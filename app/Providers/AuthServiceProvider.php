@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\AuditLog;
 use App\Models\BillingPeriod;
 use App\Models\Building;
 use App\Models\BuildingStatus;
@@ -22,6 +23,7 @@ use App\Models\Room;
 use App\Models\RoomStatus;
 use App\Models\User;
 use App\Models\UserStatus;
+use App\Policies\AuditLogPolicy;
 use App\Policies\BillingPeriodPolicy;
 use App\Policies\BuildingPolicy;
 use App\Policies\BuildingStatusPolicy;
@@ -53,6 +55,9 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
+        // Audit Policies
+        AuditLog::class => AuditLogPolicy::class,
+
         // User Policies
         User::class => UserPolicy::class,
 
@@ -133,6 +138,11 @@ class AuthServiceProvider extends ServiceProvider
         // Gate for viewing financial data
         Gate::define('view-financial', function (User $user) {
             return $user->hasRole('teller') || $user->hasRole('admin') || $user->hasRole('super_admin');
+        });
+
+        // Gate for viewing audit logs
+        Gate::define('view-audit-logs', function (User $user) {
+            return $user->hasRole('super_admin');
         });
     }
 }
