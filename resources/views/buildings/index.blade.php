@@ -136,7 +136,7 @@
                     <div
                         class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
                         <div class="dt-info" aria-live="polite" role="status">Showing {{ $buildings->firstItem() ?? 0 }}
-                            to {{ $buildings->lastItem() ?? 0 }} of {{ $buildings->total() }} users</div>
+                            to {{ $buildings->lastItem() ?? 0 }} of {{ $buildings->total() }} buildings</div>
                     </div>
                     <div
                         class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">

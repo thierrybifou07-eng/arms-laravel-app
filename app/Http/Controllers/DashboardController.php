@@ -7,6 +7,7 @@ use App\Models\Contract;
 use App\Models\Payment;
 use App\Models\PaymentHistory;
 use App\Models\User;
+use App\Models\Residence;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller

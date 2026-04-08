@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <h5 class="mb-3">Payment History</h5>
+    <h5 class="mb-3">Payments History</h5>
 
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -73,15 +73,63 @@
                     </tbody>
                 </table>
             </div>
+                <hr>
+                <!-- Pagination -->
+                <div class="row mx-3 justify-content-between mt-3">
+                    <div
+                        class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
+                        <div class="dt-info" aria-live="polite" role="status">Showing {{ $payment_histories->firstItem() ?? 0 }}
+                            to {{ $payment_histories->lastItem() ?? 0 }} of {{ $payment_histories->total() }} Payment Histories</div>
+                    </div>
+                    <div
+                        class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">
+                        <div class="dt-paging">
+                            <nav aria-label="pagination">
+                                <ul class="pagination">
+                                    {{-- Previous Button --}}
+                                    <li class="dt-paging-button page-item {{ $payment_histories->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link previous" href="{{ $payment_histories->previousPageUrl() }}"
+                                            {{ $payment_histories->onFirstPage() ? 'aria-disabled=true' : '' }}>
+                                            <i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>
+                                        </a>
+                                    </li>
+
+                                    {{-- Pagination Elements --}}
+                                    @foreach ($payment_histories->getUrlRange(1, $payment_histories->lastPage()) as $page => $url)
+                                        @if ($page == $payment_histories->currentPage())
+                                            <li class="dt-paging-button page-item active">
+                                                <span class="page-link" aria-current="page">{{ $page }}</span>
+                                            </li>
+                                        @elseif (
+                                            $page == 1 ||
+                                                $page == $payment_histories->lastPage() ||
+                                                ($page >= $payment_histories->currentPage() - 2 && $page <= $payment_histories->currentPage() + 2))
+                                            <li class="dt-paging-button page-item">
+                                                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                            </li>
+                                        @elseif ($page == 2 || $page == $payment_histories->lastPage() - 1)
+                                            <li class="dt-paging-button page-item disabled">
+                                                <span class="page-link ellipsis">…</span>
+                                            </li>
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Next Button --}}
+                                    <li class="dt-paging-button page-item {{ $payment_histories->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link next" href="{{ $payment_histories->nextPageUrl() }}"
+                                            {{ !$payment_histories->hasMorePages() ? 'aria-disabled=true' : '' }}>
+                                            <i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
         @else
             <div class="text-center py-5">
-                <p>Aucun historique de paiement trouvé.</p>
+                <p>No payment history found.</p>
             </div>
         @endif
     </div>
-    @if ($payment_histories->count() > 0)
-        <div class="demo-inline-spacing mx-5">
-            {{ $payment_histories->links() }}
-        </div>
-    @endif
 @endsection

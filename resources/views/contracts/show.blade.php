@@ -12,8 +12,11 @@
                     <p><strong>Student:</strong> {{ $contract->user->firstname }} {{ $contract->user->lastname }}</p>
                     <p><strong>Email:</strong> {{ $contract->user->email }}</p>
                     <p><strong>Phone:</strong> {{ $contract->user->phone }}</p>
-                    <p><strong>Room:</strong> B({{ $contract->room->floor->building->name }}), Floor
-                        {{ $contract->room->floor->number }}, Room {{ $contract->room->number }}
+                    <p><strong>Residence:</strong> {{ $contract->room->floor->building->residence->name }}
+                    </p>
+                    <p><strong>Building:</strong> {{ $contract->room->floor->building->name }}
+                    </p>
+                    <p><strong>Room:</strong> {{ $contract->room->number }} at the floor {{ $contract->room->floor->number }} 
                     </p>
                     <p><strong>Status:</strong>
 
@@ -67,7 +70,6 @@
                                 <tr>
                                     <th>Due date</th>
                                     <th>Expected(FCFA)</th>
-                                    <th>Other(FCFA)</th>
                                     <th>Paid(FCFA)</th>
                                     <th>Status</th>
                                 </tr>
@@ -77,7 +79,6 @@
                                     <tr>
                                         <td>{{ \Carbon\Carbon::parse($payment->due_date)->format('d/m/Y') }}</td>
                                         <td>{{ number_format($payment->expected_amount, 0, ',', ' ') }}</td>
-                                        <td>{{ number_format($payment->tip_amount, 0, ',', ' ') }}</td>
                                         <td>{{ number_format($payment->paid_amount, 0, ',', ' ') }}</td>
                                         <td> @switch($payment->status->code)
                                                 @case('pending')

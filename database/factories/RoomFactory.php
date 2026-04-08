@@ -24,9 +24,9 @@ class RoomFactory extends Factory
         return [
             'floor_id' => Floor::factory(),
             'room_status_id' => RoomStatus::where('code', RoomStatus::AVAILABLE)->first()->id ?? 1,
-            'number' => fake()->numberBetween(1, 99),
+            'number' => fake()->numberBetween(1, 25),
             'rent' => fake()->randomFloat(2, 50000, 250000),
-            'capacity' => fake()->numberBetween(1, 4),
+            'capacity' => fake()->numberBetween(1, 8),
         ];
     }
 }

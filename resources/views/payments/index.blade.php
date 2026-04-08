@@ -82,7 +82,33 @@
                                 </td>
                                 <td>
                                     <a href="" class="">
+                                        @php $status = $payment->status->code ?? '' @endphp
 
+                                        @if ($payment->isOverdue())
+                                            <span class="badge bg-danger">Overdue</span>
+                                        @else
+                                            @switch($payment->status->code)
+                                                @case('pending')
+                                                    <span class="badge bg-label-warning">{{ $payment->status->label }}</span>
+                                                @break
+
+                                                @case('validated')
+                                                    <span class="badge bg-label-success">{{ $payment->status->label }}</span>
+                                                @break
+
+                                                @case('cancelled')
+                                                    <span class="badge bg-label-secondary">{{ $payment->status->label }}</span>
+                                                @break
+
+                                                @case('processing')
+                                                    <span class="badge bg-label-info">{{ $payment->status->label }}</span>
+                                                @break
+
+                                                @default
+                                                    <span
+                                                        class="badge bg-label-dark">{{ $payment->status->label ?? 'Unknown' }}</span>
+                                            @endswitch
+                                        @endif
                                     </a>
                                 </td>
 

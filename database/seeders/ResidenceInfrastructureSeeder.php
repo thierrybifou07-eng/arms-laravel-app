@@ -46,7 +46,7 @@ class ResidenceInfrastructureSeeder extends Seeder
                 'name' => $residenceData['name'],
                 'city' => $residenceData['city'],
                 'address' => $residenceData['address'],
-                'capacity' => fake()->numberBetween(150, 500),
+                'capacity' => fake()->numberBetween(5, 10),
                 'residence_status_id' => $residenceStatusId,
             ]);
 
@@ -58,7 +58,7 @@ class ResidenceInfrastructureSeeder extends Seeder
                     'building_status_id' => $buildingStatusId,
                     'name' => "Building {$b}",
                     'address' => "{$residenceData['address']} - Bloc {$b}",
-                    'capacity' => fake()->numberBetween(50, 200),
+                    'capacity' => fake()->numberBetween(15, 20),
                 ]);
                 $totalBuildingsCreated++;
 
@@ -69,7 +69,7 @@ class ResidenceInfrastructureSeeder extends Seeder
                         'building_id' => $building->id,
                         'floor_status_id' => $floorStatusId,
                         'number' => $f,
-                        'capacity' => fake()->numberBetween(20, 50),
+                        'capacity' => fake()->numberBetween(25, 35),
                     ]);
                     $totalFloorsCreated++;
 
@@ -80,8 +80,8 @@ class ResidenceInfrastructureSeeder extends Seeder
                             'floor_id' => $floor->id,
                             'room_status_id' => $roomStatusId,
                             'number' => $r,
-                            'rent' => fake()->randomFloat(2, 50000, 200000),
-                            'capacity' => fake()->numberBetween(1, 4),
+                            'rent' => fake()->randomFloat(2, 50000, 250000),
+                            'capacity' => fake()->numberBetween(1, 8),
                         ]);
                         $totalRoomsCreated++;
                     }

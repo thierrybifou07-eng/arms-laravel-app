@@ -80,31 +80,32 @@
                                             {{ $contract->room->number }}</span>
                                     </td>
                                     <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
-                                        @switch($contract->status->code)
-                                            @case('pending')
-                                                <span class="badge bg-label-warning">{{ $contract->status->label }}</span>
-                                            @break
+                                        @if ($contract->status->code === 'overdue')
+                                            <span class="badge bg-danger">Overdue</span>
+                                        @else
+                                            @switch($contract->status->code)
+                                                @case('pending')
+                                                    <span class="badge bg-label-warning">{{ $contract->status->label }}</span>
+                                                @break
 
-                                            @case('active')
-                                                <span class="badge bg-label-success">{{ $contract->status->label }}</span>
-                                            @break
+                                                @case('active')
+                                                    <span class="badge bg-label-success">{{ $contract->status->label }}</span>
+                                                @break
 
-                                            @case('overdue')
-                                                <span class="badge bg-label-danger">{{ $contract->status->label }}</span>
-                                            @break
+                                                @case('expired')
+                                                    <span class="badge bg-label-secondary">{{ $contract->status->label }}</span>
+                                                @break
 
-                                            @case('expired')
-                                                <span class="badge bg-label-secondary">{{ $contract->status->label }}</span>
-                                            @break
+                                                @case('archived')
+                                                    <span class="badge bg-label-dark">{{ $contract->status->label }}</span>
+                                                @break
 
-                                            @case('archived')
-                                                <span class="badge bg-label-dark">{{ $contract->status->label }}</span>
-                                            @break
+                                                @default
+                                                    <span
+                                                        class="badge bg-label-info">{{ $contract->status->label ?? 'Unknown' }}</span>
+                                            @endswitch
+                                        @endif
 
-                                            @default
-                                                <span
-                                                    class="badge bg-label-info">{{ $contract->status->label ?? 'Unknown' }}</span>
-                                        @endswitch
                                     </td>
                                     <td>
                                         {{ $contract->billingPeriod->label }}
@@ -146,13 +147,13 @@
                     </table>
                 </div>
                 <hr>
-                 <!-- Pagination -->
+                <!-- Pagination -->
                 <div class="row mx-3 justify-content-between">
                     <div
                         class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
                         <div class="dt-info" aria-live="polite" role="status">Showing
                             {{ $contracts->firstItem() ?? 0 }}
-                            to {{ $contracts->lastItem() ?? 0 }} of {{ $contracts->total() }} users</div>
+                            to {{ $contracts->lastItem() ?? 0 }} of {{ $contracts->total() }} contracts</div>
                     </div>
                     <div
                         class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">
@@ -210,6 +211,5 @@
                 </div>
             @endif
         </div>
-
     </div>
 @endsection

@@ -25,7 +25,7 @@ class FloorFactory extends Factory
             'building_id' => Building::factory(),
             'floor_status_id' => FloorStatus::where('code', FloorStatus::ACTIVE)->first()->id ?? 1,
             'number' => fake()->numberBetween(1, 15),
-            'capacity' => fake()->numberBetween(10, 50),
+            'capacity' => fake()->numberBetween(25, 35),
         ];
     }
 }

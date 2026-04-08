@@ -26,7 +26,7 @@ class BuildingFactory extends Factory
             'building_status_id' => BuildingStatus::where('code', BuildingStatus::ACTIVE)->first()->id ?? 1,
             'name' => 'Building ' . fake()->unique()->numerify('###'),
             'address' => fake()->address(),
-            'capacity' => fake()->numberBetween(50, 200),
+            'capacity' => fake()->numberBetween(5, 15),
         ];
     }
 }
