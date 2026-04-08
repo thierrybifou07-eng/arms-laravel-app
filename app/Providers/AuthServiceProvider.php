@@ -72,9 +72,6 @@ class AuthServiceProvider extends ServiceProvider
         Payment::class => PaymentPolicy::class,
         PaymentHistory::class => PaymentHistoryPolicy::class,
 
-        // Billing Policies
-        BillingPeriod::class => BillingPeriodPolicy::class,
-
         // Role & Permission Policies (Administrative)
         Role::class => RolePolicy::class,
         Permission::class => PermissionPolicy::class,
@@ -85,7 +82,6 @@ class AuthServiceProvider extends ServiceProvider
         RoomStatus::class => RoomStatusPolicy::class,
         ResidenceStatus::class => ResidenceStatusPolicy::class,
         ContractStatus::class => ContractStatusPolicy::class,
-        PaymentStatus::class => PaymentStatusPolicy::class,
         UserStatus::class => UserStatusPolicy::class,
 
         // Payment Method & Event Payment Type Policies

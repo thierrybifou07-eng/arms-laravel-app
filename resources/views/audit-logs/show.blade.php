@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-xxl flex-grow-1 container-p-y">
-    <div class="page-heading mb-4">
+<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+    <div class="page-heading mb-3">
         <div class="row">
             <div class="col-12">
-                <h3 class="mb-2">
+                <h4 class="mb-2">
                     <i class="menu-icon tf-icons icon-tabler icon-tabler-history"></i>
-                    Détails du Log d'Audit
-                </h3>
+                    Details of the Audit Log
+                </h4>
                 <a href="{{ route('audit-logs.index') }}" class="btn btn-secondary btn-sm">
-                    <i class="icon-tabler icon-tabler-arrow-left"></i> Retour
+                    <i class="icon-tabler icon-tabler-arrow-left"></i> Back
                 </a>
             </div>
         </div>
@@ -20,12 +20,12 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Informations Générales</h5>
+                    <h5 class="card-title mb-0">General Information</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 mb-4">
-                            <label class="form-label fw-bold">Date et Heure</label>
+                            <label class="form-label fw-bold">Date and Time</label>
                             <p class="form-control-static">
                                 {{ $auditLog->created_at->format('d/m/Y H:i:s') }}
                                 <small class="text-muted">({{ $auditLog->created_at->diffForHumans() }})</small>
@@ -37,7 +37,7 @@
                             <p class="form-control-static">
                                 @switch($auditLog->action)
                                     @case('CREATE')
-                                        <span class="badge bg-success">Création</span>
+                                        <span class="badge bg-success">Creation</span>
                                     @break
 
                                     @case('UPDATE')
@@ -45,15 +45,15 @@
                                     @break
 
                                     @case('DELETE')
-                                        <span class="badge bg-danger">Suppression</span>
+                                        <span class="badge bg-danger">Deletion</span>
                                     @break
 
                                     @case('LOGIN')
-                                        <span class="badge bg-primary">Connexion</span>
+                                        <span class="badge bg-primary">Login</span>
                                     @break
 
                                     @case('LOGOUT')
-                                        <span class="badge bg-warning">Déconnexion</span>
+                                        <span class="badge bg-warning">Logout</span>
                                     @break
 
                                     @default
@@ -63,7 +63,7 @@
                         </div>
 
                         <div class="col-md-6 mb-4">
-                            <label class="form-label fw-bold">Type d'Audit</label>
+                            <label class="form-label fw-bold">Audit Type</label>
                             <p class="form-control-static">
                                 @if ($auditLog->auditType)
                                     {{ $auditLog->auditType->label }}
@@ -74,27 +74,27 @@
                         </div>
 
                         <div class="col-md-6 mb-4">
-                            <label class="form-label fw-bold">Type d'Élément</label>
+                            <label class="form-label fw-bold">Element Type</label>
                             <p class="form-control-static">
                                 <code>{{ $auditLog->model_type ?? $auditLog->auditable_type }}</code>
                             </p>
                         </div>
 
                         <div class="col-md-6 mb-4">
-                            <label class="form-label fw-bold">Utilisateur</label>
+                            <label class="form-label fw-bold">User</label>
                             <p class="form-control-static">
                                 @if ($auditLog->user)
                                     <strong>{{ $auditLog->user->firstname }} {{ $auditLog->user->lastname }}</strong>
                                     <br>
                                     <small class="text-muted">{{ $auditLog->user->email }}</small>
                                 @else
-                                    <span class="badge bg-secondary">Système</span>
+                                    <span class="badge bg-secondary">System</span>
                                 @endif
                             </p>
                         </div>
 
                         <div class="col-md-6 mb-4">
-                            <label class="form-label fw-bold">ID l'Élément</label>
+                            <label class="form-label fw-bold">Element ID</label>
                             <p class="form-control-static">
                                 {{ $auditLog->model_id ?? $auditLog->auditable_id ?? 'N/A' }}
                             </p>
@@ -109,19 +109,19 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Détails Techniques</h5>
+                    <h5 class="card-title mb-0">Technical Details</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 mb-4">
-                            <label class="form-label fw-bold">Adresse IP</label>
+                            <label class="form-label fw-bold">IP Address</label>
                             <p class="form-control-static">
                                 <code>{{ $auditLog->ip_address ?? 'N/A' }}</code>
                             </p>
                         </div>
 
                         <div class="col-md-6 mb-4">
-                            <label class="form-label fw-bold">Méthode HTTP</label>
+                            <label class="form-label fw-bold">HTTP Method</label>
                             <p class="form-control-static">
                                 <span class="badge bg-primary">{{ $auditLog->method ?? 'N/A' }}</span>
                             </p>
@@ -151,7 +151,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title mb-0">Changements Effectués</h5>
+                        <h5 class="card-title mb-0">Changes Made</h5>
                     </div>
                     <div class="card-body">
                         @if ($auditLog->action === 'UPDATE')
@@ -159,9 +159,9 @@
                                 <table class="table">
                                     <thead class="table-light">
                                         <tr>
-                                            <th>Champ</th>
-                                            <th>Ancienne Valeur</th>
-                                            <th>Nouvelle Valeur</th>
+                                            <th>Field</th>
+                                            <th>Old Value</th>
+                                            <th>New Value</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -184,7 +184,7 @@
                                         @else
                                             <tr>
                                                 <td colspan="3" class="text-center text-muted">
-                                                    Aucune donnée de changement disponible
+                                                    No change data available
                                                 </td>
                                             </tr>
                                         @endif
@@ -196,8 +196,8 @@
                                 <table class="table">
                                     <thead class="table-light">
                                         <tr>
-                                            <th>Champ</th>
-                                            <th>Valeur</th>
+                                            <th>Field</th>
+                                            <th>Value</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -211,7 +211,7 @@
                                         @else
                                             <tr>
                                                 <td colspan="2" class="text-center text-muted">
-                                                    Aucune donnée disponible
+                                                    No data available
                                                 </td>
                                             </tr>
                                         @endif
@@ -223,8 +223,8 @@
                                 <table class="table">
                                     <thead class="table-light">
                                         <tr>
-                                            <th>Champ</th>
-                                            <th>Valeur Supprimée</th>
+                                            <th>Field</th>
+                                            <th>Deleted Value</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -238,7 +238,7 @@
                                         @else
                                             <tr>
                                                 <td colspan="2" class="text-center text-muted">
-                                                    Aucune donnée disponible
+                                                    No data available
                                                 </td>
                                             </tr>
                                         @endif
@@ -246,7 +246,7 @@
                                 </table>
                             </div>
                         @else
-                            <p class="text-muted">Pas de détails de changement pour cette action.</p>
+                            <p class="text-muted">No change details available for this action.</p>
                         @endif
                     </div>
                 </div>
@@ -259,7 +259,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title mb-0">Détails Supplémentaires</h5>
+                        <h5 class="card-title mb-0">Additional Details</h5>
                     </div>
                     <div class="card-body">
                         <p>{{ $auditLog->details }}</p>

@@ -13,13 +13,13 @@ class TestAuditSystem extends Command
 
     public function handle()
     {
-        $this->info('🧪 Testing Audit System...');
+        $this->info('Testing Audit System...');
         $this->newLine();
 
         try {
             // Count before
             $countBefore = AuditLog::count();
-            $this->line("📊 Logs avant: <info>{$countBefore}</info>");
+            $this->line("Logs avant: <info>{$countBefore}</info>");
 
             // Create test entry
             AuditLog::log(
@@ -27,20 +27,20 @@ class TestAuditSystem extends Command
                 userId: auth()->id() ?? 1,
                 modelType: 'App\Models\AuditLog',
                 modelId: 1,
-                details: 'Test du système d\'audit effectué via commande Artisan',
+                details: 'Audit log test entry created by TestAuditSystem command',
             );
 
             // Count after
             $countAfter = AuditLog::count();
-            $this->line("📊 Logs après: <info>{$countAfter}</info>");
+            $this->line("Logs after: <info>{$countAfter}</info>");
 
             $this->newLine();
-            $this->info('✅ Test réussi! Un log a été créé.');
-            $this->line('🔗 Accédez aux logs à: <comment>/audit-logs</comment>');
+            $this->info('Test audit created successfully!');
+            $this->line('Access audit logs at: <comment>/audit-logs</comment>');
 
             return self::SUCCESS;
         } catch (\Exception $e) {
-            $this->error('❌ Erreur: ' . $e->getMessage());
+            $this->error('Erreur: ' . $e->getMessage());
             return self::FAILURE;
         }
     }

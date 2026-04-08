@@ -175,7 +175,7 @@ class AuditLogController extends Controller
 
         // Verify password
         if (!\Hash::check($request->password, auth()->user()->password)) {
-            return back()->withErrors(['password' => 'Le mot de passe est incorrect.']);
+            return back()->withErrors(['password' => 'The password is incorrect.']);
         }
 
         // Delete based on filters
@@ -188,7 +188,7 @@ class AuditLogController extends Controller
 
         $deleted = $query->delete();
 
-        return back()->with('success', "Logs supprimés avec succès ({$deleted} entrées).");
+        return back()->with('success', "Logs deleted successfully ({$deleted} entries).");
     }
 
     /**
@@ -203,12 +203,12 @@ class AuditLogController extends Controller
         ]);
 
         if (!\Hash::check($request->password, auth()->user()->password)) {
-            return back()->withErrors(['password' => 'Le mot de passe est incorrect.']);
+            return back()->withErrors(['password' => 'The password is incorrect.']);
         }
 
         $count = AuditLog::count();
         AuditLog::truncate();
 
-        return back()->with('success', "Tous les logs d'audit ont été supprimés ({$count} entrées).");
+        return back()->with('success', "All audit logs have been deleted ({$count} entries).");
     }
 }

@@ -33,7 +33,7 @@ class AuditLoginLogout
                     userId: $userId,
                     modelType: 'App\Models\User',
                     modelId: $userId,
-                    details: 'Connexion utilisateur',
+                    details: 'User login',
                 );
             }
         }
@@ -48,7 +48,7 @@ class AuditLoginLogout
                     userId: $userId,
                     modelType: 'App\Models\User',
                     modelId: $userId,
-                    details: 'Déconnexion utilisateur',
+                    details: 'User logout',
                 );
             }
         }

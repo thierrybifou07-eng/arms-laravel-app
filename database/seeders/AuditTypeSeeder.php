@@ -13,16 +13,16 @@ class AuditTypeSeeder extends Seeder
     public function run(): void
     {
         $auditTypes = [
-            ['code' => 'create', 'label' => 'Création'],
-            ['code' => 'update', 'label' => 'Modification'],
-            ['code' => 'delete', 'label' => 'Suppression'],
-            ['code' => 'read', 'label' => 'Lecture'],
-            ['code' => 'login', 'label' => 'Connexion'],
-            ['code' => 'logout', 'label' => 'Déconnexion'],
-            ['code' => 'download', 'label' => 'Téléchargement'],
-            ['code' => 'export', 'label' => 'Exportation'],
-            ['code' => 'import', 'label' => 'Importation'],
-            ['code' => 'other', 'label' => 'Autre'],
+            ['code' => 'create', 'label' => 'Create'],
+            ['code' => 'update', 'label' => 'Update'],
+            ['code' => 'delete', 'label' => 'Delete'],
+            ['code' => 'read', 'label' => 'Read'],
+            ['code' => 'login', 'label' => 'Login'],
+            ['code' => 'logout', 'label' => 'Logout'],
+            ['code' => 'download', 'label' => 'Download'],
+            ['code' => 'export', 'label' => 'Export'],
+            ['code' => 'import', 'label' => 'Import'],
+            ['code' => 'other', 'label' => 'Other'],
         ];
 
         foreach ($auditTypes as $type) {
