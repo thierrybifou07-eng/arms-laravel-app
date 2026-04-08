@@ -52,6 +52,11 @@ class DatabaseSeeder extends Seeder
             PaymentReceiptSeeder::class,                // Create receipts for validated payments
         ]);
 
+        // 5. Seed audit logs (demo data)
+        $this->call([
+            AuditLogSeeder::class,                      // Create test audit logs for dashboard
+        ]);
+
         $this->command->info("\n✓ Database seeding completed successfully!");
         $this->command->info("Database contains:");
         $this->command->info("  - 500 users (1 super_admin, 5 admins, 15 staff, 20 tellers, 459 students)");

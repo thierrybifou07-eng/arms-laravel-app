@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Models\BillingPeriod;
 use App\Models\Contract;
 use App\Models\Payment;
@@ -40,6 +41,28 @@ class DashboardController extends Controller
 
     private function getSuperAdminStats()
     {
+        // Audit statistics
+        $auditStats = [
+            'totalLogs' => AuditLog::count(),
+            'logsToday' => AuditLog::whereDate('created_at', today())->count(),
+            'createsCount' => AuditLog::where('action', 'CREATE')->count(),
+            'updatesCount' => AuditLog::where('action', 'UPDATE')->count(),
+            'deletesCount' => AuditLog::where('action', 'DELETE')->count(),
+            'loginsCount' => AuditLog::where('action', 'LOGIN')->count(),
+            'exportsCount' => AuditLog::where('action', 'EXPORT')->count(),
+            'recentLogs' => AuditLog::with(['user', 'auditType'])->latest()->take(10)->get(),
+            'topUsers' => AuditLog::selectRaw('user_id, count(*) as total')
+                ->groupBy('user_id')
+                ->orderByDesc('total')
+                ->take(5)
+                ->with('user')
+                ->get(),
+            'actionBreakdown' => AuditLog::selectRaw('action, count(*) as count')
+                ->groupBy('action')
+                ->get()
+                ->mapWithKeys(fn($item) => [$item->action => $item->count]),
+        ];
+
         return [
             'role' => 'super_admin',
             'totalStudents' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->count(),
@@ -54,6 +77,7 @@ class DashboardController extends Controller
             'recentHistories' => PaymentHistory::latest()->take(5)->get(),
             'recentPayments' => Payment::with(['contract.user', 'status'])->latest()->take(10)->get(),
             'recentContracts' => Contract::with(['user', 'room', 'status'])->latest()->take(5)->get(),
+            'auditStats' => $auditStats,
         ];
     }
 
