@@ -12,7 +12,7 @@
                 <h5 class="m-1">Contracts</h5>
             </div>
             <div class="d-flex justify-content-end">
-                <a href="{{ route('contracts.create') }}" class="btn rounded-pill btn-primary">New Contract</a>
+                <a href="{{ route('contracts.create') }}" class="btn rounded btn-primary">New Contract</a>
             </div>
         </div>
         <div class="card my-5">
