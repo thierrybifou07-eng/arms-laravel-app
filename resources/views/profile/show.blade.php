@@ -100,7 +100,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             @if($statusCode === 'active')
                 <div class="card shadow-sm mt-5 mb-4">

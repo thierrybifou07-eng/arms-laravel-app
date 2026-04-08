@@ -41,6 +41,13 @@
                 <p><strong>Expected:</strong> {{ number_format($payment->expected_amount) }} FCFA</p>
                 <p><strong>Paid:</strong> {{ number_format($payment->paid_amount) }} FCFA</p>
                 <p><strong>Due date:</strong> {{ $payment->due_date }}</p>
+                <p><strong>Payment Method:</strong>
+                    @if (($payment->status->code === 'processing'|| $payment->status->code === 'validated') && $payment->method)
+                        <span class="badge bg-label-info">{{ $payment->method->label }}</span>
+                    @else
+                        <span class="text-muted">N/A</span>
+                    @endif
+                </p>
             </div>
         </div>
     </div>

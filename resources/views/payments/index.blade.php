@@ -58,7 +58,7 @@
                             <th>Due Date</th>
                             <th>Expected(FCFA)</th>
                             <th>Paid(FCFA)</th>
-                            {{-- <th>Tip amount(FCFA)</th> --}}
+                            <th>Method</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -74,7 +74,14 @@
                                 <td>{{ number_format($payment->expected_amount, 0, ',', ' ') }}</td>
                                 <td>{{ number_format($payment->paid_amount, 0, ',', ' ') }}</td>
                                 <td>
-                                    <a href="{{ route('payments.show.pay', $payment) }}" class="">
+                                    @if (($payment->status->code === 'processing'|| $payment->status->code === 'validated') && $payment->method)
+                                        <span class="badge bg-label-info">{{ $payment->method->label }}</span>
+                                    @else
+                                        <span class="text-muted">N/A</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="" class="">
                                         @php $status = $payment->status->code ?? '' @endphp
 
                                         @if ($payment->isOverdue())
@@ -92,27 +99,40 @@
                                 </td>
 
                                 <td>
-                                    <div class="d-flex flex-row gap-1">
-                                        {{-- PAY --}}
-                                        @if (
-                                            $payment->status->code === 'pending' ||
-                                                $payment->status->code === 'cancelled' ||
-                                                $payment->status->code === 'overdue')
-                                            <a href="{{ route('payments.pay.form', $payment) }}"
-                                                class="btn btn-sm btn-primary">
-                                                Pay
-                                            </a>
-                                        @endif
-                                        {{-- VALIDATE --}}
-                                        @if ($payment->status->code === 'processing')
-                                            <form method="POST" action="{{ route('payments.validate', $payment) }}"
-                                                class="mt-3">
-                                                @csrf
-                                                <button class="btn btn-success">Validate</button>
-                                            </form>
-                                        @endif
-
-                                    </div>
+                                    @if ($payment->status->code === 'validated')
+                                        <a class="btn btn-sm btn-info" href="{{ route('payments.show.pay', $payment) }}">
+                                             <i class="icon-base bx bx-check me-1"></i>Show
+                                        </a>
+                                    @else
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                                data-bs-toggle="dropdown">
+                                                <i class="icon-base bx bx-dots-vertical-rounded"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                @if ($payment->status->code === 'pending' || $payment->status->code === 'overdue')
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('payments.pay.form', $payment) }}">
+                                                        <i class="icon-base bx bx-money me-1"></i>Pay</a>
+                                                    <hr class="dropdown-divider">
+                                                    <form method="POST" action="{{ route('payments.cancel', $payment) }}">
+                                                        @csrf
+                                                        <button class="dropdown-item text-danger" type="submit">
+                                                            <i class="icon-base bx bx-x me-1"></i>Cancel
+                                                        </button>
+                                                    </form>
+                                                @elseif ($payment->status->code === 'processing')
+                                                    <form method="POST"
+                                                        action="{{ route('payments.validate', $payment) }}">
+                                                        @csrf
+                                                        <button class="dropdown-item text-success" type="submit">
+                                                            <i class="icon-base bx bx-check me-1"></i>Validate
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

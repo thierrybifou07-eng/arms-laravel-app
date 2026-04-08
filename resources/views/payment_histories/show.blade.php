@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="col-xxl-12">
+    <div class="col-xxl-6">
         <div class="card my-4">
             <div class="card-header d-flex align-items-center justify-content-between">
-                <h5 class="mb-0">Entrée d'Historique #{{ $payment_history->id }}</h5>
+                <h5 class="mb-0">Entrée d'Historique #{{ $paymentHistory->id }}</h5>
                 <a href="{{ route('payment_histories.index') }}" class="btn btn-secondary btn-sm">
                     <i class="icon-base bx bx-arrow-back me-1"></i> Retour
                 </a>
@@ -14,25 +14,25 @@
                     <tbody class="table-border-bottom-0">
                         <tr>
                             <td class="fw-medium">Paiement ID:</td>
-                            <td>#{{ $payment_history->payment_id }}</td>
+                            <td>#{{ $paymentHistory->payment_id }}</td>
                         </tr>
                         <tr>
                             <td class="fw-medium">Montant (DZD):</td>
-                            <td><span class="badge bg-success">{{ number_format($payment_history->amount, 2, ',', ' ') }}</span></td>
+                            <td><span class="badge bg-success">{{ number_format($paymentHistory->amount, 2, ',', ' ') }}</span></td>
                         </tr>
                         <tr>
                             <td class="fw-medium">Ancien Solde:</td>
-                            <td>{{ number_format($payment_history->old_balance, 2, ',', ' ') }} DZD</td>
+                            <td>{{ number_format($paymentHistory->old_balance, 2, ',', ' ') }} DZD</td>
                         </tr>
                         <tr>
                             <td class="fw-medium">Nouveau Solde:</td>
-                            <td>{{ number_format($payment_history->new_balance, 2, ',', ' ') }} DZD</td>
+                            <td>{{ number_format($paymentHistory->new_balance, 2, ',', ' ') }} DZD</td>
                         </tr>
                         <tr>
                             <td class="fw-medium">Notes:</td>
                             <td>
-                                @if ($payment_history->notes)
-                                    {{ $payment_history->notes }}
+                                @if ($paymentHistory->notes)
+                                    {{ $paymentHistory->notes }}
                                 @else
                                     <em class="text-muted">Aucune note</em>
                                 @endif
@@ -40,7 +40,7 @@
                         </tr>
                         <tr>
                             <td class="fw-medium">Créé le:</td>
-                            <td><span class="badge bg-label-info">{{ $payment_history->created_at->format('d/m/Y H:i:s') }}</span></td>
+                            <td><span class="badge bg-label-info">{{ $paymentHistory->created_at->format('d/m/Y H:i:s') }}</span></td>
                         </tr>
                     </tbody>
                 </table>
