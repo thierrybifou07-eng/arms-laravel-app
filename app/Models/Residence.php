@@ -44,4 +44,10 @@ class Residence extends Model
     {
         return $this->hasMany(Building::class);
     }
+
+    // relationship with users
+    public function users()
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
+    }
 }
