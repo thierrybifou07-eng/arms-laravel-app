@@ -108,7 +108,7 @@ class DashboardController extends Controller
             return ['role' => 'student', 'message' => 'No contracts assigned'];
         }
 
-        $payments = Payment::whereHas('contract', fn ($q) => $q->where('user_id', $user->id))->get();
+        $payments = Payment::with('method')->whereHas('contract', fn ($q) => $q->where('user_id', $user->id))->get();
 
         return [
             'role' => 'student',
