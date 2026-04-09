@@ -35,7 +35,7 @@ class ContractService
      */
     public function approveContract(Contract $contract): Contract
     {
-        $approvedStatus = ContractStatus::where('code', 'approved')->first();
+        $approvedStatus = ContractStatus::where('code', 'active')->first();
         $contract->update(['contract_status_id' => $approvedStatus->id]);
         return $contract;
     }
@@ -132,7 +132,7 @@ class ContractService
         $endDate = now()->addDays($daysAhead)->format('Y-m-d');
 
         return Contract::whereHas('status', function ($query) {
-            $query->where('code', 'approved');
+            $query->where('code', 'active');
         })
             ->where('end_date', '<=', $endDate)
             ->with('student', 'room')
@@ -147,13 +147,13 @@ class ContractService
         return [
             'total_contracts' => Contract::count(),
             'approved_contracts' => Contract::whereHas('status', function ($q) {
-                $q->where('code', 'approved');
+                $q->where('code', 'active');
             })->count(),
             'pending_contracts' => Contract::whereHas('status', function ($q) {
                 $q->where('code', 'pending');
             })->count(),
             'rejected_contracts' => Contract::whereHas('status', function ($q) {
-                $q->where('code', 'rejected');
+                $q->where('code', 'cancelled');
             })->count(),
             'total_value' => Contract::sum('monthly_amount'),
         ];

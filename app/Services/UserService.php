@@ -101,7 +101,7 @@ class UserService
      */
     public function deactivateUser(User $user): User
     {
-        $inactiveStatus = \App\Models\UserStatus::where('code', 'inactive')->first();
+        $inactiveStatus = \App\Models\UserStatus::where('code', 'disabled')->first();
         $user->update(['user_status_id' => $inactiveStatus->id]);
         return $user;
     }

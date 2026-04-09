@@ -52,7 +52,7 @@ class BillingService
     public function generatePaymentsForPeriod(BillingPeriod $billingPeriod): int
     {
         $contracts = Contract::whereHas('status', function ($query) {
-            $query->where('code', 'approved');
+            $query->where('code', 'active');
         })
             ->where('billing_period_id', $billingPeriod->id)
             ->get();
@@ -75,8 +75,8 @@ class BillingService
                     'payment_status_id' => $pendingStatus->id,
                     'expected_amount' => $contract->monthly_amount,
                     'paid_amount' => 0,
-                    'tip_amount' => 0,
-                    'payment_date' => now(),
+/*                     'tip_amount' => 0,
+ */                    'payment_date' => now(),
                     'due_date' => now()->addDays(30),
                     'billing_period_id' => $billingPeriod->id,
                 ]);

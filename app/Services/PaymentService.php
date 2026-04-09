@@ -67,8 +67,8 @@ class PaymentService
         $payment->update([
             'payment_status_id' => $paidStatus->id,
             'paid_amount' => $data['paid_amount'] ?? $payment->expected_amount,
-            'tip_amount' => $data['tip_amount'] ?? 0,
-            'payment_date' => $data['payment_date'] ?? now(),
+/*             'tip_amount' => $data['tip_amount'] ?? 0,
+ */            'payment_date' => $data['payment_date'] ?? now(),
         ]);
 
         return $payment;
@@ -104,8 +104,8 @@ class PaymentService
             'total_payments' => $query->count(),
             'total_amount' => $query->sum('paid_amount'),
             'average_payment' => $query->avg('paid_amount'),
-            'total_tips' => $query->sum('tip_amount'),
-            'pending_count' => $query->whereHas('status', function ($q) {
+/*             'total_tips' => $query->sum('tip_amount'),
+ */            'pending_count' => $query->whereHas('status', function ($q) {
                 $q->where('code', 'pending');
             })->count(),
         ];

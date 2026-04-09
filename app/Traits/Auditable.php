@@ -5,7 +5,7 @@ namespace App\Traits;
 use App\Models\AuditLog;
 use Illuminate\Database\Eloquent\Model;
 
-Trait Auditable
+trait Auditable
 {
     /**
      * Boot the Auditable trait
