@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Residence extends Model
 {
+    use Auditable;
     use HasFactory;
 
     protected static function newFactory()
@@ -43,5 +45,11 @@ class Residence extends Model
     public function buildings()
     {
         return $this->hasMany(Building::class);
+    }
+
+    // relationship with users
+    public function users()
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
     }
 }

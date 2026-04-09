@@ -33,7 +33,7 @@ class ContractFactory extends Factory
             'contract_status_id' => ContractStatus::where('code', ContractStatus::ACTIVE)->first()->id ?? 1,
             'billing_period_id' => BillingPeriod::inRandomOrder()->first()?->id ?? 1,
             'room_id' => Room::factory(),
-            'rent_amount' => fake()->randomFloat(2, 50000, 200000),
+            'rent_amount' => fake()->randomFloat(2, 50000, 250000),
             'start_date' => $startDate,
             'end_date' => $endDate,
         ];

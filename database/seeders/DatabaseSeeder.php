@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             BillingPeriodSeeder::class,
             PaymentMethodSeeder::class,
             EventPaymentTypeSeeder::class,
+            AuditTypeSeeder::class,
         ]);
 
         // 2. Seed core data
@@ -49,6 +50,11 @@ class DatabaseSeeder extends Seeder
             ContractSeeder::class,                      // Create contracts for students
             PaymentSeeder::class,                       // Create payments and payment histories
             PaymentReceiptSeeder::class,                // Create receipts for validated payments
+        ]);
+
+        // 5. Seed audit logs (demo data)
+        $this->call([
+            AuditLogSeeder::class,                      // Create test audit logs for dashboard
         ]);
 
         $this->command->info("\n✓ Database seeding completed successfully!");

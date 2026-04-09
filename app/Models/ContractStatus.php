@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 
 class ContractStatus extends Model
 {
+    use Auditable;
+
     protected $fillable = ['code', 'label'];
 
     public const PENDING = 'Pending';
@@ -14,7 +17,7 @@ class ContractStatus extends Model
 
     public const OVERDUE = 'Overdue';
 
-    public const ARCHIVED = 'archived';
+    public const ARCHIVED = 'Archived';
 
     public const EXPIRED = 'Expired';
 

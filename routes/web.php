@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\PendingUserController;
 use App\Http\Controllers\Admin\UserRoleController;
+use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\BuildingFloorController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\DashboardController;
@@ -57,6 +58,18 @@ Route::middleware($superAdminOnly)
         Route::get('users/{user}/roles', [UserRoleController::class, 'edit'])->name('user.roles.edit');
         Route::put('users/{user}/roles', [UserRoleController::class, 'update'])->name('user.roles.update');
     });
+
+/*
+|-----------------------------------------------------------------------
+| Audit Logs Routes (Super Admin Only)
+|-----------------------------------------------------------------------
+*/
+Route::middleware($superAdminOnly)->group(function () {
+    Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
+    Route::get('/audit-logs/{auditLog}', [AuditLogController::class, 'show'])->name('audit-logs.show');
+    Route::post('/audit-logs/export', [AuditLogController::class, 'export'])->name('audit-logs.export');
+    Route::delete('/audit-logs/clear', [AuditLogController::class, 'clear'])->name('audit-logs.clear');
+});
 
 Route::middleware($superAdminAdmin)
     ->prefix('activate-account')

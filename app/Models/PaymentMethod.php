@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 
 class PaymentMethod extends Model
 {
+    use Auditable;
+
     protected $fillable = ['code', 'label'];
 
     public const CASH = 'cash';

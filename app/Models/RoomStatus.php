@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 
 class RoomStatus extends Model
 {
+    use Auditable;
+
     protected $fillable = ['code', 'label'];
 
     public const AVAILABLE = 'available';
@@ -16,8 +19,8 @@ class RoomStatus extends Model
 
     public const CLOSED = 'closed';
 
-    //create the function(undefinded here) to call in the dbseeder
-    
+    // create the function(undefinded here) to call in the dbseeder
+
     public static function getIdByCode(string $code): ?int
     {
         return static::where('code', $code)->value('id');

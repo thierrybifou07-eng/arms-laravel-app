@@ -22,7 +22,7 @@ class PaymentFactory extends Factory
      */
     public function definition(): array
     {
-        $expectedAmount = fake()->randomFloat(2, 50000, 200000);
+        $expectedAmount = fake()->randomFloat(2, 50000, 250000);
         $paymentDate = fake()->dateTimeBetween('-1 year', 'now');
         
         return [
