@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AuditLog extends Model
 {
+    use Auditable;
+    use HasFactory;
+
     protected $table = 'audits';
 
     protected $fillable = [
@@ -99,7 +104,7 @@ class AuditLog extends Model
      */
     public function getChangedValuesAttribute(): string
     {
-        if (!$this->old_values && !$this->new_values) {
+        if (! $this->old_values && ! $this->new_values) {
             return 'N/A';
         }
 
@@ -152,7 +157,7 @@ class AuditLog extends Model
                 'url' => request()->fullUrl(),
             ]);
         } catch (\Exception $e) {
-            \Log::error('Error logging audit: ' . $e->getMessage());
+            \Log::error('Error logging audit: '.$e->getMessage());
         }
     }
 

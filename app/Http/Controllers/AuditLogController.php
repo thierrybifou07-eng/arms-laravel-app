@@ -57,7 +57,7 @@ class AuditLogController extends Controller
             $query->search($request->search);
         }
 
-        $auditLogs = $query->paginate(50);
+        $auditLogs = $query->paginate(10);
 
         $auditTypes = AuditType::all();
         $actions = ['CREATE', 'UPDATE', 'DELETE', 'READ', 'LOGIN', 'LOGOUT', 'DOWNLOAD'];
