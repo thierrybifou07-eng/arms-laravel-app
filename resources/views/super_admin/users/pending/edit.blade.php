@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-4">
-    <h1 class="h4 mb-3">Active the user</h1>
+<div class="col-xxl col-md-6 col-lg-6 py-2 col-sm-12">
+    <h2 class="h4 mb-3">Active the user</h2>
 
     <div class="card shadow-sm p-4 mb-4">
         <p class="mb-1"><strong>Name :</strong> {{ $user->firstname }} {{ $user->lastname }}</p>
