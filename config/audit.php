@@ -10,10 +10,11 @@ return [
     |--------------------------------------------------------------------------
     |
     | Define which Audit model implementation should be used.
+    | Using the custom App\Models\Audit for project-specific features.
     |
     */
 
-    'implementation' => OwenIt\Auditing\Models\Audit::class,
+    'implementation' => App\Models\Audit::class,
 
     /*
     |--------------------------------------------------------------------------

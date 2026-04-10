@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AuditController;
 use App\Http\Controllers\Admin\PendingUserController;
 use App\Http\Controllers\Admin\UserRoleController;
 use App\Http\Controllers\BuildingFloorController;
@@ -51,6 +52,14 @@ Route::middleware($superAdminOnly)
     ->prefix('super-admin')
     ->name('super_admin')
     ->group(function () {
+        // Audit logs routes
+        Route::get('audits', [AuditController::class, 'index'])->name('audits.index');
+        Route::get('audits/{audit}', [AuditController::class, 'show'])->name('audits.show');
+        Route::delete('audits/{audit}', [AuditController::class, 'destroy'])->name('audits.destroy');
+        Route::post('audits/delete-multiple', [AuditController::class, 'destroyMultiple'])->name('audits.destroyMultiple');
+        Route::post('audits/export', [AuditController::class, 'export'])->name('audits.export');
+
+        // Role and permission routes
         Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
         Route::get('roles/{role}', [RoleController::class, 'show'])->name('roles.show');
         Route::get('permissions', [PermissionController::class, 'index'])->name('permissions.index');
