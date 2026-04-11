@@ -166,8 +166,8 @@
         </li>
         <!-- Audit Logs (Super Admin Only) -->
         <li class="menu-item">
-            <a href="{{ route('super_admin.audits.index') }}" class="menu-link">
-                <i class="menu-icon icon-base bx bx-list-check"></i>
+{{--             <a href="{{ route('super_admin.audits.index') }}" class="menu-link">
+ --}}                <i class="menu-icon icon-base bx bx-list-check"></i>
                 <div data-i18n="Audit Logs">Audit Logs</div>
             </a>
         </li>

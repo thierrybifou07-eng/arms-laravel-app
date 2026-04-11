@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class Residence extends Model
+class Residence extends Model implements AuditableContract
 {
-    use \OwenIt\Auditing\Auditable;
     use HasFactory;
+    use \OwenIt\Auditing\Auditable;
 
     protected static function newFactory()
     {

@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class PaymentHistory extends Model
+class PaymentHistory extends Model implements AuditableContract
 {
-    use \OwenIt\Auditing\Auditable;
     use HasFactory;
+    use \OwenIt\Auditing\Auditable;
 
     protected $table = 'payment_history';
 
