@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-App\Models\Audit;
+
 use OwenIt\Auditing\Audit as BaseAudit;
 
 class Audit extends BaseAudit

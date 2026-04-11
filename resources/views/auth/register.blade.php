@@ -38,25 +38,28 @@
             </div>
             <div class="col-lg-6 col-md-6">
                 <label for="phone" class="form-label">Phone Number</label>
-                <input type="phone" class="form-control @error('phone') is-invalid @enderror" name="phone"
-                    value="{{ old('phone') }}" required autocomplete="phone" id="phone" name="phone"
-                    placeholder="Enter your phone" autofocus />
+                <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone"
+                    value="{{ old('phone') }}" required autocomplete="phone" id="phone" placeholder="Enter your phone"
+                    autofocus />
                 @error('phone')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
+                <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                </div>
             </div>
             <div class="col-lg-6 col-md-6">
                 <label for="email" class="form-label">Email</label>
                 <input type="text" class="form-control @error('email') is-invalid @enderror" name="email"
-                    value="{{ old('email') }}" required autocomplete="email" id="email" name="email"
-                    placeholder="Enter your email" />
+                    value="{{ old('email') }}" required autocomplete="email" id="email" placeholder="Enter your email" />
                 @error('email')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
+                <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                </div>
             </div>
             <div class="col-lg-6 col-md-6">
 
@@ -113,7 +116,7 @@
         </a>
     </p>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
 
             const checkbox = document.getElementById("terms-conditions");
             const passwordBox = document.getElementById("SignUpContainer");
@@ -121,7 +124,7 @@
 
             if (!checkbox) return;
 
-            checkbox.addEventListener("change", function() {
+            checkbox.addEventListener("change", function () {
 
                 if (checkbox.checked) {
                     passwordBox.classList.remove("d-none")
