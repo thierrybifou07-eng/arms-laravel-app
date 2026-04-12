@@ -21,10 +21,10 @@
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Filters</h5>
-            <a href="{{ route('super_admin.audits.index') }}" class="btn btn-sm btn-link">Clear All</a>
+            <a href="{{ route('super_adminaudits.index') }}" class="btn btn-sm btn-link">Clear All</a>
         </div>
         <div class="card-body">
-            <form method="GET" action="{{ route('super_admin.audits.index') }}" id="filterForm" class="row g-3">
+            <form method="GET" action="{{ route('super_adminaudits.index') }}" id="filterForm" class="row g-3">
                 <div class="col-md-3">
                     <label for="search" class="form-label">Search</label>
                     <input type="text" class="form-control" id="search" name="search" placeholder="URL or Tags"
@@ -148,7 +148,7 @@
                             </td>
                             <td>
                                 <div class="btn-group btn-group-sm" role="group">
-                                    <a href="{{ route('super_admin.audits.show', $audit) }}"
+                                    <a href="{{ route('super_adminaudits.show', $audit) }}"
                                         class="btn btn-outline-info" title="View">
                                         <i class="bx bx-eye"></i>
                                     </a>
@@ -191,7 +191,7 @@
 <div class="modal fade" id="exportModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="{{ route('super_admin.audits.export') }}" id="exportForm">
+            <form method="POST" action="{{ route('super_adminaudits.export') }}" id="exportForm">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title">Export Audit Logs</h5>

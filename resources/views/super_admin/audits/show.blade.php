@@ -5,7 +5,7 @@
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <a href="{{ route('super_admin.audits.index') }}" class="btn btn-sm btn-outline-secondary mb-2">
+            <a href="{{ route('super_adminaudits.index') }}" class="btn btn-sm btn-outline-secondary mb-2">
                 <i class="bx bx-arrow-back me-1"></i>Back to Audits
             </a>
             <h3 class="mb-0">Audit Record #{{ $audit->id }}</h3>
@@ -238,7 +238,7 @@
 <div class="modal fade" id="deleteModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="{{ route('super_admin.audits.destroy', $audit) }}">
+            <form method="POST" action="{{ route('super_adminaudits.destroy', $audit) }}">
                 @csrf
                 @method('DELETE')
                 <div class="modal-header">

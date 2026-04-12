@@ -58,7 +58,7 @@ class AuditController extends Controller
 
         $audits = $query->with('user')
             ->orderBy('created_at', 'desc')
-            ->paginate(50);
+            ->paginate(10);
 
         $models = $this->getAuditableModels();
         $events = ['created', 'updated', 'deleted', 'restored'];
@@ -90,7 +90,7 @@ class AuditController extends Controller
         $audit->delete();
 
         return redirect()
-            ->route('super_admin.audits.index')
+            ->route('super_adminaudits.index')
             ->with('success', 'Audit record deleted successfully.');
     }
 
@@ -110,7 +110,7 @@ class AuditController extends Controller
         Audit::whereIn('id', $request->audit_ids)->delete();
 
         return redirect()
-            ->route('super_admin.audits.index')
+            ->route('super_adminaudits.index')
             ->with('success', count($request->audit_ids) . ' audit records deleted successfully.');
     }
 
