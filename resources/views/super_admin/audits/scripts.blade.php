@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Create and submit the form with password prompt
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = '{{ route("super_admin.audits.destroyMultiple") }}';
+            form.action = '{{ route("super_adminaudits.destroyMultiple") }}';
             
             const selectedIds = Array.from(document.querySelectorAll('.audit-checkbox:checked'))
                 .map(cb => cb.value);
