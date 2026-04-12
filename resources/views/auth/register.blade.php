@@ -36,7 +36,7 @@
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6">
+            <div class="col-lg-6 col-md-6 form-control-validation fv-plugins-icon-container">
                 <label for="phone" class="form-label">Phone Number</label>
                 <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone"
                     value="{{ old('phone') }}" required autocomplete="phone" id="phone" placeholder="Enter your phone"
