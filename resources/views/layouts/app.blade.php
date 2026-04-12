@@ -50,7 +50,6 @@
 
     <script src="{{ asset('admin-template/assets') }}/js/config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    @include('components.modal-script')
 </head>
 
 <body>
@@ -127,6 +126,10 @@
     <!-- JS Select2 -->
     <!-- Select2 JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    
+    <!-- Modal Helper Script - MUST be after Bootstrap JS -->
+    @include('components.modal-script')
+    
     @stack('scripts')
 </body>
 

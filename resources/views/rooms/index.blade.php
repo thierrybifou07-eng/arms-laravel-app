@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div class="col-xxl-12" x-data>
+    <div class="col-xxl-12">
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
