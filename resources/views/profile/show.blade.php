@@ -1,5 +1,10 @@
 @extends('layouts.app')
 @section('content')
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <a href="{{ route('dashboard') }}" class="btn btn-sm btn-secondary">Back to Dashboard</a>
+        </div>
+    </div>
     <div class="row fv-plugins-icon-container">
         <div class="col-md-12">
             @php

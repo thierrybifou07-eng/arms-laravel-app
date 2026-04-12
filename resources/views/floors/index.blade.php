@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div cclass="col-xxl-12">
+    <div class="col-xxl-12" x-data>
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
@@ -22,9 +22,10 @@
                 <h5 class="m-1">Floors</h5>
             </div>
             <div class="d-flex justify-content-end gap-2">
-                <a href="" class="btn rounded btn-secondary">Back</a>
-                <a href="{{ route('buildings.floors.create', $building) }}" class="btn rounded btn-primary">New
-                    Floor</a>
+                <a href="{{ route('residences.buildings.index') }}" class="btn rounded btn-secondary">Back</a>
+                <button type="button" class="btn rounded btn-primary" @click="$dispatch('open-modal', 'create-floor')">
+                    New Floor
+                </button>
             </div>
         </div>
         <div class="card my-5">
@@ -99,9 +100,8 @@
                                                 <a class="dropdown-item"
                                                     href="{{ route('floors.rooms.index', $floor) }}"><i
                                                         class="icon-base bx bx-folder me-1"></i> View Rooms</a>
-                                                <a class="dropdown-item"
-                                                    href="{{ route('buildings.floors.edit', [$building, $floor]) }}"><i
-                                                        class="icon-base bx bx-edit me-1"></i> Edit</a>
+                                                <button type="button" class="dropdown-item" @click="$dispatch('open-modal', 'edit-floor-{{ $floor->id }}')">
+                                                    <i class="icon-base bx bx-edit me-1"></i>Edit</button>
                                                 <hr class="dropdown-divider">
                                                 <form method="POST"
                                                     action="{{ route('buildings.floors.destroy', [$building, $floor]) }}">
@@ -179,4 +179,13 @@
         </div>
 
     </div>
+
+    {{-- Create Modal --}}
+    @include('floors.form-modal', ['building' => $building, 'statuses' => $statuses ?? \App\Models\FloorStatus::all()])
+
+    {{-- Edit Modals --}}
+    @foreach ($floors as $floor)
+        @include('floors.form-modal', ['building' => $building, 'floor' => $floor, 'statuses' => $statuses ?? \App\Models\FloorStatus::all()])
+    @endforeach
+
 @endsection

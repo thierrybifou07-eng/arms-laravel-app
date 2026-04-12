@@ -3,7 +3,10 @@
 @section('content')
     <div class="col-xxl-4 mb-6 order-0">
         <div class="card mb-6">
-            <h5 class="card-header">PAYMENT DETAILS</h5>
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">PAYMENT DETAILS</h5>
+                <a href="{{ route('payments.index') }}" class="btn btn-sm btn-secondary">Back</a>
+            </div>
             <div class="card-body pt-4">
                 <p><strong>Contract:</strong> #{{ $payment->contract->id }}
                     @php $status = $payment->contract->status->code ?? '' @endphp

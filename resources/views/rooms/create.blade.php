@@ -5,6 +5,7 @@
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h5 class="mb-0">Create a new room</h5>
+                <a href="{{ route('floors.rooms.index', $floor) }}" class="btn btn-sm btn-secondary">Back</a>
             </div>
             @if ($errors->any())
                 <div class="alert alert-danger">

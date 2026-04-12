@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="col-xxl-12">
+    <div class="col-xxl-12" x-data>
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
@@ -125,9 +125,9 @@
                                             </button>
                                             <div class="dropdown-menu">
                                                 @if ($payment->status->code === 'pending' || $payment->status->code === 'overdue')
-                                                    <a class="dropdown-item"
-                                                        href="{{ route('payments.pay.form', $payment) }}">
-                                                        <i class="icon-base bx bx-money me-1"></i>Pay</a>
+                                                    <button type="button" class="dropdown-item text-primary"
+                                                        @click="$dispatch('open-modal', 'pay-modal-{{ $payment->id }}')">
+                                                        <i class="icon-base bx bx-money me-1"></i>Pay</button>
                                                     <hr class="dropdown-divider">
                                                     <form method="POST" action="{{ route('payments.cancel', $payment) }}">
                                                         @csrf
@@ -204,4 +204,9 @@
                 </div>
             </div>
         </div>
-    @endsection
+    </div>
+
+    @foreach ($payments as $payment)
+        @include('payments.pay-modal', ['payment' => $payment, 'paymentMethods' => $paymentMethods ?? \App\Models\PaymentMethod::all()])
+    @endforeach
+@endsection

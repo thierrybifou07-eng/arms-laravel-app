@@ -5,7 +5,7 @@
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <a href="{{ route('super_adminaudits.index') }}" class="btn btn-sm btn-outline-secondary mb-2">
+            <a href="{{ route('super_admin.audits.index') }}" class="btn btn-sm btn-outline-secondary mb-2">
                 <i class="bx bx-arrow-back me-1"></i>Back to Audits
             </a>
             <h3 class="mb-0">Audit Record #{{ $audit->id }}</h3>

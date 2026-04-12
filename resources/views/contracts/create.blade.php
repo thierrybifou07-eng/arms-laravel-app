@@ -1,7 +1,10 @@
 @extends('layouts.app')
 @section('content')
     <div class="card mb-6">
-        <h5 class="card-header">Create Contract</h5>
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <h5 class="mb-0">Create Contract</h5>
+            <a href="{{ route('contracts.index') }}" class="btn btn-sm btn-secondary">Back</a>
+        </div>
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}

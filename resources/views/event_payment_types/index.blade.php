@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div class="col-xxl-12">
+    <div class="col-xxl-12" x-data>
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
@@ -11,9 +11,9 @@
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h5 class="mb-0">Types de Paiement d'Événement</h5>
                 @can('create', App\Models\EventPaymentType::class)
-                <a href="{{ route('event_payment_types.create') }}" class="btn btn-primary btn-sm">
+                <button type="button" class="btn btn-primary btn-sm" @click="$dispatch('open-modal', 'create-event-payment-type')">
                     <i class="icon-base bx bx-plus me-1"></i> Ajouter
-                </a>
+                </button>
                 @endcan
             </div>
             @if ($eventPaymentTypes->count() > 0)
@@ -45,8 +45,8 @@
                                                     <i class="icon-base bx bx-show-alt me-1"></i>Voir</a>
                                                 @endcan
                                                 @can('update', $type)
-                                                <a class="dropdown-item" href="{{ route('event_payment_types.edit', $type) }}">
-                                                    <i class="icon-base bx bx-edit me-1"></i>Éditer</a>
+                                                <button type="button" class="dropdown-item" @click="$dispatch('open-modal', 'edit-event-payment-type-{{ $type->id }}')">
+                                                    <i class="icon-base bx bx-edit me-1"></i>Éditer</button>
                                                 @endcan
                                                 @can('delete', $type)
                                                 <hr class="dropdown-divider">
@@ -79,4 +79,13 @@
             </div>
         @endif
     </div>
+
+    {{-- Create Modal --}}
+    @include('event_payment_types.form-modal')
+
+    {{-- Edit Modals --}}
+    @foreach ($eventPaymentTypes as $type)
+        @include('event_payment_types.form-modal', ['eventPaymentType' => $type])
+    @endforeach
+
 @endsection

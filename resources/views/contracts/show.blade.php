@@ -4,8 +4,9 @@
     <div class="row g-5 ">
         <div class="col-lg-5">
             <div class="card h-100">
-                <div class="card-header">
-                    <h5>Contract Details</h5>
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">Contract Details</h5>
+                    <a href="{{ route('contracts.index') }}" class="btn btn-sm btn-secondary">Back</a>
                 </div>
 
                 <div class="card-body">
