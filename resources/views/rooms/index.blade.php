@@ -189,7 +189,7 @@
     </div>
 
     {{-- Create Modal --}}
-    @include('rooms.form-modal', ['floor' => $floor, 'statuses' => $statuses ?? \App\Models\RoomStatus::all()])
+    @include('rooms.form-modal', ['floor' => $floor, 'room' => null, 'statuses' => $statuses])
 
     {{-- Edit Modals --}}
     @foreach ($rooms as $room)

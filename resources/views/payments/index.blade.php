@@ -207,6 +207,6 @@
     </div>
 
     @foreach ($payments as $payment)
-        @include('payments.pay-modal', ['payment' => $payment, 'paymentMethods' => $paymentMethods ?? \App\Models\PaymentMethod::all()])
+        @include('payments.pay-modal', ['payment' => $payment, 'paymentMethods' => isset($paymentMethods) ? $paymentMethods : \App\Models\PaymentMethod::all()])
     @endforeach
 @endsection

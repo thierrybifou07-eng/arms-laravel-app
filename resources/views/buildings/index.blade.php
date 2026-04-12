@@ -192,7 +192,7 @@
     </div>
 
     {{-- Create Modal --}}
-    @include('buildings.form-modal', ['residence' => $residence, 'statuses' => $statuses ?? \App\Models\BuildingStatus::all()])
+    @include('buildings.form-modal', ['residence' => $residence, 'building' => null, 'statuses' => $statuses])
 
     {{-- Edit Modals --}}
     @foreach ($buildings as $building)

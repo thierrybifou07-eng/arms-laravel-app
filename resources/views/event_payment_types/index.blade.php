@@ -81,7 +81,7 @@
     </div>
 
     {{-- Create Modal --}}
-    @include('event_payment_types.form-modal')
+    @include('event_payment_types.form-modal', ['eventPaymentType' => null])
 
     {{-- Edit Modals --}}
     @foreach ($eventPaymentTypes as $type)
