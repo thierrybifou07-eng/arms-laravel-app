@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Audit;
 use App\Models\BillingPeriod;
 use App\Models\Contract;
 use App\Models\Payment;
@@ -54,6 +55,16 @@ class DashboardController extends Controller
             'recentHistories' => PaymentHistory::latest()->take(5)->get(),
             'recentPayments' => Payment::with(['contract.user', 'status'])->latest()->take(10)->get(),
             'recentContracts' => Contract::with(['user', 'room', 'status'])->latest()->take(5)->get(),
+            // Audit statistics
+            'totalAudits' => Audit::count(),
+            'auditsByEvent' => [
+                'created' => Audit::byEvent('created')->count(),
+                'updated' => Audit::byEvent('updated')->count(),
+                'deleted' => Audit::byEvent('deleted')->count(),
+                'restored' => Audit::byEvent('restored')->count(),
+            ],
+            'recentAudits' => Audit::with('user')->latest()->take(8)->get(),
+            'todayAudits' => Audit::whereDate('created_at', now())->count(),
         ];
     }
 
