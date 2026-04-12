@@ -11,7 +11,7 @@
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h5 class="mb-0">Types de Paiement d'Événement</h5>
                 @can('create', App\Models\EventPaymentType::class)
-                <button type="button" class="btn btn-primary btn-sm" @click="$dispatch('open-modal', 'create-event-payment-type')">
+                <button type="button" class="btn btn-primary btn-sm" onclick="openModal('create-event-payment-type')">
                     <i class="icon-base bx bx-plus me-1"></i> Ajouter
                 </button>
                 @endcan
@@ -45,7 +45,7 @@
                                                     <i class="icon-base bx bx-show-alt me-1"></i>Voir</a>
                                                 @endcan
                                                 @can('update', $type)
-                                                <button type="button" class="dropdown-item" @click="$dispatch('open-modal', 'edit-event-payment-type-{{ $type->id }}')">
+                                                <button type="button" class="dropdown-item" onclick="openModal('edit-event-payment-type-{{ $type->id }}')">
                                                     <i class="icon-base bx bx-edit me-1"></i>Éditer</button>
                                                 @endcan
                                                 @can('delete', $type)

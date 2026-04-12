@@ -126,7 +126,7 @@
                                             <div class="dropdown-menu">
                                                 @if ($payment->status->code === 'pending' || $payment->status->code === 'overdue')
                                                     <button type="button" class="dropdown-item text-primary"
-                                                        @click="$dispatch('open-modal', 'pay-modal-{{ $payment->id }}')">
+                                                        onclick="openModal('pay-modal-{{ $payment->id }}')">
                                                         <i class="icon-base bx bx-money me-1"></i>Pay</button>
                                                     <hr class="dropdown-divider">
                                                     <form method="POST" action="{{ route('payments.cancel', $payment) }}">

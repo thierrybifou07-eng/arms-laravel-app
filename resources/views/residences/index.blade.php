@@ -92,8 +92,8 @@
                                                 <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="{{ route('residences.show', $residence) }}">
-                                                    <i class="icon-base bx bx-show-alt me-1"></i>view</a>
+                                                <button type="button" class="dropdown-item" onclick="openModal('residence-show-{{ $residence->id }}')">
+                                                    <i class="icon-base bx bx-show-alt me-1"></i>View</button>
                                                 <a class="dropdown-item"
                                                     href="{{ route('residences.buildings.index', $residence) }}">
                                                     <i class="icon-base bx bx-home-alt me-1"></i>view building(s)</a>
@@ -180,5 +180,10 @@
         </div>
 
     </div>
+
+    {{-- Show Modals --}}
+    @foreach ($residences as $residence)
+        @include('residences.show-modal', ['residence' => $residence])
+    @endforeach
 
 @endsection

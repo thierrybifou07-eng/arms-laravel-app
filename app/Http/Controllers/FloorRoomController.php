@@ -29,8 +29,10 @@ class FloorRoomController extends Controller
         }
 
         $rooms = $query->latest()->paginate(10)->withQueryString();
+        $statuses = \App\Models\RoomStatus::all();
+        $building = $floor->building;
 
-        return view('rooms.index', compact('floor', 'rooms'));
+        return view('rooms.index', compact('floor', 'rooms', 'statuses', 'building'));
     }
 
     /**

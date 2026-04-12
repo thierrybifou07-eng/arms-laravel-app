@@ -22,8 +22,8 @@
                 <h5 class="m-1">Floors</h5>
             </div>
             <div class="d-flex justify-content-end gap-2">
-                <a href="{{ route('residences.buildings.index') }}" class="btn rounded btn-secondary">Back</a>
-                <button type="button" class="btn rounded btn-primary" @click="$dispatch('open-modal', 'create-floor')">
+                <a href="{{ route('residences.buildings.index', $residence) }}" class="btn rounded btn-secondary">Back</a>
+                <button type="button" class="btn rounded btn-primary" onclick="openModal('create-floor')">
                     New Floor
                 </button>
             </div>
@@ -94,13 +94,12 @@
                                                 <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item"
-                                                    href="{{ route('buildings.floors.show', [$building, $floor]) }}"><i
-                                                        class="icon-base bx bx-show-alt me-1"></i> Show</a>
+                                                <button type="button" class="dropdown-item" onclick="openModal('floor-show-{{ $floor->id }}')">
+                                                    <i class="icon-base bx bx-show-alt me-1"></i> Show</button>
                                                 <a class="dropdown-item"
                                                     href="{{ route('floors.rooms.index', $floor) }}"><i
                                                         class="icon-base bx bx-folder me-1"></i> View Rooms</a>
-                                                <button type="button" class="dropdown-item" @click="$dispatch('open-modal', 'edit-floor-{{ $floor->id }}')">
+                                                <button type="button" class="dropdown-item" onclick="openModal('edit-floor-{{ $floor->id }}')">
                                                     <i class="icon-base bx bx-edit me-1"></i>Edit</button>
                                                 <hr class="dropdown-divider">
                                                 <form method="POST"
@@ -186,6 +185,7 @@
     {{-- Edit Modals --}}
     @foreach ($floors as $floor)
         @include('floors.form-modal', ['building' => $building, 'floor' => $floor, 'statuses' => $statuses ?? \App\Models\FloorStatus::all()])
+        @include('floors.show-modal', ['building' => $building, 'floor' => $floor])
     @endforeach
 
 @endsection

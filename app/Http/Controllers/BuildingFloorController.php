@@ -29,8 +29,10 @@ class BuildingFloorController extends Controller
         }
 
         $floors = $query->latest()->paginate(10)->withQueryString();
+        $statuses = \App\Models\FloorStatus::all();
+        $residence = $building->residence;
 
-        return view('floors.index', compact('building', 'floors'));
+        return view('floors.index', compact('building', 'floors', 'statuses', 'residence'));
     }
 
     /**

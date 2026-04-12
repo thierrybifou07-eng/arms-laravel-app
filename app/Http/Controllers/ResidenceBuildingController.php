@@ -30,8 +30,9 @@ class ResidenceBuildingController extends Controller
         }
 
         $buildings = $query->latest()->paginate(10)->withQueryString();
+        $statuses = BuildingStatus::all();
 
-        return view('buildings.index', compact('residence', 'buildings'));
+        return view('buildings.index', compact('residence', 'buildings', 'statuses'));
     }
 
     /**

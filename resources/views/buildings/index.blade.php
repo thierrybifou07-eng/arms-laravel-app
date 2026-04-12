@@ -24,7 +24,7 @@
             </div>
             <div class="d-flex justify-content-end gap-2">
                 <a href="{{ route('residences.index') }}" class="btn rounded btn-secondary">Back</a>
-                <button type="button" class="btn rounded btn-primary" @click="$dispatch('open-modal', 'create-building')">
+                <button type="button" class="btn rounded btn-primary" onclick="openModal('create-building')">
                     New Building
                 </button>
             </div>
@@ -105,13 +105,12 @@
                                                 <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item"
-                                                    href="{{ route('residences.buildings.show', [$residence, $building]) }}"><i
-                                                        class="icon-base bx bx-show-alt me-1"></i> Show</a>
+                                                <button type="button" class="dropdown-item" onclick="openModal('building-show-{{ $building->id }}')">
+                                                    <i class="icon-base bx bx-show-alt me-1"></i> Show</button>
                                                 <a class="dropdown-item"
                                                     href="{{ route('buildings.floors.index', $building) }}"><i
                                                         class="icon-base bx bx-folder me-1"></i> View Floors</a>
-                                                <button type="button" class="dropdown-item" @click="$dispatch('open-modal', 'edit-building-{{ $building->id }}')">
+                                                <button type="button" class="dropdown-item" onclick="openModal('edit-building-{{ $building->id }}')">
                                                     <i class="icon-base bx bx-edit me-1"></i>Edit</button>
                                                 <hr class="dropdown-divider">
                                                 <form method="POST"
@@ -198,6 +197,7 @@
     {{-- Edit Modals --}}
     @foreach ($buildings as $building)
         @include('buildings.form-modal', ['residence' => $residence, 'building' => $building, 'statuses' => $statuses ?? \App\Models\BuildingStatus::all()])
+        @include('buildings.show-modal', ['residence' => $residence, 'building' => $building])
     @endforeach
 
 @endsection
