@@ -76,16 +76,7 @@
                     <div class="container-xxl flex-grow-1 container-p-y">
                         <div class="row">
                             <div class="col-xxl-12 mb-6 order-0">
-
                                 @yield('content')
-                                <div class="row justify-content-start mt-4">
-                                    <div class="col-sm-10">
-                                        <button type="button" class="btn btn-secondary btn-sm"
-                                            onclick="window.history.back()">
-                                            <i class="icon-base bx bx-reply me-1"></i> Back
-                                        </button>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

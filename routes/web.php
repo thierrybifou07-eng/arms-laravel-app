@@ -127,6 +127,7 @@ Route::middleware($adminOnly)->resource('floors.rooms', FloorRoomController::cla
 Route::middleware($superAdminAdmin)->resource('contracts', ContractController::class)->scoped();
 
 Route::middleware($superAdminOnly)->resource('users', UserController::class)->only(['index', 'show', 'update', 'destroy'])->scoped();
+Route::middleware($superAdminOnly)->put('users/{user}/change-status', [UserController::class, 'changeStatus'])->name('users.changeStatus');
 Route::middleware($superAdminOnly)->resource('roles', RoleController::class)->scoped();
 Route::middleware($superAdminOnly)->resource('permissions', PermissionController::class)->scoped();
 

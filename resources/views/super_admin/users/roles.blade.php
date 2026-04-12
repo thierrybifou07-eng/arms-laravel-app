@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-4">
+<div class="col-xxl col-lg-12 col-md-12 col-sm-12 py-4">
 
     <h1 class="h4 mb-3">
         Assign roles to : {{ $user->lastname }} {{ $user->firstname }}
