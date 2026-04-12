@@ -164,13 +164,6 @@
                 </li>
             </ul>
         </li>
-        <!-- Audit Logs (Super Admin Only) -->
-        <li class="menu-item">
-            <a href="{{ route('super_adminaudits.index') }}" class="menu-link">
-                <i class="menu-icon icon-base bx bx-list-check"></i>
-                <div data-i18n="Audit Logs">Audit Logs</div>
-            </a>
-        </li>
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base bx bx-lock-open-alt"></i>
@@ -189,5 +182,16 @@
                 </li>
             </ul>
         </li>
+        <!-- Audit Logs (Super Admin Only) -->
+
+        @can('view-audit-logs')
+            <li class="menu-divider my-2"></li>
+            <li class="menu-item">
+                <a href="{{ route('super_adminaudits.index') }}" class="menu-link">
+                    <i class="menu-icon icon-base bx bx-history"></i>
+                    <div data-i18n="Audit Logs">Audit Logs</div>
+                </a>
+            </li>
+        @endcan
     </ul>
 </aside>

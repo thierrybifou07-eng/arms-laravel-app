@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-xxl flex-grow-1 container-p-y">
+<div class="col-xxl col-lg-12 col-md-12 flex-grow-1 container-p-y">
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -97,11 +97,11 @@
                     @if ($audit->user)
                         <div class="mb-3">
                             <label class="form-label fw-bold">User</label>
-                            <p class="form-control-plaintext">
+                            <p class="form-control-plaintext">email: 
                                 <strong>{{ $audit->user->email }}</strong>
-                                <br>
+                                <br>Name: 
                                 {{ $audit->user->firstname }} {{ $audit->user->lastname }}
-                                <br>
+                                <br>Roles:
                                 @if ($audit->user->roles->isNotEmpty())
                                     @foreach ($audit->user->roles as $role)
                                         <span class="badge bg-primary">{{ $role->label }}</span>
@@ -119,7 +119,7 @@
                     @endif
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">IP Address</label>
+                        <label class="form-label fw-bold">IP Address: </label>
                         <p class="form-control-plaintext">
                             {{ $audit->ip_address ?? 'N/A' }}
                         </p>
