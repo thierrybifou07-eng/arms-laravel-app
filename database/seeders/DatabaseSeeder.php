@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
+use App\Models\UserStatus;
+use App\Models\ResidenceStatus;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -21,21 +24,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             PermissionSeeder::class,
             RolePermissionSeeder::class,
-            ResidenceStatusSeeder::class,
-            BuildingStatusSeeder::class,
-            FloorStatusSeeder::class,
-            RoomStatusSeeder::class,
-            ContractStatusSeeder::class,
-            PaymentStatusSeeder::class,
-            BillingPeriodSeeder::class,
-            PaymentMethodSeeder::class,
-            EventPaymentTypeSeeder::class,
-        ]);
-
-        // 2. Seed core data
-        $this->call([
-            UserSeeder::class,                          // Create 500 users with roles
-            SuperAdminPermissionSeeder::class,
+            UserSeeder::class,
+            ResidenceStatusSeeder::class
         ]);
 
         // 3. Seed infrastructure
