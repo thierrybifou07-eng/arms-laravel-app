@@ -60,7 +60,6 @@ return new class extends Migration
                 ->restrictOnDelete();
             $table->string('number');
             $table->decimal('rent', 10, 2);
-            $table->integer('capacity')->nullable();
             $table->unique(['floor_id', 'number']);
             $table->timestamps();
         });

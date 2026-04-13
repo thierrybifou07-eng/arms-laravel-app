@@ -12,8 +12,6 @@ class BuildingStatus extends Model
 
     public const CLOSED = 'closed';
 
-    public const RENEW = 'renew';
-
     // create the function(undefinded here) to call in the dbseeder
 
     public static function getIdByCode(string $code): ?int

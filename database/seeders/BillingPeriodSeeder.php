@@ -12,7 +12,7 @@ class BillingPeriodSeeder extends Seeder
      */
     public function run()
     {
-        /*         $periodes = [
+                $periodes = [
                     ['code' => 'once', 'label' => 'One-time'],
                     ['code' => 'monthly', 'label' => 'Monthly'],
                     ['code' => 'quarterly', 'label' => 'Quarterly'],
@@ -25,10 +25,10 @@ class BillingPeriodSeeder extends Seeder
                         ['code' => $periode['code']],
                         $periode
                     );
-                } */
+                }
 
         // Billing Periods
-        BillingPeriod::firstOrCreate(
+/*         BillingPeriod::firstOrCreate(
             ['code' => 'monthly'],
             ['label' => 'Monthly', 'days' => 30]
         );
@@ -43,6 +43,6 @@ class BillingPeriodSeeder extends Seeder
         BillingPeriod::firstOrCreate(
             ['code' => 'yearly'],
             ['label' => 'Yearly', 'days' => 365]
-        );
+        ); */
     }
 }

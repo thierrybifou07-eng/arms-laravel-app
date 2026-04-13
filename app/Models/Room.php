@@ -16,7 +16,6 @@ class Room extends Model implements AuditableContract
         'room_status_id',
         'number',
         'rent',
-        'capacity',
     ];
 
     // relationship with floor

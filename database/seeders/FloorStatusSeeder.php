@@ -21,10 +21,6 @@ class FloorStatusSeeder extends Seeder
                 'label' => 'Closed',
                 'created_at' => now(),
                 'updated_at' => now()],
-            ['code' => 'renew',
-                'label' => 'Renovation',
-                'created_at' => now(),
-                'updated_at' => now()],
         ];
         foreach ($statuses as $status) {
             \App\Models\FloorStatus::create($status);

@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\Residence;
 use App\Models\Building;
-use App\Models\Floor;
-use App\Models\Room;
-use App\Models\ResidenceStatus;
 use App\Models\BuildingStatus;
+use App\Models\Floor;
 use App\Models\FloorStatus;
+use App\Models\Residence;
+use App\Models\ResidenceStatus;
+use App\Models\Room;
 use App\Models\RoomStatus;
 use Illuminate\Database\Seeder;
 
@@ -27,13 +27,8 @@ class ResidenceInfrastructureSeeder extends Seeder
         $residences = [
             ['name' => 'Résidence Prestige', 'city' => 'Yaoundé', 'address' => 'Boulevard de la Liberté'],
             ['name' => 'Résidence Excellence', 'city' => 'Douala', 'address' => 'Ange Raphaël'],
-            ['name' => 'Résidence Horizon', 'city' => 'Limbe', 'address' => 'Boulevard côtier'],
             ['name' => 'Résidence Confort', 'city' => 'Buea', 'address' => 'Rue de l\'Université'],
-            ['name' => 'Résidence Royal', 'city' => 'Bafoussam', 'address' => 'Centre-ville'],
             ['name' => 'Résidence Elite', 'city' => 'Bamenda', 'address' => 'Avenue Principale'],
-            ['name' => 'Résidence Vert', 'city' => 'Libreville', 'address' => 'Quartier Nouveau'],
-            ['name' => 'Résidence Paix', 'city' => 'N\'Djamena', 'address' => 'Centre administratif'],
-            ['name' => 'Résidence Oasis', 'city' => 'Bangui', 'address' => 'Quartier Saint-Paul'],
             ['name' => 'Résidence Soleil', 'city' => 'Brazzaville', 'address' => 'Plateau des 15 ans'],
         ];
 
@@ -46,7 +41,7 @@ class ResidenceInfrastructureSeeder extends Seeder
                 'name' => $residenceData['name'],
                 'city' => $residenceData['city'],
                 'address' => $residenceData['address'],
-                'capacity' => fake()->numberBetween(5, 10),
+                'capacity' => fake()->numberBetween(1, 8),
                 'residence_status_id' => $residenceStatusId,
             ]);
 
@@ -58,30 +53,29 @@ class ResidenceInfrastructureSeeder extends Seeder
                     'building_status_id' => $buildingStatusId,
                     'name' => "Building {$b}",
                     'address' => "{$residenceData['address']} - Bloc {$b}",
-                    'capacity' => fake()->numberBetween(15, 20),
+                    'capacity' => fake()->numberBetween(5, 10),
                 ]);
                 $totalBuildingsCreated++;
 
-                // Create 10-15 floors per building
-                $floorCount = fake()->numberBetween(10, 15);
+                // Create 3-7 floors per building
+                $floorCount = fake()->numberBetween(3, 7);
                 for ($f = 1; $f <= $floorCount; $f++) {
                     $floor = Floor::create([
                         'building_id' => $building->id,
                         'floor_status_id' => $floorStatusId,
                         'number' => $f,
-                        'capacity' => fake()->numberBetween(25, 35),
+                        'capacity' => fake()->numberBetween(5, 15),
                     ]);
                     $totalFloorsCreated++;
 
-                    // Create 20-25 rooms per floor
-                    $roomCount = fake()->numberBetween(20, 25);
+                    // Create 7-20 rooms per floor
+                    $roomCount = fake()->numberBetween(7, 20);
                     for ($r = 1; $r <= $roomCount; $r++) {
                         Room::create([
                             'floor_id' => $floor->id,
                             'room_status_id' => $roomStatusId,
                             'number' => $r,
                             'rent' => fake()->randomFloat(2, 50000, 250000),
-                            'capacity' => fake()->numberBetween(1, 8),
                         ]);
                         $totalRoomsCreated++;
                     }
@@ -89,7 +83,7 @@ class ResidenceInfrastructureSeeder extends Seeder
             }
         }
 
-        $this->command->info("✓ 10 residences created");
+        $this->command->info('✓ 5 residences created');
         $this->command->info("✓ $totalBuildingsCreated buildings created");
         $this->command->info("✓ $totalFloorsCreated floors created");
         $this->command->info("✓ $totalRoomsCreated rooms created");

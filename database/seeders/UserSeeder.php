@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
         $superAdmin->roles()->attach(Role::where('name', 'super_admin')->first()->id);
 
         // Create Admin users (5)
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 1; $i++) {
             $admin = User::create([
                 'firstname' => "Admin",
                 'lastname' => "User {$i}",
@@ -40,7 +40,7 @@ class UserSeeder extends Seeder
         }
 
         // Create Staff users (15)
-        for ($i = 1; $i <= 15; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
             $staff = User::create([
                 'firstname' => "Staff",
                 'lastname' => "User {$i}",
@@ -53,7 +53,7 @@ class UserSeeder extends Seeder
         }
 
         // Create Teller users (20)
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             $teller = User::create([
                 'firstname' => "Teller",
                 'lastname' => "User {$i}",
@@ -65,15 +65,15 @@ class UserSeeder extends Seeder
             $teller->roles()->attach(Role::where('name', 'teller')->first()->id);
         }
 
-        // Create Student users (459)
-        for ($i = 1; $i <= 459; $i++) {
+        // Create Student users (10)
+        for ($i = 1; $i <= 10; $i++) {
             $randomStatus = fake()->boolean(80) 
                 ? UserStatus::where('code', 'active')->first()->id
                 : UserStatus::where('code', 'pending')->first()->id;
             
             $student = User::create([
                 'firstname' => "Student",
-                'lastname' => "User {$i}",
+                'lastname' => "Resident {$i}",
                 'email' => "student{$i}@arms.test",
                 'phone' => "+237670003" . str_pad($i, 3, '0', STR_PAD_LEFT),
                 'password' => Hash::make('password'),
@@ -82,6 +82,6 @@ class UserSeeder extends Seeder
             $student->roles()->attach(Role::where('name', 'student')->first()->id);
         }
 
-        $this->command->info('✓ 500 users created successfully (1 super_admin, 5 admins, 15 staff, 20 tellers, 459 students)');
+        $this->command->info('✓ 20 users created successfully (1 super_admin, 2 admins, 4 staff, 3 tellers, 10 students)');
     }
 }
