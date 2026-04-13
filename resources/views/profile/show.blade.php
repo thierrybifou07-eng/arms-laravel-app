@@ -1,16 +1,11 @@
 @extends('layouts.app')
 @section('content')
-    <div class="row mb-3">
-        <div class="col-md-12">
-            <a href="{{ route('dashboard') }}" class="btn btn-sm btn-secondary">Back to Dashboard</a>
-        </div>
-    </div>
     <div class="row fv-plugins-icon-container">
         <div class="col-md-12">
             @php
                 $statusCode = $user->userStatus?->code;
             @endphp
-            @if($statusCode === 'pending')
+            @if ($statusCode === 'pending')
                 <div class="alert alert-warning">
                     Your account is waiting to be activated by the administration.
                     Some features remain limited.
@@ -29,9 +24,9 @@
                     <div class="card shadow-sm p-4 text-center mb-5 h-100">
                         <div class="card-body">
 
-                            <div class="rounded-circle bg-light mx-auto mb-3 d-flex align-items-center justify-content-center"
-                                style="width: 96px; height: 96px; font-size: 2rem; font-weight: 700;">
-                                {{ strtoupper(substr($user->firstname ?? $user->name ?? 'U', 0, 1)) }}
+                            <div class="mx-auto mb-3 d-flex align-items-center justify-content-center">
+                                <img src="{{ auth()->user()->avatar() }}" alt="user-avatar"
+                                    class="d-block w-px-100 h-px-100 rounded-circle" id="uploadedAvatar">
                             </div>
 
                             <h2 class="h5 mb-1">{{ $user->firstname }} {{ $user->lastname }}</h2>
@@ -41,7 +36,7 @@
                                 $statusCode = $user->userStatus?->code;
                             @endphp
 
-                            @if($statusCode === 'pending')
+                            @if ($statusCode === 'pending')
                                 <span class="badge bg-warning text-dark">Pending account</span>
                             @elseif($statusCode === 'active')
                                 <span class="badge bg-success">Compte actif</span>
@@ -106,7 +101,7 @@
                     </div>
                 </div>
             </div>
-            @if($statusCode === 'active')
+            @if ($statusCode === 'active')
                 <div class="card shadow-sm mt-5 mb-4">
                     <div class="card-header bg-white">
                         <strong>Active User Area</strong>
@@ -121,6 +116,7 @@
                 </div>
             @endif
             <div class="d-flex gap-2">
+                <a href="{{ route('dashboard') }}" class="btn btn-sm btn-secondary">Back to Dashboard</a>
                 <a href="{{ route('profile.edit') }}" class="btn btn-primary">Edit profile</a>
             </div>
         </div>

@@ -136,7 +136,7 @@ class ContractController extends Controller
             }
         });
 
-        return redirect()->route('contracts.index')->with('success', 'Contract created successfully and is pending approval.');
+        return redirect()->route('contracts.index')->with('success', 'Contract created successfully and waiting for payment.');
     }
 
     /**

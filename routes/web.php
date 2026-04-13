@@ -38,7 +38,7 @@ $adminOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:admin'];
 $superAdminAdmin = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,admin'];
 $adminTellerOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:admin,teller'];
 $student = ['auth', 'verified', 'checkUserStatus', 'checkRole:student'];
-$staffAdminSuperAdminTeller = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,teller,admin'];
+$staffAdminSuperAdminTellerStaff = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,teller,admin'];
 $every = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,teller,admin,student'];
 $profileAccess = ['auth', 'verified', 'checkUserStatus', 'checkRole:student,super_admin,staff,teller,admin'];
 $eventPaymentTypeAccess = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,admin'];
@@ -63,6 +63,11 @@ Route::middleware($superAdminOnly)
         Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
         Route::get('roles/{role}', [RoleController::class, 'show'])->name('roles.show');
         Route::get('permissions', [PermissionController::class, 'index'])->name('permissions.index');
+    });
+Route::middleware($superAdminAdmin)
+    ->prefix('super-admin')
+    ->name('super_admin')
+    ->group(function () {
         Route::get('users/{user}/roles', [UserRoleController::class, 'edit'])->name('user.roles.edit');
         Route::put('users/{user}/roles', [UserRoleController::class, 'update'])->name('user.roles.update');
     });
@@ -126,9 +131,9 @@ Route::middleware($adminOnly)->resource('buildings.floors', BuildingFloorControl
 Route::middleware($adminOnly)->resource('floors.rooms', FloorRoomController::class)->scoped();
 Route::middleware($superAdminAdmin)->resource('contracts', ContractController::class)->scoped();
 
-Route::middleware($superAdminOnly)->resource('users', UserController::class)->only(['index', 'show', 'update', 'destroy'])->scoped();
-Route::middleware($superAdminOnly)->put('users/{user}/change-status', [UserController::class, 'changeStatus'])->name('users.changeStatus');
-Route::middleware($superAdminOnly)->resource('roles', RoleController::class)->scoped();
+Route::middleware($superAdminAdmin)->resource('users', UserController::class)->only(['index', 'show', 'update', 'destroy'])->scoped();
+Route::middleware($superAdminAdmin)->put('users/{user}/change-status', [UserController::class, 'changeStatus'])->name('users.changeStatus');
+Route::middleware($superAdminAdmin)->resource('roles', RoleController::class)->scoped();
 Route::middleware($superAdminOnly)->resource('permissions', PermissionController::class)->scoped();
 
 /*
@@ -143,7 +148,7 @@ Route::middleware($eventPaymentTypeAccess)->resource('event_payment_types', Even
 | Payment history
 |-----------------------------------------------------------------------
 */
-Route::middleware($staffAdminSuperAdminTeller)->group(function () {
+Route::middleware($staffAdminSuperAdminTellerStaff)->group(function () {
     Route::resource('payment_histories', PaymentHistoryController::class)->scoped();
     Route::post('payment_histories/export', [PaymentHistoryController::class, 'export'])->name('payment_histories.export');
 });
@@ -153,7 +158,7 @@ Route::middleware($staffAdminSuperAdminTeller)->group(function () {
 | Payments
 |-----------------------------------------------------------------------
 */
-Route::middleware($staffAdminSuperAdminTeller)->group(function () {
+Route::middleware($staffAdminSuperAdminTellerStaff)->group(function () {
     Route::resource('payments', PaymentController::class)->only('index');
     Route::get('/payments/{payment}', [PaymentController::class, 'payForm'])->name('payments.pay.form');
     Route::get('/payments/{payment}/pay', [PaymentController::class, 'showPay'])->name('payments.show.pay');

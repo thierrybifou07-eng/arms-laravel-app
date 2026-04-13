@@ -53,7 +53,7 @@ class DashboardController extends Controller
             'processingPayments' => Payment::whereHas('status', fn ($q) => $q->where('code', 'processing'))->count(),
             'totalPaymentHistories' => PaymentHistory::count(),
             'recentHistories' => PaymentHistory::latest()->take(5)->get(),
-            'recentPayments' => Payment::with(['contract.user', 'status'])->latest()->take(10)->get(),
+            'recentPayments' => Payment::with(['contract.user', 'status'])->whereHas('status', fn ($q) => $q->where('code', 'validated'))->latest()->take(10)->get(),
             'recentContracts' => Contract::with(['user', 'room', 'status'])->latest()->take(5)->get(),
             // Audit statistics
             'totalAudits' => Audit::count(),
@@ -123,7 +123,7 @@ class DashboardController extends Controller
             'pendingPayments' => $paymentsByStatus['pending'],
             'processingPayments' => $paymentsByStatus['processing'],
             'residenceStats' => $residenceStats,
-            'recentPayments' => Payment::with(['contract.user', 'status'])->latest()->take(10)->get(),
+            'recentPayments' => Payment::with(['contract.user', 'status'])->whereHas('status', fn ($q) => $q->where('code', 'validated'))->latest()->take(10)->get(),
             'recentContracts' => Contract::with(['user', 'room', 'status'])->latest()->take(5)->get(),
         ];
     }
