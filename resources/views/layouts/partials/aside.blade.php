@@ -65,7 +65,7 @@
         <!-- Dashboards -->
         <li class="menu-item active">
             <a href="{{ route('dashboard') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-smile"></i>
+                <i class="menu-icon tf-icons bx bx-pie-chart-alt-2"></i>
                 <div class="text-truncate" data-i18n="Dashboards">Dashboard</div>
             </a>
         </li>
@@ -171,16 +171,27 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <a href="{{ route('verification.send') }}" class="menu-link">
                         <div data-i18n="Verify Email">Verify Email</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <a href="{{ route('password.request') }};" class="menu-link">
                         <div data-i18n="Forgot Password">Forgot Password</div>
                     </a>
                 </li>
             </ul>
         </li>
+        <!-- Audit Logs (Super Admin Only) -->
+
+        @can('view-audit-logs')
+            <li class="menu-divider my-2"></li>
+            <li class="menu-item">
+                <a href="{{ route('super_adminaudits.index') }}" class="menu-link">
+                    <i class="menu-icon icon-base bx bx-history"></i>
+                    <div data-i18n="Audit Logs">Audit Logs</div>
+                </a>
+            </li>
+        @endcan
     </ul>
 </aside>

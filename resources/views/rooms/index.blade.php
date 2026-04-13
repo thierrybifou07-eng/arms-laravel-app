@@ -7,13 +7,26 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="d-flex align-items-center justify-content-between gap-3">
             <div class="d-flex justify-content-start">
                 <h5 class="m-1">Rooms</h5>
             </div>
-            <div class="d-flex justify-content-end">
-                <a href="{{ route('floors.rooms.create', $floor) }}" class="btn rounded-pill btn-primary">New
-                    Room</a>
+            <div class="d-flex justify-content-end gap-2">
+                <a href="{{ route('buildings.floors.index', $building) }}" class="btn rounded btn-secondary">
+                    Back</a>
+                <button type="button" class="btn rounded btn-primary" onclick="openModal('create-room')">
+                    New Room
+                </button>
             </div>
         </div>
         <div class="card my-5">
@@ -61,7 +74,6 @@
                                 <th>Capacity</th>
                                 <th>Rent(FCFA)</th>
                                 <th>Created Date</th>
-                                <th>Updated Date</th>
                                 <th>Status</th>
                                 <th class="text-center">Actions</th>
                             </tr>
@@ -90,12 +102,10 @@
                                                 <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item"
-                                                    href="{{ route('floors.rooms.show', [$floor, $room]) }}"><i
-                                                        class="icon-base bx bx-show-alt me-1"></i> Show</a>
-                                                <a class="dropdown-item"
-                                                    href="{{ route('floors.rooms.edit', [$floor, $room]) }}"><i
-                                                        class="icon-base bx bx-edit me-1"></i> Edit</a>
+                                                <button type="button" class="dropdown-item" onclick="openModal('room-show-{{ $room->id }}')">
+                                                    <i class="icon-base bx bx-show-alt me-1"></i> Show</button>
+                                                <button type="button" class="dropdown-item" onclick="openModal('edit-room-{{ $room->id }}')">
+                                                    <i class="icon-base bx bx-edit me-1"></i>Edit</button>
                                                 <hr class="dropdown-divider">
                                                 <form method="POST"
                                                     action="{{ route('floors.rooms.destroy', [$floor, $room]) }}">
@@ -166,9 +176,9 @@
                     </div>
                 </div>
             @else
-            <div class="alert alert-info text-center py-5 mb-0">
-                <h5>No room found</h5>
-            </div>
+                <div class="alert alert-info text-center py-5 mb-0">
+                    <h5>No room found</h5>
+                </div>
             @endif
         </div>
 
@@ -177,4 +187,14 @@
         </div>
 
     </div>
+
+    {{-- Create Modal --}}
+    @include('rooms.form-modal', ['floor' => $floor, 'room' => null, 'statuses' => $statuses])
+
+    {{-- Edit Modals --}}
+    @foreach ($rooms as $room)
+        @include('rooms.form-modal', ['floor' => $floor, 'room' => $room, 'statuses' => $statuses ?? \App\Models\RoomStatus::all()])
+        @include('rooms.show-modal', ['floor' => $floor, 'room' => $room])
+    @endforeach
+
 @endsection

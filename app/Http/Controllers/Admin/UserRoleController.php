@@ -20,31 +20,38 @@ class UserRoleController extends Controller
 
     public function update(Request $request, User $user)
     {
+        // Prevent user from modifying their own roles
+        if (auth()->id() === $user->id) {
+            abort(403, 'You cannot modify your own roles.');
+        }
+
+        // Prevent modification of another super admin
+        if ($user->hasRole(Role::SUPER_ADMIN)) {
+            abort(403, 'Cannot modify the roles of another super admin.');
+        }
+
         $validated = $request->validate([
             'roles' => ['nullable', 'array'],
             'roles.*' => ['exists:roles,id'],
         ]);
-        // Active account when a role is assigned
+
+        // Sync roles
         $user->roles()->sync($validated['roles'] ?? []);
+
+        // Update user status based on role assignment
         $pendingId = UserStatus::where('code', UserStatus::PENDING)->value('id');
         $activeId = UserStatus::where('code', UserStatus::ACTIVE)->value('id');
-        if ($pendingId||$activeId) {
+
+        if (!$pendingId || !$activeId) {
             abort(500, 'User statuses missing in database.');
         }
+
         $user->update([
-            'user_status_id'=>empty($validated['roles'])?$pendingId:$activeId,
+            'user_status_id' => empty($validated['roles']) ? $pendingId : $activeId,
         ]);
-        // Critic protection
-        if ($user->hasRole(Role::SUPER_ADMIN) && auth()->id() !== $user->id) {
-            abort(403, 'Impossible to modify the role of another super admin');
-        }
-        // Critic protection
-        if ($user->hasRole(Role::SUPER_ADMIN) && auth()->id() === $user->id) {
-            abort(403, 'Impossible to modify yourself');
-        }
 
         return redirect()
-            ->route('users.index')
-            ->with('success', 'The user\' s role has been successfully updated');
+            ->route('users.show', $user)
+            ->with('success', 'User roles successfully updated');
     }
 }

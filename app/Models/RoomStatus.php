@@ -8,7 +8,7 @@ class RoomStatus extends Model
 {
     protected $fillable = ['code', 'label'];
 
-    public const AVALABLE = 'avalable';
+    public const AVAILABLE = 'available';
 
     public const BUSY = 'busy';
 

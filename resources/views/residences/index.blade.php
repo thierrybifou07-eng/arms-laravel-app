@@ -7,12 +7,19 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                @foreach ($errors->all() as $error)
+                    <div>{{ $error }}</div>
+                @endforeach
+            </div>
+        @endif
         <div class="d-flex align-items-center justify-content-between gap-3">
             <div class="d-flex justify-content-start">
                 <h5 class="m-1">Residences</h5>
             </div>
             <div class="d-flex justify-content-end">
-                <a href="{{ route('residences.create') }}" class="btn rounded-pill btn-primary">New Residence</a>
+                <a href="{{ route('residences.create') }}" class="btn rounded btn-primary">New Residence</a>
             </div>
         </div>
         <div class="card my-5">
@@ -85,8 +92,8 @@
                                                 <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="{{ route('residences.show', $residence) }}">
-                                                    <i class="icon-base bx bx-show-alt me-1"></i>view</a>
+                                                <button type="button" class="dropdown-item" onclick="openModal('residence-show-{{ $residence->id }}')">
+                                                    <i class="icon-base bx bx-show-alt me-1"></i>View</button>
                                                 <a class="dropdown-item"
                                                     href="{{ route('residences.buildings.index', $residence) }}">
                                                     <i class="icon-base bx bx-home-alt me-1"></i>view building(s)</a>
@@ -116,7 +123,7 @@
                     <div
                         class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
                         <div class="dt-info" aria-live="polite" role="status">Showing {{ $residences->firstItem() ?? 0 }}
-                            to {{ $residences->lastItem() ?? 0 }} of {{ $residences->total() }} entries</div>
+                            to {{ $residences->lastItem() ?? 0 }} of {{ $residences->total() }} residences</div>
                     </div>
                     <div
                         class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">
@@ -166,12 +173,17 @@
                     </div>
                 </div>
             @else
-            <div class="alert alert-info text-center py-5 mb-0">
-                <h5>No residence found</h5>
-            </div>
+                <div class="alert alert-info text-center py-5 mb-0">
+                    <h5>No residence found</h5>
+                </div>
             @endif
         </div>
 
     </div>
+
+    {{-- Show Modals --}}
+    @foreach ($residences as $residence)
+        @include('residences.show-modal', ['residence' => $residence])
+    @endforeach
 
 @endsection

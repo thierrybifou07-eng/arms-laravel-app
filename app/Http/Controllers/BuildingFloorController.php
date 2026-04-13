@@ -29,8 +29,10 @@ class BuildingFloorController extends Controller
         }
 
         $floors = $query->latest()->paginate(10)->withQueryString();
+        $statuses = \App\Models\FloorStatus::all();
+        $residence = $building->residence;
 
-        return view('floors.index', compact('building', 'floors'));
+        return view('floors.index', compact('building', 'floors', 'statuses', 'residence'));
     }
 
     /**
@@ -115,6 +117,9 @@ class BuildingFloorController extends Controller
      */
     public function destroy(Building $building, Floor $floor)
     {
+            if ($floor->rooms()->exists()) {
+                return redirect()->route('buildings.floors.index', $building)->withErrors(['message' => 'Impossible to delete a floor that contains rooms.']);
+            }
         $floor->delete();
 
         return redirect()->route('buildings.floors.index', $building)->with('success', 'Le palier à bien été supprimée');

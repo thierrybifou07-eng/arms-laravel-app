@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class Residence extends Model
+class Residence extends Model implements AuditableContract
 {
     use HasFactory;
+    use \OwenIt\Auditing\Auditable;
 
     protected static function newFactory()
     {
@@ -43,5 +45,11 @@ class Residence extends Model
     public function buildings()
     {
         return $this->hasMany(Building::class);
+    }
+
+    // relationship with users
+    public function users()
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
     }
 }

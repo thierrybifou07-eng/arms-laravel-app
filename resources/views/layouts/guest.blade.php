@@ -50,6 +50,8 @@
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
 
     <script src="{{ asset('admin-template/assets') }}/js/config.js"></script>
+    <!-- Additional CSS for phone input -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/css/intlTelInput.css">
 </head>
 
 <body>
@@ -57,7 +59,7 @@
 
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
-            <div class="authentication-inner">
+            <div class="authentication-inner" style="max-width: 800px;">
                 <!-- Register -->
                 <div class="card px-5">
                     <div class="card-body">
@@ -119,7 +121,6 @@
                             </a>
                         </div>
                         @yield('content')
-
                     </div>
                 </div>
                 <!-- /Register -->
@@ -128,7 +129,36 @@
     </div>
 
     <!-- / Content -->
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/intlTelInput.min.js"></script>
 
+    <script>
+        const input = document.querySelector("#phone");
+        const iti = window.intlTelInput(input, {
+            // Options de configuration
+            initialCountry: "auto",
+            geoIpLookup: callback => {
+                fetch("https://ipapi.co/json")
+                    .then(res => res.json())
+                    .then(data => callback(data.country_code))
+                    .catch(() => callback("fr"));
+            },
+            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js",
+        });
+        const form = document.querySelector("#formAccountSetting");
+
+        form.addEventListener("submit", function(e) {
+            // 1. Récupérer les données de la bibliothèque
+            const countryData = iti.getSelectedCountryData(); // Contient l'indicatif (dialCode)
+            const nationalNumber = input.value; // Le numéro tapé par l'utilisateur
+
+            // 2. Créer le format : (+Indicatif) Numéro
+            const formattedNumber = `(+${countryData.dialCode}) ${nationalNumber}`;
+
+            // 3. Mettre à jour la valeur de l'input phone avant que Laravel ne le reçoive
+            // On peut soit utiliser un champ caché, soit écraser la valeur de l'input actuel
+            input.value = formattedNumber;
+        });
+    </script>
     <!-- Core JS -->
 
     <script src="{{ asset('admin-template/assets') }}/vendor/libs/jquery/jquery.js"></script>

@@ -27,7 +27,8 @@ class ContractController extends Controller
     {
         $query = Contract::with(['user', 'room.floor.building', 'status', 'billingPeriod'])->latest();
 
-        if (! auth()->user()->hasRole('super_admin')) {
+        // Hide archived contracts unless user is admin or super_admin
+        if (! auth()->user()->hasRole('admin') && ! auth()->user()->hasRole('super_admin')) {
             $archivedId = ContractStatus::getIdByCodeOrFail('archived');
             $query->where('contract_status_id', '!=', $archivedId);
         }
@@ -49,15 +50,13 @@ class ContractController extends Controller
         if (request('search')) {
             $search = request('search');
             $query->where(function ($q) use ($search) {
-                $q->whereHas('user', fn ($u) => 
-                    $u->where('firstname', 'like', "%$search%")
-                      ->orWhere('lastname', 'like', "%$search%")
-                     /*  ->orWhere('email', 'like', "%$search%") */
-                  )
-                  ->orWhereHas('room', fn ($r) =>
-                    $r->where('number', 'like', "%$search%")
-                    ->orWhere('rent_amount', 'like', "%$search%")
-                  );
+                $q->whereHas('user', fn ($u) => $u->where('firstname', 'like', "%$search%")
+                    ->orWhere('lastname', 'like', "%$search%")
+                    /*  ->orWhere('email', 'like', "%$search%") */
+                )
+                    ->orWhereHas('room', fn ($r) => $r->where('number', 'like', "%$search%")
+                      ->orWhere('rent_amount', 'like', "%$search%")
+                    );
             });
         }
 
@@ -85,7 +84,7 @@ class ContractController extends Controller
     {
         return view('contracts.create', [
             'students' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->get(),
-            'rooms' => Room::all(),
+            'rooms' => Room::whereHas('status', fn ($q) => $q->where('code', 'available'))->get(),
             'billingPeriods' => BillingPeriod::all(),
         ]);
 
@@ -100,7 +99,7 @@ class ContractController extends Controller
             'user_id' => 'required|exists:users,id',
             'room_id' => 'required|exists:rooms,id',
             'billing_period_id' => 'required|exists:billing_periods,id',
-            'start_date' => 'required|date',
+            'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after:start_date',
         ]);
         // checking overlapping contracts for the same room
@@ -109,19 +108,27 @@ class ContractController extends Controller
             $validated['start_date'],
             $validated['end_date'],
         )) {
-            return back()->withErrors(['room_id' => 'The room is already booked for the selected period.'], 422);
+            return back()->withErrors(['room_id' => 'The room is already booked for the selected period.']);
 
         }
         // bring Id of contract status
         $pendingId = ContractStatus::getIdByCodeOrFail('pending');
         // bring the room rent
-        $room = Room::findOrFail($validated['room_id']);
-        DB::transaction(function () use ($validated, $room, $pendingId) {
-
+        $room = Room::with('status')->findOrFail($validated['room_id']);
+        if ($room->status->code !== 'available') {
+            return back()->withErrors(['room_id' => 'Room not available']);
+        }
+        // Update room status to 'busy'
+        $busyId = \App\Models\RoomStatus::where('code', 'busy')->value('id');
+        DB::transaction(function () use ($validated, $room, $pendingId, $busyId) {
             $contract = Contract::create([
                 ...$validated,
                 'rent_amount' => $room->rent,
                 'contract_status_id' => $pendingId,
+            ]);
+
+            $room->update([
+                'room_status_id' => $busyId,
             ]);
 
             if ($contract->status->code === 'pending') {
@@ -147,6 +154,12 @@ class ContractController extends Controller
      */
     public function edit(Contract $contract)
     {
+        // Prevent editing expired contracts
+        if ($contract->status->code === 'expired' || $contract->status->code === 'archived') {
+            return redirect()->route('contracts.show', $contract)
+                ->withErrors(['contract' => 'Expired or archived contracts cannot be edited.']);
+        }
+
         return view('contracts.edit', [
             'contract' => $contract,
             'students' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->get(),

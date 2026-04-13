@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Audit;
 use App\Models\BillingPeriod;
 use App\Models\Building;
 use App\Models\BuildingStatus;
@@ -22,6 +23,7 @@ use App\Models\Room;
 use App\Models\RoomStatus;
 use App\Models\User;
 use App\Models\UserStatus;
+use App\Policies\AuditPolicy;
 use App\Policies\BillingPeriodPolicy;
 use App\Policies\BuildingPolicy;
 use App\Policies\BuildingStatusPolicy;
@@ -73,6 +75,9 @@ class AuthServiceProvider extends ServiceProvider
         // Role & Permission Policies (Administrative)
         Role::class => RolePolicy::class,
         Permission::class => PermissionPolicy::class,
+
+        // Audit Policy
+        Audit::class => AuditPolicy::class,
 
         // Status Policies
         BuildingStatus::class => BuildingStatusPolicy::class,

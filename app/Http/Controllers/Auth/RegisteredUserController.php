@@ -34,7 +34,7 @@ class RegisteredUserController extends Controller
             'firstname' => ['string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email:rfc,dns', 'max:255', 'unique:users,email'],
-            'phone' => ['required', 'string', 'max:25', 'regex:/^\+?[0-9]{8,15}$/', 'unique:users,phone'],
+            'phone' => ['required', 'string', 'max:25', 'regex:/^\(\+?[0-9]+\)\s[0-9\s\-\(\)]+$/', 'unique:users,phone'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
         $pendingId = UserStatus::where('code', UserStatus::PENDING)->value('id');

@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class Floor extends Model
+class Floor extends Model implements AuditableContract
 {
+    use HasFactory;
+    use \OwenIt\Auditing\Auditable;
+
     protected $fillable = [
         'building_id',
         'floor_status_id',

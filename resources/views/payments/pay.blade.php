@@ -1,6 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="card mb-6">
         <h5 class="card-header">Payment Details</h5>
 
@@ -41,9 +56,11 @@
                     <div class="col-md-6">
                         <label>Method</label>
                         <select name="payment_method_id" class="form-select">
-                            @foreach($paymentMethods as $method)
-                                <option @if ($method->code === 'orange_money' || $method->code === 'mtn_money') id="mobile_fields"
-                                @elseif ($method->code === 'bank_transfer') id="card_fields" @endif value="{{ $method->id }}">
+                            @foreach ($paymentMethods as $method)
+                                <option
+                                    @if ($method->code === 'orange_money' || $method->code === 'mtn_money') id="mobile_fields"
+                                @elseif ($method->code === 'bank_transfer') id="card_fields" @endif
+                                    value="{{ $method->id }}">
                                     {{ $method->label }}</option>
                             @endforeach
                         </select>
@@ -54,18 +71,11 @@
                     <button class="btn btn-primary">Pay</button>
                 </div>
             </form>
-
-            {{-- CANCEL --}}
-            <form method="POST" action="{{ route('payments.cancel', $payment) }}" class="mt-2">
-                @csrf
-                <button class="btn btn-danger">Cancel</button>
-            </form>
-
         </div>
     </div>
     @push('script')
         <script>
-            $('input[name="method"]').on('change', function () {
+            $('input[name="method"]').on('change', function() {
 
                 $('#mobile_fields, #card_fields').addClass('d-none');
 

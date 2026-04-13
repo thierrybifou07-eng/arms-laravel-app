@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Audit;
 use App\Models\BillingPeriod;
 use App\Models\Contract;
 use App\Models\Payment;
 use App\Models\PaymentHistory;
 use App\Models\User;
+use App\Models\Residence;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -53,20 +55,74 @@ class DashboardController extends Controller
             'recentHistories' => PaymentHistory::latest()->take(5)->get(),
             'recentPayments' => Payment::with(['contract.user', 'status'])->latest()->take(10)->get(),
             'recentContracts' => Contract::with(['user', 'room', 'status'])->latest()->take(5)->get(),
+            // Audit statistics
+            'totalAudits' => Audit::count(),
+            'auditsByEvent' => [
+                'created' => Audit::byEvent('created')->count(),
+                'updated' => Audit::byEvent('updated')->count(),
+                'deleted' => Audit::byEvent('deleted')->count(),
+                'restored' => Audit::byEvent('restored')->count(),
+            ],
+            'recentAudits' => Audit::with('user')->latest()->take(8)->get(),
+            'todayAudits' => Audit::whereDate('created_at', now())->count(),
         ];
     }
 
     private function getAdminStats()
     {
+        $user = Auth::user();
+        $residences = $user->residences;
+        
+        // Stats globales
+        $totalStudents = User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->count();
+        $activeStudents = User::whereHas('roles', fn ($q) => $q->where('name', 'student'))
+            ->whereHas('contracts', fn ($q) => $q->whereHas('status', fn ($s) => $s->where('code', 'active')))
+            ->count();
+        
+        // Contract stats
+        $totalContracts = Contract::count();
+        $contractsByStatus = [
+            'pending' => Contract::whereHas('status', fn ($q) => $q->where('code', 'pending'))->count(),
+            'active' => Contract::whereHas('status', fn ($q) => $q->where('code', 'active'))->count(),
+            'overdue' => Contract::whereHas('status', fn ($q) => $q->where('code', 'overdue'))->count(),
+            'expired' => Contract::whereHas('status', fn ($q) => $q->where('code', 'expired'))->count(),
+            'archived' => Contract::whereHas('status', fn ($q) => $q->where('code', 'archived'))->count(),
+        ];
+        
+        // Payment stats
+        $totalPayments = Payment::count();
+        $paymentsByStatus = [
+            'pending' => Payment::whereHas('status', fn ($q) => $q->where('code', 'pending'))->count(),
+            'processing' => Payment::whereHas('status', fn ($q) => $q->where('code', 'processing'))->count(),
+            'validated' => Payment::whereHas('status', fn ($q) => $q->where('code', 'validated'))->count(),
+            'cancelled' => Payment::whereHas('status', fn ($q) => $q->where('code', 'cancelled'))->count(),
+        ];
+        
+        // Residence statistics for each managed residence
+        $residenceStats = [];
+        foreach ($residences as $residence) {
+            $monthlyPayments = $this->getMonthlyPaymentStats($residence);
+            $residenceStats[] = [
+                'residence' => $residence,
+                'monthlyData' => $monthlyPayments,
+                'totalAmount' => array_sum(array_column($monthlyPayments, 'amount')),
+            ];
+        }
+        
         return [
             'role' => 'admin',
-            'totalStudents' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->count(),
-            'totalContracts' => Contract::count(),
-            'activeContracts' => Contract::whereHas('status', fn ($q) => $q->where('code', 'active'))->count(),
-            'pendingContracts' => Contract::whereHas('status', fn ($q) => $q->where('code', 'pending'))->count(),
-            'totalPayments' => Payment::count(),
-            'validatedPayments' => Payment::whereHas('status', fn ($q) => $q->where('code', 'validated'))->count(),
-            'pendingPayments' => Payment::whereHas('status', fn ($q) => $q->where('code', 'pending'))->count(),
+            'totalStudents' => $totalStudents,
+            'activeStudents' => $activeStudents,
+            'totalContracts' => $totalContracts,
+            'contractsByStatus' => $contractsByStatus,
+            'activeContracts' => $contractsByStatus['active'],
+            'pendingContracts' => $contractsByStatus['pending'],
+            'totalPayments' => $totalPayments,
+            'paymentsByStatus' => $paymentsByStatus,
+            'validatedPayments' => $paymentsByStatus['validated'],
+            'pendingPayments' => $paymentsByStatus['pending'],
+            'processingPayments' => $paymentsByStatus['processing'],
+            'residenceStats' => $residenceStats,
             'recentPayments' => Payment::with(['contract.user', 'status'])->latest()->take(10)->get(),
             'recentContracts' => Contract::with(['user', 'room', 'status'])->latest()->take(5)->get(),
         ];
@@ -100,6 +156,38 @@ class DashboardController extends Controller
         ];
     }
 
+    /**
+     * Get monthly payment statistics for a residence over the last 12 months
+     */
+    private function getMonthlyPaymentStats(Residence $residence)
+    {
+        $monthlyData = [];
+        
+        for ($i = 11; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $month = $date->format('m');
+            $year = $date->format('Y');
+            $monthLabel = $date->format('M Y');
+            
+            $amount = Payment::whereHas('contract.room.floor.building', function ($q) use ($residence) {
+                    $q->where('residence_id', $residence->id);
+                })
+                ->whereHas('status', fn ($q) => $q->where('code', 'validated'))
+                ->whereMonth('payment_date', $month)
+                ->whereYear('payment_date', $year)
+                ->sum('paid_amount');
+            
+            $monthlyData[] = [
+                'month' => $monthLabel,
+                'monthNum' => $month,
+                'year' => $year,
+                'amount' => (float) ($amount ?? 0),
+            ];
+        }
+        
+        return $monthlyData;
+    }
+
     private function getStudentStats($user)
     {
         $contracts = $user->contracts;
@@ -108,7 +196,7 @@ class DashboardController extends Controller
             return ['role' => 'student', 'message' => 'No contracts assigned'];
         }
 
-        $payments = Payment::whereHas('contract', fn ($q) => $q->where('user_id', $user->id))->get();
+        $payments = Payment::with('method')->whereHas('contract', fn ($q) => $q->where('user_id', $user->id))->get();
 
         return [
             'role' => 'student',

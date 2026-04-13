@@ -30,8 +30,9 @@ class ResidenceBuildingController extends Controller
         }
 
         $buildings = $query->latest()->paginate(10)->withQueryString();
+        $statuses = BuildingStatus::all();
 
-        return view('buildings.index', compact('residence', 'buildings'));
+        return view('buildings.index', compact('residence', 'buildings', 'statuses'));
     }
 
     /**
@@ -115,6 +116,9 @@ class ResidenceBuildingController extends Controller
      */
     public function destroy( Residence $residence, Building $building)
     {
+        if ($building->floors()->exists()) {
+            return redirect()->route('residences.buildings.index', $residence)->withErrors(['message' => 'Impossible to delete a building that contains floors.']);
+        }
         $building->delete();
 
         return redirect()->route('residences.buildings.index', $residence)->with('success', 'Le Bâtiment à bien été supprimée');

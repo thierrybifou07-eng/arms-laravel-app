@@ -89,8 +89,5 @@
                 </form>
             </div>
         </div>
-        <div class="demo-inline-spacing mx-5">
-            <a href="{{ route('residences.buildings.index',$residence) }}" class="btn rounded-pill btn-primary">Back</a>
-        </div>
     </div>
 @endsection

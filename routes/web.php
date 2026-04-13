@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AuditController;
 use App\Http\Controllers\Admin\PendingUserController;
 use App\Http\Controllers\Admin\UserRoleController;
 use App\Http\Controllers\BuildingFloorController;
@@ -34,6 +35,7 @@ Route::get('/', function () {
 $authVerifiedStatus = ['auth', 'verified', 'checkUserStatus'];
 $superAdminOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin'];
 $adminOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:admin'];
+$superAdminAdmin = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,admin'];
 $adminTellerOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:admin,teller'];
 $student = ['auth', 'verified', 'checkUserStatus', 'checkRole:student'];
 $staffAdminSuperAdminTeller = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,teller,admin'];
@@ -50,6 +52,14 @@ Route::middleware($superAdminOnly)
     ->prefix('super-admin')
     ->name('super_admin')
     ->group(function () {
+        // Audit logs routes
+        Route::get('audits', [AuditController::class, 'index'])->name('audits.index');
+        Route::get('audits/{audit}', [AuditController::class, 'show'])->name('audits.show');
+        Route::delete('audits/{audit}', [AuditController::class, 'destroy'])->name('audits.destroy');
+        Route::post('audits/delete-multiple', [AuditController::class, 'destroyMultiple'])->name('audits.destroyMultiple');
+        Route::post('audits/export', [AuditController::class, 'export'])->name('audits.export');
+
+        // Role and permission routes
         Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
         Route::get('roles/{role}', [RoleController::class, 'show'])->name('roles.show');
         Route::get('permissions', [PermissionController::class, 'index'])->name('permissions.index');
@@ -57,7 +67,7 @@ Route::middleware($superAdminOnly)
         Route::put('users/{user}/roles', [UserRoleController::class, 'update'])->name('user.roles.update');
     });
 
-Route::middleware($adminOnly)
+Route::middleware($superAdminAdmin)
     ->prefix('activate-account')
     ->name('activate_account')
     ->group(function () {
@@ -114,9 +124,10 @@ Route::middleware($adminOnly)->resource('residences', ResidenceController::class
 Route::middleware($adminOnly)->resource('residences.buildings', ResidenceBuildingController::class)->scoped();
 Route::middleware($adminOnly)->resource('buildings.floors', BuildingFloorController::class)->scoped();
 Route::middleware($adminOnly)->resource('floors.rooms', FloorRoomController::class)->scoped();
-Route::middleware($adminOnly)->resource('contracts', ContractController::class)->scoped();
+Route::middleware($superAdminAdmin)->resource('contracts', ContractController::class)->scoped();
 
 Route::middleware($superAdminOnly)->resource('users', UserController::class)->only(['index', 'show', 'update', 'destroy'])->scoped();
+Route::middleware($superAdminOnly)->put('users/{user}/change-status', [UserController::class, 'changeStatus'])->name('users.changeStatus');
 Route::middleware($superAdminOnly)->resource('roles', RoleController::class)->scoped();
 Route::middleware($superAdminOnly)->resource('permissions', PermissionController::class)->scoped();
 
@@ -142,7 +153,7 @@ Route::middleware($staffAdminSuperAdminTeller)->group(function () {
 | Payments
 |-----------------------------------------------------------------------
 */
-Route::middleware($staffAdminSuperAdminTeller, $student)->group(function () {
+Route::middleware($staffAdminSuperAdminTeller)->group(function () {
     Route::resource('payments', PaymentController::class)->only('index');
     Route::get('/payments/{payment}', [PaymentController::class, 'payForm'])->name('payments.pay.form');
     Route::get('/payments/{payment}/pay', [PaymentController::class, 'showPay'])->name('payments.show.pay');

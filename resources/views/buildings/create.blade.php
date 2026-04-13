@@ -5,7 +5,7 @@
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h5 class="mb-0">Create a new building</h5>
-                <small class="text-body-secondary float-end">Merged input group</small>
+                <a href="{{ route('residences.buildings.index', $residence) }}" class="btn btn-sm btn-secondary">Back</a>
             </div>
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -82,9 +82,6 @@
                     </div>
                 </form>
             </div>
-        </div>
-        <div class="demo-inline-spacing mx-5">
-            <a href="{{ route('residences.buildings.index',$residence) }}" class="btn rounded-pill btn-primary">Back</a>
         </div>
     </div>
 @endsection

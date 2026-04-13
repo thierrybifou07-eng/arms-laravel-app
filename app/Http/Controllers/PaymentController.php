@@ -13,7 +13,7 @@ class PaymentController extends Controller
 {
     public function index()
     {
-        $query = Payment::with(['contract.user', 'status']);
+        $query = Payment::with(['contract.user', 'status', 'method']);
 
         // Filtre par statut
         if (request('status')) {
@@ -58,7 +58,7 @@ class PaymentController extends Controller
 
     public function showPay(Payment $payment)
     {
-        $payment->load(['contract', 'status']);
+        $payment->load(['contract', 'status', 'method']);
         $paymentMethods = \App\Models\PaymentMethod::all();
 
         return view('payments.show', compact('payment', 'paymentMethods'));
@@ -74,7 +74,7 @@ class PaymentController extends Controller
         $paidAmount = (float) $validated['paid_amount'];
         $expected = (float) $payment->expected_amount;
         if ($paidAmount < $expected) {
-            return back()->withErrors(['paid_amount' => 'Le montant payé est inférieur au montant attendu.']);
+            return back()->withErrors(['paid_amount' => 'The paid amount must be at least equal to the expected amount.']);
         }
         $processingStatus = PaymentStatus::getIdByCodeOrFail('processing');
 
@@ -87,7 +87,7 @@ class PaymentController extends Controller
             ]);
         });
 
-        return back()->with('success', 'Payment submitted for validation.');
+        return redirect()->route('dashboard')->with('success', 'Payment submitted for validation.');
     }
 
     public function validatePayment(Payment $payment)
@@ -117,6 +117,7 @@ class PaymentController extends Controller
                 'amount' => $payment->paid_amount,
                 'old_balance' => $contract->user->balance ?? 0,
                 'new_balance' => ($contract->user->balance ?? 0) + $payment->paid_amount,
+                'recorded_by' => auth()->id(),
             ]);
 
             $contract->refresh();

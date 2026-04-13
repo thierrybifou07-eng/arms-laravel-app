@@ -2,32 +2,37 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class Building extends Model
+class Building extends Model implements AuditableContract
 {
+    use \OwenIt\Auditing\Auditable;
+    use HasFactory;
+
     protected $fillable = [
         'residence_id',
         'building_status_id',
         'name',
         'address',
-        'capacity'
+        'capacity',
     ];
 
-        // relationship with residence
+    // relationship with residence
 
     public function residence()
     {
         return $this->belongsTo(Residence::class);
     }
 
-        // Assign a status
+    // Assign a status
 
     public function status()
     {
         return $this->belongsTo(BuildingStatus::class, 'building_status_id');
     }
-            // relationship with floors
+    // relationship with floors
 
     public function floors()
     {

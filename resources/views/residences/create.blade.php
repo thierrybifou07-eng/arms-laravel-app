@@ -5,7 +5,7 @@
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h5 class="mb-0">Create a new residence</h5>
-                <small class="text-body-secondary float-end">Merged input group</small>
+                <a href="{{ route('residences.index') }}" class="btn btn-sm btn-secondary">Back</a>
             </div>
             @if ($errors->any())
                 <div class="alert alert-danger">

@@ -76,11 +76,9 @@
                     <div class="container-xxl flex-grow-1 container-p-y">
                         <div class="row">
                             <div class="col-xxl-12 mb-6 order-0">
-
                                 @yield('content')
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -128,6 +126,10 @@
     <!-- JS Select2 -->
     <!-- Select2 JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    
+    <!-- Modal Helper Script - MUST be after Bootstrap JS -->
+    @include('components.modal-script')
+    
     @stack('scripts')
 </body>
 

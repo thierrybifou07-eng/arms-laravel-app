@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div cclass="col-xxl-12">
+    <div class="col-xxl-12">
 
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -8,13 +8,25 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="d-flex align-items-center justify-content-between gap-3">
             <div class="d-flex justify-content-start">
                 <h5 class="m-1">Buildings</h5>
             </div>
-            <div class="d-flex justify-content-end">
-                <a href="{{ route('residences.buildings.create', $residence) }}" class="btn rounded-pill btn-primary">New
-                    Building</a>
+            <div class="d-flex justify-content-end gap-2">
+                <a href="{{ route('residences.index') }}" class="btn rounded btn-secondary">Back</a>
+                <button type="button" class="btn rounded btn-primary" onclick="openModal('create-building')">
+                    New Building
+                </button>
             </div>
         </div>
         <div class="card my-5">
@@ -93,15 +105,13 @@
                                                 <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item"
-                                                    href="{{ route('residences.buildings.show', [$residence, $building]) }}"><i
-                                                        class="icon-base bx bx-show-alt me-1"></i> Show</a>
+                                                <button type="button" class="dropdown-item" onclick="openModal('building-show-{{ $building->id }}')">
+                                                    <i class="icon-base bx bx-show-alt me-1"></i> Show</button>
                                                 <a class="dropdown-item"
                                                     href="{{ route('buildings.floors.index', $building) }}"><i
                                                         class="icon-base bx bx-folder me-1"></i> View Floors</a>
-                                                <a class="dropdown-item"
-                                                    href="{{ route('residences.buildings.edit', [$residence, $building]) }}"><i
-                                                        class="icon-base bx bx-edit me-1"></i> Edit</a>
+                                                <button type="button" class="dropdown-item" onclick="openModal('edit-building-{{ $building->id }}')">
+                                                    <i class="icon-base bx bx-edit me-1"></i>Edit</button>
                                                 <hr class="dropdown-divider">
                                                 <form method="POST"
                                                     action="{{ route('residences.buildings.destroy', [$residence, $building]) }}">
@@ -124,7 +134,7 @@
                     <div
                         class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
                         <div class="dt-info" aria-live="polite" role="status">Showing {{ $buildings->firstItem() ?? 0 }}
-                            to {{ $buildings->lastItem() ?? 0 }} of {{ $buildings->total() }} users</div>
+                            to {{ $buildings->lastItem() ?? 0 }} of {{ $buildings->total() }} buildings</div>
                     </div>
                     <div
                         class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">
@@ -180,4 +190,14 @@
             @endif
         </div>
     </div>
+
+    {{-- Create Modal --}}
+    @include('buildings.form-modal', ['residence' => $residence, 'building' => null, 'statuses' => $statuses])
+
+    {{-- Edit Modals --}}
+    @foreach ($buildings as $building)
+        @include('buildings.form-modal', ['residence' => $residence, 'building' => $building, 'statuses' => $statuses ?? \App\Models\BuildingStatus::all()])
+        @include('buildings.show-modal', ['residence' => $residence, 'building' => $building])
+    @endforeach
+
 @endsection

@@ -12,12 +12,11 @@
                     <input type="file" name="avatar" id="upload" class="account-file-input" hidden=""
                         accept="image/png, image/jpeg">
                 </label>
-                <button class="btn btn-primary account-image-reset mb-4">
+                <button type="submit" class="btn btn-primary account-image-reset mb-4">
                     <i class="icon-base bx bx-reset d-block d-sm-none"></i>
                     <span class="d-none d-sm-block">Upload</span>
                     <i class="icon-base bx bx-upload d-block d-sm-none"></i>
                 </button>
-
                 <div>Allowed JPG, GIF or PNG. Max size of 800K</div>
             </div>
         </form>

@@ -3,8 +3,9 @@
 @section('content')
     <div class="col-xxl-12 my-4">
         <div class="card">
-            <div class="card-header">
+            <div class="card-header d-flex align-items-center justify-content-between">
                 <h5 class="mb-0">Éditer Type de Paiement d'Événement</h5>
+                <a href="{{ route('event_payment_types.index') }}" class="btn btn-sm btn-secondary">Back</a>
             </div>
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">

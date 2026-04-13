@@ -11,7 +11,7 @@
 </div>
 
 <div class="mb-3">
-    <label class="form-label">Libellé</label>
+    <label class="form-label">Label</label>
     <input type="text" name="label" class="form-control" value="{{ old('label', $role->label ?? '') }}">
     @error('label')
         <div class="text-danger small">{{ $message }}</div>

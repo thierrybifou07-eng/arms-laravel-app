@@ -6,11 +6,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable implements HasMedia
+class User extends Authenticatable implements HasMedia, AuditableContract
 {
+    use Auditable;
     use InteractsWithMedia;
 
     public function avatar()
@@ -90,6 +93,12 @@ class User extends Authenticatable implements HasMedia
     public function contracts()
     {
         return $this->hasMany(Contract::class);
+    }
+
+    // Relationship with residences (admin can manage many residences)
+    public function residences()
+    {
+        return $this->belongsToMany(Residence::class);
     }
 
     // create the hasRole method for the middleware
