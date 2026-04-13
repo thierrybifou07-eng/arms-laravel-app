@@ -14,25 +14,26 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('contract_id')
-                ->constrained()
+                ->constrained('contracts')
                 ->cascadeOnDelete();
-            $table->foreignId('payment_method_id')
-                ->constrained()
+            $table->foreignId('payment_method_id')->nullable()
+                ->constrained('payment_methods')
                 ->restrictOnDelete();
             $table->foreignId('payment_status_id')
-                ->constrained()
+                ->constrained('payment_statuses')
                 ->restrictOnDelete();
-            $table->decimal('amount', 10, 2);
-            $table->date('payment_date');
+            $table->decimal('expected_amount', 10, 2);
+            $table->decimal('paid_amount', 10, 2);
+            $table->date('payment_date')->nullable();
             $table->timestamps();
         });
         Schema::create('payments_histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('event_payment_type_id')
-                ->constrained()
+                ->constrained('event_payment_types')
                 ->restrictOnDelete();
             $table->foreignId('payment_id')
-                ->constrained()
+                ->constrained('payments')
                 ->cascadeOnDelete();
             $table->text('comment')->nullable();
             $table->dateTime('event_date');
@@ -42,7 +43,7 @@ return new class extends Migration
         Schema::create('payment_receipts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('payment_id')
-                ->constrained()
+                ->constrained('payments')
                 ->cascadeOnDelete();
             $table->decimal('amount', 10, 2);
             $table->string('number')->unique();

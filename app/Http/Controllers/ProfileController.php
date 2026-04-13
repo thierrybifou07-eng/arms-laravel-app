@@ -11,6 +11,30 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    public function updateAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => 'required|image|max:1000',
+        ]);
+
+        $user = auth()->user();
+
+        $user->clearMediaCollection('avatars');
+
+        $user->addMediaFromRequest('avatar')
+            ->toMediaCollection('avatars');
+
+        return back()->with('success', 'Avatar updated!');
+    }
+    //
+
+    public function show(Request $request): View
+    {
+        $user = $request->user()->load(['userStatus', 'roles']);
+
+        return view('profile.show', compact('user'));
+    }
+
     /**
      * Display the user's profile form.
      */

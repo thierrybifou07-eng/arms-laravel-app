@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('code', 30)->unique();
             $table->string('label', 100);
+            $table->string('days', 1000)->nullable(); // Add days column to store the number of days for each billing period
             $table->timestamps();
         });
     }

@@ -1,64 +1,109 @@
-<section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
-        </h2>
+<!-- Account -->
+<div class="card-body">
+    <div class="d-flex align-items-start align-items-sm-center gap-6 pb-4 border-bottom">
 
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
-        </p>
-    </header>
+        <img src="{{ auth()->user()->avatar() }}" alt="user-avatar" class="d-block w-px-100 h-px-100 rounded"
+            id="uploadedAvatar">
+        <form method="POST" action="{{ route('avatar.update') }}" enctype="multipart/form-data">
+            @csrf
+            <div class="button-wrapper">
+                <label for="upload" class="btn btn-secondary me-3 mb-4" tabindex="0">
+                    <span class="d-none d-sm-block">New photo</span>
+                    <input type="file" name="avatar" id="upload" class="account-file-input" hidden=""
+                        accept="image/png, image/jpeg">
+                </label>
+                <button type="submit" class="btn btn-primary account-image-reset mb-4">
+                    <i class="icon-base bx bx-reset d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Upload</span>
+                    <i class="icon-base bx bx-upload d-block d-sm-none"></i>
+                </button>
+                <div>Allowed JPG, GIF or PNG. Max size of 800K</div>
+            </div>
+        </form>
+    </div>
+</div>
 
-    <form id="send-verification" method="post" action="{{ route('verification.send') }}">
+<div class="card-body pt-4">
+    <form id="send-verification" class="d-none" method="post" action="{{ route('verification.send') }}">
         @csrf
     </form>
-
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form id="formAccountSettings" method="POST" class="fv-plugins-bootstrap5 fv-plugins-framework"
+        novalidate="novalidate" action="{{ route('profile.update') }}">
         @csrf
         @method('patch')
-
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
-        </div>
-
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
-
-            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                <div>
-                    <p class="text-sm mt-2 text-gray-800">
-                        {{ __('Your email address is unverified.') }}
-
-                        <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
-                    </p>
-
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
-                    @endif
+        <div class="row g-6">
+            <div class="col-md-6 form-control-validation fv-plugins-icon-container">
+                <label for="firstname" class="form-label">First Name</label>
+                <input class="form-control @error('firstname') is-invalid @enderror" type="text" id="firstName"
+                    name="firstname" value="{{ old('firstname', $user->firstname) }}" autofocus="" required
+                    autocomplete="firstname">
+                @error('firstname')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+                <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 </div>
-            @endif
+            </div>
+            <div class="col-md-6 form-control-validation fv-plugins-icon-container">
+                <label for="lastname" class="form-label">Last Name</label>
+                <input class="form-control @error('lastname') is-invalid @enderror" type="text" name="lastname"
+                    id="lastname" value="{{ old('lastname', $user->lastname) }}" required autocomplete="lastname">
+                @error('lastname')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+                <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" for="phone">Phone Number</label>
+                <div class="input-group input-group-merge">
+                    <span class="input-group-text">(+237)</span>
+                    <input type="phone" id="phoneNumber" name="phone"
+                        class="form-control @error('phone') is-invalid @enderror"
+                        value="{{ old('phone', $user->phone) }}" required autocomplete="phone">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="email" class="form-label">E-mail</label>
+                <input class="form-control @error('email') is-invalid @enderror" type="email" id="email" name="email"
+                    value="{{ old('email', $user->email) }}" required autocomplete="email">
+                @error('email')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+
+                @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())
+                    <div class="mt-2">
+                        <p class="mb-0">
+                            {{ __('Your email address is unverified.') }}
+
+                            <button form="send-verification" class="btn btn-link p-0">
+                                {{ __('Click here to re-send the verification email.') }}
+                            </button>
+                        </p>
+
+                        @if (session('status') === 'verification-link-sent')
+                            <div class="alert alert-success mt-3 mb-0" role="alert">
+                                {{ __('A new verification link has been sent to your email address.') }}
+                            </div>
+                        @endif
+                    </div>
+                @endif
+            </div>
+
         </div>
-
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
-
+        <div class="mt-6">
+            <button type="submit" class="btn btn-primary me-3">Save changes</button>
             @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
+                <span class="m-1 fade-out">{{ __('Saved.') }}</span>
             @endif
+            <button type="reset" class="btn btn-label-secondary">Cancel</button>
         </div>
+        <input type="hidden">
     </form>
-</section>
+</div>
+<!-- /Account -->

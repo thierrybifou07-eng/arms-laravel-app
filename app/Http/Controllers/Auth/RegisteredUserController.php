@@ -31,25 +31,29 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'phone' => ['required', 'string', 'max:25', 'unique:'.User::class],
+            'firstname' => ['string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email:rfc,dns', 'max:255', 'unique:users,email'],
+            'phone' => ['required', 'string', 'max:25', 'regex:/^\(\+?[0-9]+\)\s[0-9\s\-\(\)]+$/', 'unique:users,phone'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-        $activateId=UserStatus::getIdByCode(UserStatus::ACTIVE);
-
+        $pendingId = UserStatus::where('code', UserStatus::PENDING)->value('id');
+        if (! $pendingId) {
+            throw new \Exception('User status "pending" missing in database');
+        }
         $user = User::create([
-            'name' => $request->name,
+            'firstname' => $request->firstname,
+            'lastname' => $request->lastname,
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
-            'user_status_id' => $activateId, // Assuming active is the default status
+            'user_status_id' => $pendingId, // Assuming pending is the default status
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('dashboard'));
     }
 }
