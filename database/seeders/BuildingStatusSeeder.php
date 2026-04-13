@@ -14,7 +14,7 @@ class BuildingStatusSeeder extends Seeder
     {
         $statuses = [
             ['code' => 'active',
-                'label' => 'Active',
+                'label' => 'Open',
                 'created_at' => now(),
                 'updated_at' => now()],
             ['code' => 'closed',
