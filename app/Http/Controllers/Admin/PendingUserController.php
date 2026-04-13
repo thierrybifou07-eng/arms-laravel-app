@@ -20,7 +20,7 @@ class PendingUserController extends Controller
                 $query->where('code', UserStatus::PENDING);
             })
             ->latest()
-            ->get();
+            ->paginate(10);
 
         return view('super_admin.users.pending.index', compact('pendingUsers'));
     }
@@ -32,42 +32,4 @@ class PendingUserController extends Controller
         return view('super_admin.users.pending.show', compact('user'));
     }
 
-    public function edit(User $user): View
-    {
-        $user->load(['userStatus', 'roles']);
-
-        $roles = Role::where('name', '!=', Role::SUPER_ADMIN)
-            ->orderBy('label')
-            ->get();
-
-        return view('super_admin.users.pending.edit', compact('user', 'roles'));
-    }
-
-    public function update(Request $request, User $user): RedirectResponse
-    {
-        $validated = $request->validate([
-            'roles' => ['required', 'array', 'min:1'],
-            'roles.*' => [
-                'integer',
-                Rule::exists('roles', 'id')->where(function ($query) {
-                    $query->where('name', '!=', Role::SUPER_ADMIN);
-                }),
-            ],
-        ]);
-
-        $user->roles()->sync($validated['roles']);
-
-        $activeId = UserStatus::where('code', UserStatus::ACTIVE)->value('id');
-        if (! $activeId) {
-            abort(500, 'User status active missing in database');
-        }
-
-        $user->update([
-            'user_status_id' => $activeId,
-        ]);
-
-        return redirect()
-            ->route('activate_accountpending_users.index')
-            ->with('success', 'The user has been successfully activated.');
-    }
 }

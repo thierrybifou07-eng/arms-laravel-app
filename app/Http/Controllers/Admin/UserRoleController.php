@@ -12,7 +12,10 @@ class UserRoleController extends Controller
 {
     public function edit(User $user)
     {
-        $roles = Role::orderBy('label')->get();
+        $roles = Role::query()
+            ->whereNot('name', Role::SUPER_ADMIN)
+            ->orderBy('label')
+            ->get();
         $user->load('roles');
 
         return view('super_admin.users.roles', compact('user', 'roles'));
@@ -20,6 +23,11 @@ class UserRoleController extends Controller
 
     public function update(Request $request, User $user)
     {
+        $superAdminId = Role::where('name', Role::SUPER_ADMIN)->value('id');
+
+        if (isset($validated['roles']) && in_array($superAdminId, $validated['roles'])) {
+            abort(403, 'You cannot assign super admin role.');
+        }
         // Prevent user from modifying their own roles
         if (auth()->id() === $user->id) {
             abort(403, 'You cannot modify your own roles.');
@@ -42,7 +50,7 @@ class UserRoleController extends Controller
         $pendingId = UserStatus::where('code', UserStatus::PENDING)->value('id');
         $activeId = UserStatus::where('code', UserStatus::ACTIVE)->value('id');
 
-        if (!$pendingId || !$activeId) {
+        if (! $pendingId || ! $activeId) {
             abort(500, 'User statuses missing in database.');
         }
 

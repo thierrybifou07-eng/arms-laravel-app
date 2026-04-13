@@ -6,8 +6,8 @@
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
-                        <a href="{{ route('users.index') }}" class="btn btn-sm btn-outline-secondary mb-2">
-                            <i class="bx bx-arrow-back me-1"></i>Back to Users
+                        <a href="{{ route('users.index') }}" class="btn btn-sm btn-secondary mb-2">
+                            Back to Users
                         </a>
                         <h3 class="mb-0">User Details</h3>
                     </div>
@@ -37,34 +37,6 @@
                             width="100">
                         <h5 class="card-title">{{ $user->firstname }}</h5>
                         <p class="text-muted mb-3">{{ $user->email }}</p>
-
-{{--                         <!-- Status Badge -->
-                        <div class="mb-3">
-                            @if ($user->userStatus)
-                                @switch($user->userStatus->code)
-                                    @case('active')
-                                        <span class="badge bg-success">
-                                            <i class="bx bx-check-circle me-1"></i>{{ $user->userStatus->label }}
-                                        </span>
-                                    @break
-
-                                    @case('pending')
-                                        <span class="badge bg-warning">
-                                            <i class="bx bx-time me-1"></i>{{ $user->userStatus->label }}
-                                        </span>
-                                    @break
-
-                                    @case('disabled')
-                                        <span class="badge bg-danger">
-                                            <i class="bx bx-block me-1"></i>{{ $user->userStatus->label }}
-                                        </span>
-                                    @break
-
-                                    @default
-                                        <span class="badge bg-secondary">{{ $user->userStatus->label }}</span>
-                                @endswitch
-                            @endif
-                        </div> --}}
                         <!-- Action Buttons -->
                         <div class="gap-2 d-flex flex-column mt-4">
                             @if (auth()->id() !== $user->id)

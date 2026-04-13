@@ -82,7 +82,7 @@
                             <th class="text-center" style="width: 7%">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="table-border-bottom-0">
+                    <tbody>
                         @foreach ($users as $user)
                             <tr>
                                 <td class="text-center">
@@ -191,7 +191,6 @@
                     </tbody>
                 </table>
             </div>
-            <hr>
             <!-- Pagination -->
             <div class="row mx-3 justify-content-between">
                 <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
