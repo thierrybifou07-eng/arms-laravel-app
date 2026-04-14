@@ -15,7 +15,7 @@ class ContractPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $this->isStaff($user) || $this->isTeller($user);
+        return $this->isStaff($user);
     }
 
     /**
@@ -23,8 +23,8 @@ class ContractPolicy
      */
     public function view(User $user, Contract $model): bool
     {
-        // Super Admin, Admin, Staff, Teller can view all contracts
-        if ($this->isStaff($user) || $this->isTeller($user)) {
+        // Super Admin, Admin, Staff can view all contracts
+        if ($this->isStaff($user)) {
             return true;
         }
 
@@ -117,8 +117,8 @@ class ContractPolicy
      */
     public function viewPaymentHistory(User $user, Contract $model): bool
     {
-        // Staff, Teller can view payment history
-        if ($this->isStaff($user) || $this->isTeller($user)) {
+        // Staff can view payment history
+        if ($this->isStaff($user)) {
             return true;
         }
 

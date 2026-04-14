@@ -43,8 +43,6 @@
                                     <option value="">All Roles</option>
                                     <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin
                                     </option>
-                                    <option value="teller" {{ request('role') === 'teller' ? 'selected' : '' }}>Teller
-                                    </option>
                                     <option value="staff" {{ request('role') === 'staff' ? 'selected' : '' }}>Staff
                                     </option>
                                     <option value="student" {{ request('role') === 'student' ? 'selected' : '' }}>Student
@@ -138,10 +136,6 @@
 
                                             @case('staff')
                                                 <span class="badge bg-label-danger">{{ $userRole->label }}</span>
-                                            @break
-
-                                            @case('teller')
-                                                <span class="badge bg-label-warning">{{ $userRole->label }}</span>
                                             @break
 
                                             @case('student')

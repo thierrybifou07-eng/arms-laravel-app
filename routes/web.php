@@ -36,11 +36,11 @@ $authVerifiedStatus = ['auth', 'verified', 'checkUserStatus'];
 $superAdminOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin'];
 $adminOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:admin'];
 $superAdminAdmin = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,admin'];
-$adminTellerOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:admin,teller'];
+$adminStaffOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:admin,staff'];
 $student = ['auth', 'verified', 'checkUserStatus', 'checkRole:student'];
-$staffAdminSuperAdminTellerStaff = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,teller,admin'];
-$every = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,teller,admin,student'];
-$profileAccess = ['auth', 'verified', 'checkUserStatus', 'checkRole:student,super_admin,staff,teller,admin'];
+$staffAdminSuperAdmin = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,admin'];
+$every = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,admin,student'];
+$profileAccess = ['auth', 'verified', 'checkUserStatus', 'checkRole:student,super_admin,staff,admin'];
 $eventPaymentTypeAccess = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,admin'];
 
 /*
@@ -87,7 +87,7 @@ Route::middleware($superAdminAdmin)
 | Contract creation helpers
 |-----------------------------------------------------------------------
 */
-Route::middleware($adminTellerOnly)->group(function () {
+Route::middleware($adminStaffOnly)->group(function () {
     Route::get('/buildings/{residence}', [ContractController::class, 'getBuildings']);
     Route::get('/floors/{building}', [ContractController::class, 'getFloors']);
     Route::get('/rooms/{floor}', [ContractController::class, 'getRooms']);
@@ -148,7 +148,7 @@ Route::middleware($eventPaymentTypeAccess)->resource('event_payment_types', Even
 | Payment history
 |-----------------------------------------------------------------------
 */
-Route::middleware($staffAdminSuperAdminTellerStaff)->group(function () {
+Route::middleware($staffAdminSuperAdmin)->group(function () {
     Route::resource('payment_histories', PaymentHistoryController::class)->scoped();
     Route::post('payment_histories/export', [PaymentHistoryController::class, 'export'])->name('payment_histories.export');
 });
@@ -158,7 +158,7 @@ Route::middleware($staffAdminSuperAdminTellerStaff)->group(function () {
 | Payments
 |-----------------------------------------------------------------------
 */
-Route::middleware($staffAdminSuperAdminTellerStaff)->group(function () {
+Route::middleware($staffAdminSuperAdmin)->group(function () {
     Route::resource('payments', PaymentController::class)->only('index');
     Route::post('/payments/{payment}/validate', [PaymentController::class, 'validatePayment'])->name('payments.validate');
 });

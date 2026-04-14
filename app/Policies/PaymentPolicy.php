@@ -15,7 +15,7 @@ class PaymentPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $this->isStaff($user) || $this->isTeller($user);
+        return $this->isStaff($user);
     }
 
     /**
@@ -23,8 +23,8 @@ class PaymentPolicy
      */
     public function view(User $user, Payment $model): bool
     {
-        // Super Admin, Admin, Staff, Teller can view all payments
-        if ($this->isStaff($user) || $this->isTeller($user)) {
+        // Super Admin, Admin, Staff can view all payments
+        if ($this->isStaff($user)) {
             return true;
         }
 
@@ -41,7 +41,7 @@ class PaymentPolicy
      */
     public function create(User $user): bool
     {
-        return $this->isTeller($user);
+        return $this->isStaff($user);
     }
 
     /**
@@ -54,8 +54,8 @@ class PaymentPolicy
             return true;
         }
 
-        // Teller can update payments
-        if ($this->isTeller($user)) {
+        // Staff can update payments
+        if ($this->isStaff($user)) {
             return true;
         }
 
@@ -91,7 +91,7 @@ class PaymentPolicy
      */
     public function validatePayment(User $user, Payment $model): bool
     {
-        return $this->isTeller($user);
+        return $this->isStaff($user);
     }
 
     /**
@@ -107,7 +107,7 @@ class PaymentPolicy
      */
     public function processPayment(User $user, Payment $model): bool
     {
-        return $this->isTeller($user);
+        return $this->isStaff($user);
     }
 
     /**
@@ -115,7 +115,7 @@ class PaymentPolicy
      */
     public function manageStatus(User $user, Payment $model): bool
     {
-        return $this->isTeller($user);
+        return $this->isStaff($user);
     }
 
     /**
@@ -123,6 +123,6 @@ class PaymentPolicy
      */
     public function checkOverdue(User $user, Payment $model): bool
     {
-        return $this->isStaff($user) || $this->isTeller($user);
+        return $this->isStaff($user);
     }
 }

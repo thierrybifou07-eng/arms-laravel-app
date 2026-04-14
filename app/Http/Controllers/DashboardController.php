@@ -28,9 +28,6 @@ class DashboardController extends Controller
         } elseif ($user->hasRole('staff')) {
             $role = 'staff';
             $dashboardData = $this->getStaffStats();
-        } elseif ($user->hasRole('teller')) {
-            $role = 'teller';
-            $dashboardData = $this->getTellerStats();
         } elseif ($user->hasRole('student')) {
             $role = 'student';
             $dashboardData = $this->getStudentStats($user);
@@ -138,14 +135,6 @@ class DashboardController extends Controller
             'pendingContracts' => Contract::whereHas('status', fn ($q) => $q->where('code', 'pending'))->count(),
             'recentContracts' => Contract::with(['user', 'room', 'status'])->latest()->take(5)->get(),
             'totalBillingPeriods' => BillingPeriod::count(),
-            'recentPayments' => Payment::with(['contract.user', 'status'])->latest()->take(10)->get(),
-        ];
-    }
-
-    private function getTellerStats()
-    {
-        return [
-            'role' => 'teller',
             'totalPayments' => Payment::count(),
             'validatedPayments' => Payment::whereHas('status', fn ($q) => $q->where('code', 'validated'))->count(),
             'pendingPayments' => Payment::whereHas('status', fn ($q) => $q->where('code', 'pending'))->count(),

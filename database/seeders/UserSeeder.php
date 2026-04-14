@@ -41,8 +41,8 @@ class UserSeeder extends Seeder
             $admin->roles()->sync([Role::where('name', 'admin')->first()->id]);
         }
 
-        // Create Staff users (3)
-        for ($i = 1; $i <= 3; $i++) {
+        // Create Staff users (8)
+        for ($i = 1; $i <= 8; $i++) {
             $staff = User::create([
                 'firstname' => "Staff",
                 'lastname' => "User {$i}",
@@ -53,20 +53,6 @@ class UserSeeder extends Seeder
             ]);
             // Assign the single staff role
             $staff->roles()->sync([Role::where('name', 'staff')->first()->id]);
-        }
-
-        // Create Teller users (5)
-        for ($i = 1; $i <= 5; $i++) {
-            $teller = User::create([
-                'firstname' => "Teller",
-                'lastname' => "User {$i}",
-                'email' => "teller{$i}@arms.test",
-                'phone' => "+237670002" . sprintf('%02d', $i),
-                'password' => Hash::make('password'),
-                'user_status_id' => UserStatus::where('code', 'active')->first()->id,
-            ]);
-            // Assign the single teller role
-            $teller->roles()->sync([Role::where('name', 'teller')->first()->id]);
         }
 
         // Create Student users (10)
@@ -90,8 +76,7 @@ class UserSeeder extends Seeder
         $this->command->info('✓ 20 users created successfully with single role assignments');
         $this->command->info('  → 1 super_admin');
         $this->command->info('  → 1 admin');
-        $this->command->info('  → 3 staff');
-        $this->command->info('  → 5 tellers');
+        $this->command->info('  → 8 staff');
         $this->command->info('  → 10 students');
     }
 }

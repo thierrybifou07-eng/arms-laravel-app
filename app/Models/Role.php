@@ -15,8 +15,6 @@ class Role extends Model
 
     public const STAFF = 'staff';
 
-    public const TELLER = 'teller';
-
     public const STUDENT = 'student';
 
     // create the function(undefinded here) to call in the dbseeder

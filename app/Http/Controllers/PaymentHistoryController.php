@@ -27,14 +27,8 @@ class PaymentHistoryController extends Controller
         // Filter based on user role
         if ($user->hasRole('super_admin')) {
             // Super admin sees all payment histories
-        } elseif ($user->hasRole('admin') || $user->hasRole('teller')) {
-            // Admin/Teller sees payment histories for residences they manage
-            $query->whereHas('payment.contract.room.floor.building.residence', fn ($q) =>
-                $q->whereHas('users', fn ($q2) => $q2->where('users.id', $user->id))
-            );
-        } elseif ($user->hasRole('staff')) {
-            // Staff sees payment histories they recorded
-            $query->where('recorded_by', $user->id);
+        } elseif ($user->hasRole('admin') || $user->hasRole('staff')) {
+            // Admin and staff can review all payment histories.
         } elseif ($user->hasRole('student')) {
             // Student sees only their own payment histories
             $query->whereHas('payment.contract', fn ($q) => $q->where('user_id', $user->id));

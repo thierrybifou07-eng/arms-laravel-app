@@ -140,7 +140,6 @@ class UserService
             'pending_users' => $this->getPendingUsers()->count(),
             'admins' => $this->getUsersByRole('admin')->count(),
             'staff' => $this->getUsersByRole('staff')->count(),
-            'tellers' => $this->getUsersByRole('teller')->count(),
             'students' => $this->getUsersByRole('student')->count(),
         ];
     }

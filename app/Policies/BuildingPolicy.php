@@ -24,16 +24,7 @@ class BuildingPolicy
     public function view(User $user, Building $model): bool
     {
         // Super Admin, Admin, Staff can view all buildings
-        if ($this->isStaff($user)) {
-            return true;
-        }
-
-        // Teller can view buildings
-        if ($this->isTeller($user)) {
-            return true;
-        }
-
-        return false;
+        return $this->isStaff($user);
     }
 
     /**

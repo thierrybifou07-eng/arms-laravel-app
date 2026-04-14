@@ -15,7 +15,7 @@ class PaymentHistoryPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $this->isStaff($user) || $this->isTeller($user);
+        return $this->isStaff($user);
     }
 
     /**
@@ -23,8 +23,8 @@ class PaymentHistoryPolicy
      */
     public function view(User $user, PaymentHistory $model): bool
     {
-        // Super Admin, Admin, Staff, Teller can view all payment histories
-        if ($this->isStaff($user) || $this->isTeller($user)) {
+        // Super Admin, Admin, Staff can view all payment histories
+        if ($this->isStaff($user)) {
             return true;
         }
 
@@ -42,7 +42,7 @@ class PaymentHistoryPolicy
      */
     public function create(User $user): bool
     {
-        return $this->isTeller($user) || $this->isStaff($user);
+        return $this->isStaff($user);
     }
 
     /**
