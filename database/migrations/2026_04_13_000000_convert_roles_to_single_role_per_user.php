@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -56,35 +58,29 @@ return new class extends Migration
             }
         }
 
-        // Disable foreign key checks for MySQL
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        Schema::disableForeignKeyConstraints();
 
         try {
-            // Recreate the table with new primary key structure
-            // user_id is PRIMARY KEY: each user can have only ONE role
-            // NO unique constraint on role_id: multiple users can have the same role
-            DB::statement('
-                CREATE TABLE role_user_new (
-                    role_id BIGINT UNSIGNED NOT NULL,
-                    user_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
-                    created_at TIMESTAMP NULL DEFAULT NULL,
-                    updated_at TIMESTAMP NULL DEFAULT NULL,
-                    CONSTRAINT fk_role_user_role_id FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
-                    CONSTRAINT fk_role_user_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-            ');
+            Schema::create('role_user_new', function (Blueprint $table) {
+                $table->foreignId('role_id')
+                    ->constrained()
+                    ->cascadeOnDelete();
+                $table->foreignId('user_id')
+                    ->primary()
+                    ->constrained()
+                    ->cascadeOnDelete();
+                $table->timestamps();
+            });
 
-            // Copy data from old table
-            DB::statement('INSERT INTO role_user_new SELECT role_id, user_id, created_at, updated_at FROM role_user');
+            DB::table('role_user_new')->insertUsing(
+                ['role_id', 'user_id', 'created_at', 'updated_at'],
+                DB::table('role_user')->select('role_id', 'user_id', 'created_at', 'updated_at')
+            );
 
-            // Drop old table
-            DB::statement('DROP TABLE IF EXISTS role_user');
-
-            // Rename new table to old name
-            DB::statement('RENAME TABLE role_user_new TO role_user');
+            Schema::drop('role_user');
+            Schema::rename('role_user_new', 'role_user');
         } finally {
-            // Re-enable foreign key checks
-            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+            Schema::enableForeignKeyConstraints();
         }
     }
 
@@ -93,30 +89,29 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        Schema::disableForeignKeyConstraints();
 
         try {
-            // Recreate the original table structure
-            DB::statement('
-                CREATE TABLE role_user_old (
-                    role_id BIGINT UNSIGNED NOT NULL,
-                    user_id BIGINT UNSIGNED NOT NULL,
-                    created_at TIMESTAMP NULL DEFAULT NULL,
-                    updated_at TIMESTAMP NULL DEFAULT NULL,
-                    PRIMARY KEY (role_id, user_id),
-                    CONSTRAINT fk_role_user_role_id_old FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
-                    CONSTRAINT fk_role_user_user_id_old FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-            ');
+            Schema::create('role_user_old', function (Blueprint $table) {
+                $table->foreignId('role_id')
+                    ->constrained()
+                    ->cascadeOnDelete();
+                $table->foreignId('user_id')
+                    ->constrained()
+                    ->cascadeOnDelete();
+                $table->primary(['role_id', 'user_id']);
+                $table->timestamps();
+            });
 
-            // Copy data
-            DB::statement('INSERT INTO role_user_old SELECT role_id, user_id, created_at, updated_at FROM role_user');
+            DB::table('role_user_old')->insertUsing(
+                ['role_id', 'user_id', 'created_at', 'updated_at'],
+                DB::table('role_user')->select('role_id', 'user_id', 'created_at', 'updated_at')
+            );
 
-            // Drop and rename
-            DB::statement('DROP TABLE IF EXISTS role_user');
-            DB::statement('RENAME TABLE role_user_old TO role_user');
+            Schema::drop('role_user');
+            Schema::rename('role_user_old', 'role_user');
         } finally {
-            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+            Schema::enableForeignKeyConstraints();
         }
     }
 };

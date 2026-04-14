@@ -3,30 +3,24 @@
 @section('content')
     <div class="col-xxl-6">
         <div class="card my-4">
-            <div class="card-header d-flex align-items-center justify-content-between">
-                <h5 class="mb-0">Entrée d'Historique #{{ $paymentHistory->id }}</h5>
-                <a href="{{ route('payment_histories.index') }}" class="btn btn-secondary btn-sm">
-                    <i class="icon-base bx bx-arrow-back me-1"></i> Retour
-                </a>
-            </div>
             <div class="table-responsive text-nowrap">
                 <table class="table table-borderless">
                     <tbody class="table-border-bottom-0">
                         <tr>
-                            <td class="fw-medium">Paiement ID:</td>
+                            <td class="fw-medium">Payment ID:</td>
                             <td>#{{ $paymentHistory->payment_id }}</td>
                         </tr>
                         <tr>
-                            <td class="fw-medium">Montant (DZD):</td>
+                            <td class="fw-medium">Amount (FCFA):</td>
                             <td><span class="badge bg-success">{{ number_format($paymentHistory->amount, 2, ',', ' ') }}</span></td>
                         </tr>
                         <tr>
-                            <td class="fw-medium">Ancien Solde:</td>
-                            <td>{{ number_format($paymentHistory->old_balance, 2, ',', ' ') }} DZD</td>
+                            <td class="fw-medium">Old Balance:</td>
+                            <td>{{ number_format($paymentHistory->old_balance, 2, ',', ' ') }} FCFA</td>
                         </tr>
                         <tr>
-                            <td class="fw-medium">Nouveau Solde:</td>
-                            <td>{{ number_format($paymentHistory->new_balance, 2, ',', ' ') }} DZD</td>
+                            <td class="fw-medium">New Balance:</td>
+                            <td>{{ number_format($paymentHistory->new_balance, 2, ',', ' ') }} FCFA</td>
                         </tr>
                         <tr>
                             <td class="fw-medium">Notes:</td>
@@ -34,12 +28,12 @@
                                 @if ($paymentHistory->notes)
                                     {{ $paymentHistory->notes }}
                                 @else
-                                    <em class="text-muted">Aucune note</em>
+                                    <em class="text-muted">No note</em>
                                 @endif
                             </td>
                         </tr>
                         <tr>
-                            <td class="fw-medium">Créé le:</td>
+                            <td class="fw-medium">Created at:</td>
                             <td><span class="badge bg-label-info">{{ $paymentHistory->created_at->format('d/m/Y H:i:s') }}</span></td>
                         </tr>
                     </tbody>
@@ -49,7 +43,7 @@
 
         <div class="demo-inline-spacing">
             <a href="{{ route('payment_histories.index') }}" class="btn btn-secondary">
-                <i class="icon-base bx bx-arrow-back me-1"></i> Retour à la Liste
+                <i class="icon-base bx bx-arrow-back me-1"></i> Return to List
             </a>
         </div>
     </div>

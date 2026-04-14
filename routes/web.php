@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResidenceBuildingController;
 use App\Http\Controllers\ResidenceController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -106,6 +107,10 @@ Route::get('/super_admin/dashboard', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware($every)
     ->name('dashboard');
+
+Route::get('/search', SearchController::class)
+    ->middleware($every)
+    ->name('search');
 
 /*
 |-----------------------------------------------------------------------

@@ -9,10 +9,11 @@
 
         <!-- Search -->
         <div class="navbar-nav align-items-center me-auto">
-            <form action="#" method="GET" class="nav-item d-flex align-items-center">
+            <form action="{{ route('search') }}" method="GET" class="nav-item d-flex align-items-center" role="search">
                 <span class="w-px-22 h-px-22"><i class="icon-base bx bx-search icon-md"></i></span>
                 <input type="text" class="form-control border-0 shadow-none ps-1 ps-sm-2 d-md-block d-none"
-                    placeholder="Search..." aria-label="Search..." name="q" id="searchInput">
+                    placeholder="Search..." aria-label="Search..." name="q" id="searchInput"
+                    value="{{ request('q') }}">
             </form>
         </div>
 
