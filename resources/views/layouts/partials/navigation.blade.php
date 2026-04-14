@@ -70,13 +70,7 @@
                     </ul>
                 </li>
                 <!-- / Style Switcher-->
-                @if (auth()->user()->hasRole('student'))
-                    <li class="nav-item dropdown-shortcuts navbar-dropdown dropdown me-2 me-xl-0">🧑🏾‍🎓</li>
-                @else
-                    <!-- Quick links  -->
-                    @include('layouts.partials.shortcuts')
-                    <!-- Quick links -->
-                @endif
+                @include('layouts.partials.shortcuts')
                 <!-- Notification -->
                 <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
                     <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown"
