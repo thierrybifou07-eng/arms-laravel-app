@@ -41,8 +41,8 @@ class UserSeeder extends Seeder
             $admin->roles()->sync([Role::where('name', 'admin')->first()->id]);
         }
 
-        // Create Staff users (8)
-        for ($i = 1; $i <= 8; $i++) {
+        // Create Staff users (3)
+        for ($i = 1; $i <= 3; $i++) {
             $staff = User::create([
                 'firstname' => "Staff",
                 'lastname' => "User {$i}",
@@ -55,8 +55,8 @@ class UserSeeder extends Seeder
             $staff->roles()->sync([Role::where('name', 'staff')->first()->id]);
         }
 
-        // Create Student users (10)
-        for ($i = 1; $i <= 10; $i++) {
+        // Create Student users (15)
+        for ($i = 1; $i <= 15; $i++) {
             $randomStatus = fake()->boolean(80) 
                 ? UserStatus::where('code', 'active')->first()->id
                 : UserStatus::where('code', 'pending')->first()->id;
@@ -76,7 +76,7 @@ class UserSeeder extends Seeder
         $this->command->info('✓ 20 users created successfully with single role assignments');
         $this->command->info('  → 1 super_admin');
         $this->command->info('  → 1 admin');
-        $this->command->info('  → 8 staff');
-        $this->command->info('  → 10 students');
+        $this->command->info('  → 3 staff');
+        $this->command->info('  → 15 students');
     }
 }

@@ -129,7 +129,7 @@ Route::middleware($adminOnly)->resource('residences', ResidenceController::class
 Route::middleware($adminOnly)->resource('residences.buildings', ResidenceBuildingController::class)->scoped();
 Route::middleware($adminOnly)->resource('buildings.floors', BuildingFloorController::class)->scoped();
 Route::middleware($adminOnly)->resource('floors.rooms', FloorRoomController::class)->scoped();
-Route::middleware($superAdminAdmin)->resource('contracts', ContractController::class)->scoped();
+Route::middleware($adminStaffOnly)->resource('contracts', ContractController::class)->scoped();
 
 Route::middleware($superAdminAdmin)->resource('users', UserController::class)->only(['index', 'show', 'update', 'destroy'])->scoped();
 Route::middleware($superAdminAdmin)->put('users/{user}/change-status', [UserController::class, 'changeStatus'])->name('users.changeStatus');
