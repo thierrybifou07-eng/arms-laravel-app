@@ -17,9 +17,9 @@ class UserSeeder extends Seeder
     {
         // Create Super Admin (only one)
         $superAdmin = User::create([
-            'firstname' => 'Super',
-            'lastname' => 'Admin',
-            'email' => 'super@admin.com',
+            'firstname' => 'Pierre Gedéon',
+            'lastname' => 'Bifou Ngo\'o',
+            'email' => 'bifoungoo@gmail.com',
             'phone' => '+237670000000',
             'password' => Hash::make('password'),
             'user_status_id' => UserStatus::where('code', 'active')->first()->id,
@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
             $admin = User::create([
                 'firstname' => "Admin",
                 'lastname' => "User {$i}",
-                'email' => "admin{$i}@arms.test",
+                'email' => "admin{$i}@gmail.com",
                 'phone' => "+2376700000{$i}",
                 'password' => Hash::make('password'),
                 'user_status_id' => UserStatus::where('code', 'active')->first()->id,
@@ -46,7 +46,7 @@ class UserSeeder extends Seeder
             $staff = User::create([
                 'firstname' => "Staff",
                 'lastname' => "User {$i}",
-                'email' => "staff{$i}@arms.test",
+                'email' => "staff{$i}@gmail.com",
                 'phone' => "+237670001" . sprintf('%02d', $i),
                 'password' => Hash::make('password'),
                 'user_status_id' => UserStatus::where('code', 'active')->first()->id,
@@ -64,7 +64,7 @@ class UserSeeder extends Seeder
             $student = User::create([
                 'firstname' => "Student",
                 'lastname' => "Resident {$i}",
-                'email' => "student{$i}@arms.test",
+                'email' => "student{$i}@gmail.com",
                 'phone' => "+237670003" . str_pad($i, 3, '0', STR_PAD_LEFT),
                 'password' => Hash::make('password'),
                 'user_status_id' => $randomStatus,
