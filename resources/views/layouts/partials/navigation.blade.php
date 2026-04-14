@@ -12,8 +12,7 @@
             <form action="#" method="GET" class="nav-item d-flex align-items-center">
                 <span class="w-px-22 h-px-22"><i class="icon-base bx bx-search icon-md"></i></span>
                 <input type="text" class="form-control border-0 shadow-none ps-1 ps-sm-2 d-md-block d-none"
-                    placeholder="Search residences, contracts, payments..." aria-label="Search..." name="q"
-                    id="searchInput">
+                    placeholder="Search..." aria-label="Search..." name="q" id="searchInput">
             </form>
         </div>
 
@@ -72,6 +71,7 @@
                 </li>
                 <!-- / Style Switcher-->
                 @if (auth()->user()->hasRole('student'))
+                    <li class="nav-item dropdown-shortcuts navbar-dropdown dropdown me-2 me-xl-0">🧑🏾‍🎓</li>
                 @else
                     <!-- Quick links  -->
                     @include('layouts.partials.shortcuts')
@@ -105,8 +105,8 @@
                                     <div class="d-flex">
                                         <div class="flex-shrink-0 me-3">
                                             <div class="avatar">
-                                                <img src="{{ auth()->user()->avatar() }}" width="35" height="35"
-                                                    alt="" class="rounded-circle">
+                                                <img src="{{ auth()->user()->avatar() }}" width="35" height="35" alt=""
+                                                    class="rounded-circle">
                                             </div>
                                         </div>
                                         <div class="flex-grow-1">
@@ -149,8 +149,8 @@
                                     <div class="d-flex">
                                         <div class="flex-shrink-0 me-3">
                                             <div class="avatar">
-                                                <img src="{{ asset('admin-template/assets') }}/img/avatars/2.png"
-                                                    alt="" class="rounded-circle">
+                                                <img src="{{ asset('admin-template/assets') }}/img/avatars/2.png" alt=""
+                                                    class="rounded-circle">
                                             </div>
                                         </div>
                                         <div class="flex-grow-1">
@@ -196,8 +196,8 @@
                                     <div class="d-flex">
                                         <div class="flex-shrink-0 me-3">
                                             <div class="avatar">
-                                                <img src="{{ asset('admin-template/assets') }}/img/avatars/9.png"
-                                                    alt="" class="rounded-circle">
+                                                <img src="{{ asset('admin-template/assets') }}/img/avatars/9.png" alt=""
+                                                    class="rounded-circle">
                                             </div>
                                         </div>
                                         <div class="flex-grow-1">
@@ -244,8 +244,8 @@
                                     <div class="d-flex">
                                         <div class="flex-shrink-0 me-3">
                                             <div class="avatar">
-                                                <img src="{{ asset('admin-template/assets') }}/img/avatars/5.png"
-                                                    alt="" class="rounded-circle">
+                                                <img src="{{ asset('admin-template/assets') }}/img/avatars/5.png" alt=""
+                                                    class="rounded-circle">
                                             </div>
                                         </div>
                                         <div class="flex-grow-1">
@@ -267,8 +267,8 @@
                                     <div class="d-flex">
                                         <div class="flex-shrink-0 me-3">
                                             <div class="avatar">
-                                                <img src="{{ asset('admin-template/assets') }}/img/avatars/6.png"
-                                                    alt="" class="rounded-circle">
+                                                <img src="{{ asset('admin-template/assets') }}/img/avatars/6.png" alt=""
+                                                    class="rounded-circle">
                                             </div>
                                         </div>
                                         <div class="flex-grow-1">
@@ -343,13 +343,13 @@
                                 <div class="d-flex">
                                     <div class="flex-shrink-0 me-3">
                                         <div class="avatar avatar-online">
-                                            <img src="{{ auth()->user()->avatar() }}" width="35" height="35"
-                                                alt="" class="rounded-circle">
+                                            <img src="{{ auth()->user()->avatar() }}" width="35" height="35" alt=""
+                                                class="rounded-circle">
                                         </div>
                                     </div>
                                     <div class="flex-grow-1">
                                         <h6 class="mb-0">{{ auth()->user()->firstname }}</h6>
-                                        <small class="text-body-secondary">{{ auth()->user()->role }}</small>
+                                        <small class="text-body-secondary">{{ auth()->user()->getRoleLabel() }}</small>
                                     </div>
                                 </div>
                             </a>
@@ -372,8 +372,7 @@
                             <div class="dropdown-divider my-1"></div>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                                onclick="event.preventDefault();
+                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
                                 <i class="icon-base bx bx-power-off icon-md me-3"></i><span>Log
                                     Out</span>
@@ -382,11 +381,11 @@
                                 @method('')
                                 @csrf
                             </form>
-
                         </li>
                     </ul>
                 </li>
                 <!--/ User -->
             </ul>
+        </ul>
     </div>
 </nav>

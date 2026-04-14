@@ -66,7 +66,7 @@ Route::middleware($superAdminOnly)
     });
 Route::middleware($superAdminAdmin)
     ->prefix('super-admin')
-    ->name('super_admin')
+    ->name('super_admin.')
     ->group(function () {
         Route::get('users/{user}/roles', [UserRoleController::class, 'edit'])->name('user.roles.edit');
         Route::put('users/{user}/roles', [UserRoleController::class, 'update'])->name('user.roles.update');
@@ -160,13 +160,9 @@ Route::middleware($staffAdminSuperAdminTellerStaff)->group(function () {
 */
 Route::middleware($staffAdminSuperAdminTellerStaff)->group(function () {
     Route::resource('payments', PaymentController::class)->only('index');
-    Route::get('/payments/{payment}', [PaymentController::class, 'payForm'])->name('payments.pay.form');
-    Route::get('/payments/{payment}/pay', [PaymentController::class, 'showPay'])->name('payments.show.pay');
-    Route::post('/payments/{payment}/pay', [PaymentController::class, 'pay'])->name('payments.pay');
     Route::post('/payments/{payment}/validate', [PaymentController::class, 'validatePayment'])->name('payments.validate');
-    Route::post('/payments/{payment}/cancel', [PaymentController::class, 'cancel'])->name('payments.cancel');
 });
-Route::middleware($student)->group(function () {
+Route::middleware($every)->group(function () {
     Route::get('/payments/{payment}', [PaymentController::class, 'payForm'])->name('payments.pay.form');
     Route::get('/payments/{payment}/pay', [PaymentController::class, 'showPay'])->name('payments.show.pay');
     Route::post('/payments/{payment}/pay', [PaymentController::class, 'pay'])->name('payments.pay');

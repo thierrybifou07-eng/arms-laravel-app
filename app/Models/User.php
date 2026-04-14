@@ -83,10 +83,16 @@ class User extends Authenticatable implements HasMedia, AuditableContract
         return $this->belongsTo(\App\Models\UserStatus::class, 'user_status_id');
     }
 
-    // Assigning role to many users
-    public function roles()
+    // User has one role (many-to-one relationship via role_user pivot table)
+    public function role()
     {
         return $this->belongsToMany(Role::class)->withTimestamps();
+    }
+
+    // Alias for backward compatibility: roles() returns collection with single role
+    public function roles()
+    {
+        return $this->role();
     }
 
     // Relationship with contracts (user can have many contracts)
@@ -99,6 +105,23 @@ class User extends Authenticatable implements HasMedia, AuditableContract
     public function residences()
     {
         return $this->belongsToMany(Residence::class);
+    }
+
+    // Get the user's single role
+    public function getRole(): ?Role
+    {
+        return $this->roles()->first();
+    }
+
+    // Get the user's role name
+    public function getRoleName(): ?string
+    {
+        return $this->getRole()?->name;
+    }
+    // Get the user's role label
+    public function getRoleLabel(): ?string
+    {
+        return $this->getRole()?->label;
     }
 
     // create the hasRole method for the middleware

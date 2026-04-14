@@ -178,7 +178,7 @@
                                         <div class="card-body">
                                             <h6 class="text-muted mb-3">12-Month Summary</h6>
                                             <div class="mb-3">
-                                                <small class="text-muted d-block">Total Revenue (12 months)</small>
+                                                <small class="text-muted d-block">Total Income (12 months)</small>
                                                 <h4 class="text-success">{{ number_format($stat['totalAmount'], 0, ',', ' ') }} FCFA</h4>
                                             </div>
                                             <div>

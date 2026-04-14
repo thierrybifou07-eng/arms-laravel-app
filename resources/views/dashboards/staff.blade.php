@@ -3,12 +3,12 @@
     <div class="d-flex align-items-start row">
         <div class="col-sm-7">
             <div class="card-body">
-                <h5 class="card-title text-primary mb-3">Bienvenue {{ Auth::user()->firstname }}
+                <h5 class="card-title text-primary mb-3">Welcome {{ Auth::user()->firstname }}
                     {{ Auth::user()->lastname }}! 🎉</h5>
-                <p class="mb-3">Vous êtes connecté en tant que
+                <p class="mb-3">You are logged in as
                     <strong>{{ Auth::user()->roles->first()->label }}</strong></p>
                 <a href="{{ route('profile.show') }}" class="btn btn-sm btn-outline-primary">
-                    <i class="icon-base bx bx-user me-1"></i> Vue Profil
+                    <i class="icon-base bx bx-user me-1"></i> View Profile
                 </a>
             </div>
         </div>
@@ -27,7 +27,7 @@
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <h3 class="mb-0">{{ $dashboardData['totalStudents'] ?? 0 }}</h3>
-                        <p class="text-muted mb-0">Étudiants</p>
+                        <p class="text-muted mb-0">Students</p>
                     </div>
                     <i class="icon-base bx bx-user-circle text-primary" style="font-size: 2rem;"></i>
                 </div>
@@ -40,7 +40,7 @@
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <h3 class="mb-0">{{ $dashboardData['totalContracts'] ?? 0 }}</h3>
-                        <p class="text-muted mb-0">Contrats</p>
+                        <p class="text-muted mb-0">Contracts</p>
                     </div>
                     <i class="icon-base bx bx-receipt text-success" style="font-size: 2rem;"></i>
                 </div>
@@ -53,7 +53,7 @@
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <h3 class="mb-0">{{ $dashboardData['totalBillingPeriods'] ?? 0 }}</h3>
-                        <p class="text-muted mb-0">Périodes</p>
+                        <p class="text-muted mb-0">Billing Periods</p>
                     </div>
                     <i class="icon-base bx bx-calendar text-warning" style="font-size: 2rem;"></i>
                 </div>
@@ -66,17 +66,17 @@
     <div class="col-lg-12 mb-4">
         <div class="card">
             <div class="card-header d-flex align-items-center justify-content-between">
-                <h5 class="mb-0">Contrats Récents</h5>
-                <a href="{{ route('contracts.index') }}" class="btn btn-sm btn-primary">Voir tout</a>
+                <h5 class="mb-0">Recent Contracts</h5>
+                <a href="{{ route('contracts.index') }}" class="btn btn-sm btn-primary">See all</a>
             </div>
             <div class="table-responsive">
                 <table class="table table-sm mb-0">
                     <thead>
                         <tr class="table-dark">
-                            <th>Étudiant</th>
-                            <th>Chambre</th>
-                            <th>Statut</th>
-                            <th>Date Début</th>
+                            <th>Student</th>
+                            <th>Room</th>
+                            <th>Status</th>
+                            <th>Start Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -91,7 +91,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center text-muted">Aucun contrat</td>
+                                <td colspan="4" class="text-center text-muted">No contracts found</td>
                             </tr>
                         @endforelse
                     </tbody>

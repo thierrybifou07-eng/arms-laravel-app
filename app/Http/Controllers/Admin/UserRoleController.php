@@ -25,9 +25,6 @@ class UserRoleController extends Controller
     {
         $superAdminId = Role::where('name', Role::SUPER_ADMIN)->value('id');
 
-        if (isset($validated['roles']) && in_array($superAdminId, $validated['roles'])) {
-            abort(403, 'You cannot assign super admin role.');
-        }
         // Prevent user from modifying their own roles
         if (auth()->id() === $user->id) {
             abort(403, 'You cannot modify your own roles.');
@@ -38,28 +35,31 @@ class UserRoleController extends Controller
             abort(403, 'Cannot modify the roles of another super admin.');
         }
 
+        // Prevent assigning super admin role
         $validated = $request->validate([
-            'roles' => ['nullable', 'array'],
-            'roles.*' => ['exists:roles,id'],
+            'role' => ['required', 'exists:roles,id'],
         ]);
 
-        // Sync roles
-        $user->roles()->sync($validated['roles'] ?? []);
+        if ($validated['role'] == $superAdminId) {
+            abort(403, 'You cannot assign super admin role.');
+        }
+
+        // Assign single role (removes previous role if any)
+        $user->roles()->sync([$validated['role']]);
 
         // Update user status based on role assignment
-        $pendingId = UserStatus::where('code', UserStatus::PENDING)->value('id');
         $activeId = UserStatus::where('code', UserStatus::ACTIVE)->value('id');
 
-        if (! $pendingId || ! $activeId) {
-            abort(500, 'User statuses missing in database.');
+        if (!$activeId) {
+            abort(500, 'User status "active" missing in database.');
         }
 
         $user->update([
-            'user_status_id' => empty($validated['roles']) ? $pendingId : $activeId,
+            'user_status_id' => $activeId,
         ]);
 
         return redirect()
             ->route('users.show', $user)
-            ->with('success', 'User roles successfully updated');
+            ->with('success', 'User role successfully updated');
     }
 }

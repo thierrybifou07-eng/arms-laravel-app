@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create Super Admin
+        // Create Super Admin (only one)
         $superAdmin = User::create([
             'firstname' => 'Super',
             'lastname' => 'Admin',
@@ -24,9 +24,10 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
             'user_status_id' => UserStatus::where('code', 'active')->first()->id,
         ]);
-        $superAdmin->roles()->attach(Role::where('name', 'super_admin')->first()->id);
+        // Assign the single super_admin role
+        $superAdmin->roles()->sync([Role::where('name', 'super_admin')->first()->id]);
 
-        // Create Admin users (5)
+        // Create Admin users (1)
         for ($i = 1; $i <= 1; $i++) {
             $admin = User::create([
                 'firstname' => "Admin",
@@ -36,10 +37,11 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'user_status_id' => UserStatus::where('code', 'active')->first()->id,
             ]);
-            $admin->roles()->attach(Role::where('name', 'admin')->first()->id);
+            // Assign the single admin role
+            $admin->roles()->sync([Role::where('name', 'admin')->first()->id]);
         }
 
-        // Create Staff users (15)
+        // Create Staff users (3)
         for ($i = 1; $i <= 3; $i++) {
             $staff = User::create([
                 'firstname' => "Staff",
@@ -49,10 +51,11 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'user_status_id' => UserStatus::where('code', 'active')->first()->id,
             ]);
-            $staff->roles()->attach(Role::where('name', 'staff')->first()->id);
+            // Assign the single staff role
+            $staff->roles()->sync([Role::where('name', 'staff')->first()->id]);
         }
 
-        // Create Teller users (20)
+        // Create Teller users (5)
         for ($i = 1; $i <= 5; $i++) {
             $teller = User::create([
                 'firstname' => "Teller",
@@ -62,7 +65,8 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'user_status_id' => UserStatus::where('code', 'active')->first()->id,
             ]);
-            $teller->roles()->attach(Role::where('name', 'teller')->first()->id);
+            // Assign the single teller role
+            $teller->roles()->sync([Role::where('name', 'teller')->first()->id]);
         }
 
         // Create Student users (10)
@@ -79,9 +83,15 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'user_status_id' => $randomStatus,
             ]);
-            $student->roles()->attach(Role::where('name', 'student')->first()->id);
+            // Assign the single student role
+            $student->roles()->sync([Role::where('name', 'student')->first()->id]);
         }
 
-        $this->command->info('✓ 20 users created successfully (1 super_admin, 2 admins, 4 staff, 3 tellers, 10 students)');
+        $this->command->info('✓ 20 users created successfully with single role assignments');
+        $this->command->info('  → 1 super_admin');
+        $this->command->info('  → 1 admin');
+        $this->command->info('  → 3 staff');
+        $this->command->info('  → 5 tellers');
+        $this->command->info('  → 10 students');
     }
 }

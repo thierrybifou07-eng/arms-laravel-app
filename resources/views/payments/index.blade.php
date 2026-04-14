@@ -114,9 +114,11 @@
 
                                 <td>
                                     @if ($payment->status->code === 'validated')
-                                        <a class="btn btn-sm btn-info" href="{{ route('payments.show.pay', $payment) }}">
+                                       {{--  <a class="btn btn-sm btn-info" href="{{ route('payments.show.pay', $payment) }}">
                                             <i class="icon-base bx bx-check me-1"></i>Show
-                                        </a>
+                                        </a> --}}
+                                        <button type="button" class="btn btn-sm btn-info" onclick="openModal('payment-show-{{ $payment->id }}')">
+                                                    <i class="icon-base bx bx-show-alt me-1"></i>Show</button>
                                     @else
                                         <div class="dropdown">
                                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
@@ -205,7 +207,10 @@
             </div>
         </div>
     </div>
-
+        {{-- Show Modals --}}
+    @foreach ($payments as $payment)
+        @include('payments.show-modal', ['payment' => $payment])
+    @endforeach
     @foreach ($payments as $payment)
         @include('payments.pay-modal', ['payment' => $payment, 'paymentMethods' => isset($paymentMethods) ? $paymentMethods : \App\Models\PaymentMethod::all()])
     @endforeach

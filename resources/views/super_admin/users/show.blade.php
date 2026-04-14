@@ -40,7 +40,7 @@
                         <!-- Action Buttons -->
                         <div class="gap-2 d-flex flex-column mt-4">
                             @if (auth()->id() !== $user->id)
-                                <a href="{{ route('super_adminuser.roles.edit', $user) }}"
+                                <a href="{{ route('super_admin.user.roles.edit', $user) }}"
                                     class="btn btn-sm btn-outline-primary">
                                     <i class="bx bx-edit me-1"></i>Manage Roles
                                 </a>
@@ -96,13 +96,17 @@
                             <i class="bx bx-crown me-2"></i>Roles
                         </h6>
                         @if (auth()->id() !== $user->id)
-                            <a href="{{ route('super_adminuser.roles.edit', $user) }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('super_admin.user.roles.edit', $user) }}" class="btn btn-sm btn-primary">
                                 <i class="bx bx-edit me-1"></i>Edit
                             </a>
                         @endif
                     </div>
                     <div class="card-body">
-                        @if ($user->roles->isNotEmpty())
+                        @php
+                            $userRole = $user->getRole();
+                        @endphp
+
+                        @if ($userRole)
                             <div class="table-responsive">
                                 <table class="table table-sm">
                                     <thead class="table-light">
@@ -112,25 +116,23 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($user->roles as $role)
-                                            <tr>
-                                                <td>
-                                                    <strong>{{ $role->label }}</strong>
-                                                </td>
-                                                <td>
-                                                    <small class="text-muted">
-                                                        {{ $role->pivot->created_at?->format('M d, Y H:i') ?? 'N/A' }}
-                                                    </small>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                        <tr>
+                                            <td>
+                                                <strong>{{ $userRole->label }}</strong>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">
+                                                    {{ $userRole->pivot->created_at?->format('M d, Y H:i') ?? 'N/A' }}
+                                                </small>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                         @else
                             <div class="alert alert-info" role="alert">
                                 <i class="bx bx-info-circle me-2"></i>
-                                This user has no roles assigned.
+                                This user has no role assigned.
                             </div>
                         @endif
                     </div>

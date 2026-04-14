@@ -101,11 +101,14 @@
                                 <strong>{{ $audit->user->email }}</strong>
                                 <br>Name: 
                                 {{ $audit->user->firstname }} {{ $audit->user->lastname }}
-                                <br>Roles:
-                                @if ($audit->user->roles->isNotEmpty())
-                                    @foreach ($audit->user->roles as $role)
-                                        <span class="badge bg-primary">{{ $role->label }}</span>
-                                    @endforeach
+                                <br>Role:
+                                @php
+                                    $userRole = $audit->user->getRole();
+                                @endphp
+                                @if ($userRole)
+                                    <span class="badge bg-primary">{{ $userRole->label }}</span>
+                                @else
+                                    <span class="text-muted">No role assigned</span>
                                 @endif
                             </p>
                         </div>
