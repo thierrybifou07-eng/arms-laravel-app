@@ -109,6 +109,45 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia, Auditab
         return $this->belongsToMany(Residence::class);
     }
 
+    public function managedResidence(): ?Residence
+    {
+        return $this->residences()
+            ->orderBy('residences.name')
+            ->first();
+    }
+
+    public function managedResidenceIds(): array
+    {
+        return $this->residences()
+            ->pluck('residences.id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
+    }
+
+    public function isResidenceScoped(): bool
+    {
+        return $this->hasRole(Role::ADMIN) || $this->hasRole(Role::STAFF);
+    }
+
+    public function canAccessResidence(Residence|int|null $residence): bool
+    {
+        if ($this->hasRole(Role::SUPER_ADMIN)) {
+            return true;
+        }
+
+        if (! $this->isResidenceScoped()) {
+            return false;
+        }
+
+        $residenceId = $residence instanceof Residence ? $residence->getKey() : $residence;
+
+        if (! $residenceId) {
+            return false;
+        }
+
+        return in_array((int) $residenceId, $this->managedResidenceIds(), true);
+    }
+
     // Get the user's single role
     public function getRole(): ?Role
     {

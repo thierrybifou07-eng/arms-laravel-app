@@ -6,6 +6,12 @@
         </a>
     </li>
     <li class="menu-item">
+        <a href="{{ route('contracts.index') }}" class="menu-link">
+            <i class="menu-icon icon-base bx bx-food-menu"></i>
+            <div data-i18n="Contracts">Contracts</div>
+        </a>
+    </li>
+    <li class="menu-item">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon icon-base bx bx-money"></i>
             <div data-i18n="Finance">Finance</div>

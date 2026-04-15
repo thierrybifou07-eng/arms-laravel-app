@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             'firstname' => 'Pierre Gedéon',
             'lastname' => 'Bifou Ngo\'o',
             'email' => 'bifoungoo@gmail.com',
-            'phone' => '+237670000000',
+            'phone' => '+237697147114',
             'password' => Hash::make('password'),
             'user_status_id' => UserStatus::where('code', 'active')->first()->id,
         ]);
@@ -28,26 +28,34 @@ class UserSeeder extends Seeder
         $superAdmin->roles()->sync([Role::where('name', 'super_admin')->first()->id]);
 
         // Create Admin users (1)
-        for ($i = 1; $i <= 1; $i++) {
-            $admin = User::create([
-                'firstname' => "Admin",
-                'lastname' => "User {$i}",
-                'email' => "admin{$i}@gmail.com",
-                'phone' => "+2376700000{$i}",
-                'password' => Hash::make('password'),
-                'user_status_id' => UserStatus::where('code', 'active')->first()->id,
-            ]);
-            // Assign the single admin role
-            $admin->roles()->sync([Role::where('name', 'admin')->first()->id]);
-        }
+        $admin = User::create([
+            'firstname' => 'Yannick',
+            'lastname' => 'Mbena',
+            'email' => 'yannickmbenakombo@gmail.com',
+            'phone' => '+237699000000',
+            'password' => Hash::make('password'),
+            'user_status_id' => UserStatus::where('code', 'active')->first()->id,
+        ]);
+        // Assign the admin role
+        $admin->roles()->sync([Role::where('name', 'admin')->first()->id]);
 
         // Create Staff users (3)
-        for ($i = 1; $i <= 3; $i++) {
+        $staff = User::create([
+            'firstname' => 'Leonard',
+            'lastname' => 'dev',
+            'email' => 'leonardev19@gmail.com',
+            'phone' => '+237699000001',
+            'password' => Hash::make('password'),
+            'user_status_id' => UserStatus::where('code', 'active')->first()->id,
+        ]);
+        // Assign the staff role
+        $staff->roles()->sync([Role::where('name', 'staff')->first()->id]);
+        for ($i = 1; $i <= 2; $i++) {
             $staff = User::create([
-                'firstname' => "Staff",
+                'firstname' => 'Staff',
                 'lastname' => "User {$i}",
                 'email' => "staff{$i}@gmail.com",
-                'phone' => "+237670001" . sprintf('%02d', $i),
+                'phone' => '+237670001'.sprintf('%02d', $i),
                 'password' => Hash::make('password'),
                 'user_status_id' => UserStatus::where('code', 'active')->first()->id,
             ]);
@@ -56,16 +64,26 @@ class UserSeeder extends Seeder
         }
 
         // Create Student users (15)
-        for ($i = 1; $i <= 15; $i++) {
-            $randomStatus = fake()->boolean(80) 
+        $student = User::create([
+            'firstname' => 'Mathurin',
+            'lastname' => 'Manga',
+            'email' => 'mathurinngamanga@gmail.com',
+            'phone' => '+237699000002',
+            'password' => Hash::make('password'),
+            'user_status_id' => UserStatus::where('code', 'pending')->first()->id,
+        ]);
+        // Assign the student role
+        $student->roles()->sync([Role::where('name', 'student')->first()->id]);
+        for ($i = 1; $i <= 14; $i++) {
+            $randomStatus = fake()->boolean(80)
                 ? UserStatus::where('code', 'active')->first()->id
                 : UserStatus::where('code', 'pending')->first()->id;
-            
+
             $student = User::create([
-                'firstname' => "Student",
+                'firstname' => 'Student',
                 'lastname' => "Resident {$i}",
                 'email' => "student{$i}@gmail.com",
-                'phone' => "+237670003" . str_pad($i, 3, '0', STR_PAD_LEFT),
+                'phone' => '+237670003'.str_pad($i, 3, '0', STR_PAD_LEFT),
                 'password' => Hash::make('password'),
                 'user_status_id' => $randomStatus,
             ]);

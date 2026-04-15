@@ -26,22 +26,22 @@ class SearchController extends Controller
                 $sections = collect([
                     $this->usersSection($query),
                     $this->rolesSection($query),
-                    $this->paymentsSection($query),
-                    $this->paymentHistoriesSection($query),
+                    $this->paymentsSection($query, $user),
+                    $this->paymentHistoriesSection($query, $user),
                 ])->filter();
             } elseif ($user->hasRole(Role::ADMIN)) {
                 $sections = collect([
                     $this->usersSection($query),
                     $this->residencesSection($query, $user),
                     $this->contractsSection($query, $user),
-                    $this->paymentsSection($query),
-                    $this->paymentHistoriesSection($query),
+                    $this->paymentsSection($query, $user),
+                    $this->paymentHistoriesSection($query, $user),
                 ])->filter();
             } elseif ($user->hasRole(Role::STAFF)) {
                 $sections = collect([
                     $this->contractsSection($query, $user),
-                    $this->paymentsSection($query),
-                    $this->paymentHistoriesSection($query),
+                    $this->paymentsSection($query, $user),
+                    $this->paymentHistoriesSection($query, $user),
                 ])->filter();
             } elseif ($user->hasRole(Role::STUDENT)) {
                 $sections = collect([
@@ -115,9 +115,7 @@ class SearchController extends Controller
     {
         $items = Contract::query()
             ->with(['user', 'status'])
-            ->when($user->hasRole(Role::ADMIN), function (Builder $builder) use ($user) {
-                $builder->whereHas('room.floor.building.residence.users', fn (Builder $residenceQuery) => $residenceQuery->where('users.id', $user->id));
-            })
+            ->forManager($user)
             ->where(function (Builder $builder) use ($query) {
                 $this->applyBasicSearch($builder, $query, ['id']);
                 $builder->orWhereHas('user', fn (Builder $userQuery) => $this->applyUserSearch($userQuery, $query));
@@ -136,10 +134,11 @@ class SearchController extends Controller
         return $this->makeSection('Contracts', 'bx-food-menu', $items);
     }
 
-    private function paymentsSection(string $query): ?array
+    private function paymentsSection(string $query, User $user): ?array
     {
         $items = Payment::query()
             ->with(['contract.user', 'status'])
+            ->forManager($user)
             ->where(function (Builder $builder) use ($query) {
                 $this->applyBasicSearch($builder, $query, ['id', 'expected_amount', 'paid_amount']);
                 $builder->orWhereHas('status', fn (Builder $statusQuery) => $this->applyBasicSearch($statusQuery, $query, ['code', 'label']));
@@ -158,10 +157,11 @@ class SearchController extends Controller
         return $this->makeSection('Payments', 'bx-money', $items);
     }
 
-    private function paymentHistoriesSection(string $query): ?array
+    private function paymentHistoriesSection(string $query, User $user): ?array
     {
         $items = PaymentHistory::query()
             ->with(['payment.contract.user', 'recordedBy'])
+            ->forManager($user)
             ->where(function (Builder $builder) use ($query) {
                 $this->applyBasicSearch($builder, $query, ['id', 'payment_id', 'notes']);
                 $builder->orWhereHas('payment.contract.user', fn (Builder $userQuery) => $this->applyUserSearch($userQuery, $query));

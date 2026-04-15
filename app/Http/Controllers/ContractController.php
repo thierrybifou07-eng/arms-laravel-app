@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\BillingPeriod;
+use App\Models\Building;
 use App\Models\Contract;
 use App\Models\ContractStatus;
+use App\Models\Floor;
 use App\Models\Payment;
 use App\Models\PaymentStatus;
+use App\Models\Residence;
 use App\Models\Room;
 use App\Models\User;
 use Carbon\Carbon;
@@ -17,7 +20,14 @@ class ContractController extends Controller
 {
     public function getBuildings($residenceId)
     {
-        return \App\Models\Building::where('residence_id', $residenceId)->get();
+        $residence = Residence::query()
+            ->forManager(auth()->user())
+            ->findOrFail($residenceId);
+
+        return Building::query()
+            ->where('residence_id', $residence->id)
+            ->orderBy('name')
+            ->get();
     }
 
     /**
@@ -25,7 +35,12 @@ class ContractController extends Controller
      */
     public function index()
     {
-        $query = Contract::with(['user', 'room.floor.building', 'status', 'billingPeriod'])->latest();
+        $this->authorize('viewAny', Contract::class);
+
+        $query = Contract::query()
+            ->with(['user', 'room.floor.building.residence', 'status', 'billingPeriod'])
+            ->forManager(auth()->user())
+            ->latest();
 
         // Hide archived contracts unless user is admin or super_admin
         if (! auth()->user()->hasRole('admin') && ! auth()->user()->hasRole('super_admin')) {
@@ -67,13 +82,27 @@ class ContractController extends Controller
 
     public function getFloors($buildingId)
     {
-        return \App\Models\Floor::where('building_id', $buildingId)->get();
+        $building = Building::query()
+            ->forManager(auth()->user())
+            ->findOrFail($buildingId);
+
+        return Floor::query()
+            ->where('building_id', $building->id)
+            ->orderBy('number')
+            ->get();
     }
 
     public function getRooms($floorId)
     {
-        return \App\Models\Room::where('floor_id', $floorId)
+        $floor = Floor::query()
+            ->forManager(auth()->user())
+            ->findOrFail($floorId);
+
+        return Room::query()
+            ->where('floor_id', $floor->id)
             ->whereHas('status', fn ($q) => $q->where('code', 'available')) //  typo into the DB
+            ->forManager(auth()->user())
+            ->orderBy('number')
             ->get();
     }
 
@@ -82,9 +111,17 @@ class ContractController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Contract::class);
+
+        $user = auth()->user();
+
         return view('contracts.create', [
+            'residences' => Residence::query()->forManager($user)->orderBy('name')->get(),
             'students' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->get(),
-            'rooms' => Room::whereHas('status', fn ($q) => $q->where('code', 'available'))->get(),
+            'rooms' => Room::query()
+                ->forManager($user)
+                ->whereHas('status', fn ($q) => $q->where('code', 'available'))
+                ->get(),
             'billingPeriods' => BillingPeriod::all(),
         ]);
 
@@ -95,6 +132,8 @@ class ContractController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Contract::class);
+
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'room_id' => 'required|exists:rooms,id',
@@ -114,7 +153,11 @@ class ContractController extends Controller
         // bring Id of contract status
         $pendingId = ContractStatus::getIdByCodeOrFail('pending');
         // bring the room rent
-        $room = Room::with('status')->findOrFail($validated['room_id']);
+        $room = Room::query()
+            ->forManager($request->user())
+            ->with('status')
+            ->findOrFail($validated['room_id']);
+
         if ($room->status->code !== 'available') {
             return back()->withErrors(['room_id' => 'Room not available']);
         }
@@ -144,7 +187,9 @@ class ContractController extends Controller
      */
     public function show(Contract $contract)
     {
-        $contract->load(['user', 'room', 'payments']);
+        $this->authorize('view', $contract);
+
+        $contract->load(['user', 'room.floor.building.residence', 'payments']);
 
         return view('contracts.show', compact('contract'));
     }
@@ -154,16 +199,20 @@ class ContractController extends Controller
      */
     public function edit(Contract $contract)
     {
+        $this->authorize('update', $contract);
+
         // Prevent editing expired contracts
         if ($contract->status->code === 'expired' || $contract->status->code === 'archived') {
             return redirect()->route('contracts.show', $contract)
                 ->withErrors(['contract' => 'Expired or archived contracts cannot be edited.']);
         }
 
+        $user = auth()->user();
+
         return view('contracts.edit', [
             'contract' => $contract,
             'students' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->get(),
-            'rooms' => Room::all(),
+            'rooms' => Room::query()->forManager($user)->get(),
             'billingPeriods' => BillingPeriod::all(),
         ]);
     }
@@ -173,6 +222,8 @@ class ContractController extends Controller
      */
     public function update(Request $request, Contract $contract)
     {
+        $this->authorize('update', $contract);
+
         $validated = $request->validate([
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
@@ -202,6 +253,8 @@ class ContractController extends Controller
      */
     public function archived(Contract $contract)
     {
+        $this->authorize('archive', $contract);
+
         if ($contract->status->code === 'active') {
             return back()->withErrors(['contract' => 'Active contracts cannot be archived directly. Cancelled or expire it first.']);
         }

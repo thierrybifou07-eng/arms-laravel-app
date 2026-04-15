@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Residence;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserStatus;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class UserRoleController extends Controller
 {
@@ -16,9 +18,10 @@ class UserRoleController extends Controller
             ->whereNot('name', Role::SUPER_ADMIN)
             ->orderBy('label')
             ->get();
-        $user->load('roles');
+        $residences = Residence::query()->orderBy('name')->get();
+        $user->load(['roles', 'residences']);
 
-        return view('super_admin.users.roles', compact('user', 'roles'));
+        return view('super_admin.users.roles', compact('user', 'roles', 'residences'));
     }
 
     public function update(Request $request, User $user)
@@ -38,14 +41,29 @@ class UserRoleController extends Controller
         // Prevent assigning super admin role
         $validated = $request->validate([
             'role' => ['required', 'exists:roles,id'],
+            'residence_id' => ['nullable', 'exists:residences,id'],
         ]);
 
         if ($validated['role'] == $superAdminId) {
             abort(403, 'You cannot assign super admin role.');
         }
 
+        $role = Role::query()->findOrFail($validated['role']);
+
+        if ($role->name === Role::STAFF && empty($validated['residence_id'])) {
+            throw ValidationException::withMessages([
+                'residence_id' => 'A residence is required when assigning the staff role.',
+            ]);
+        }
+
         // Assign single role (removes previous role if any)
-        $user->roles()->sync([$validated['role']]);
+        $user->roles()->sync([$role->id]);
+
+        if ($role->name === Role::STAFF) {
+            $user->residences()->sync([$validated['residence_id']]);
+        } elseif ($role->name === Role::STUDENT) {
+            $user->residences()->detach();
+        }
 
         // Update user status based on role assignment
         $activeId = UserStatus::where('code', UserStatus::ACTIVE)->value('id');

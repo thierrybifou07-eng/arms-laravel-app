@@ -112,6 +112,7 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th>Role</th>
+                                            <th>Residence</th>
                                             <th>Assigned Date</th>
                                         </tr>
                                     </thead>
@@ -119,6 +120,13 @@
                                         <tr>
                                             <td>
                                                 <strong>{{ $userRole->label }}</strong>
+                                            </td>
+                                            <td>
+                                                @if ($user->residences->isNotEmpty())
+                                                    {{ $user->residences->pluck('name')->join(', ') }}
+                                                @else
+                                                    <span class="text-muted">Not assigned</span>
+                                                @endif
                                             </td>
                                             <td>
                                                 <small class="text-muted">

@@ -42,7 +42,7 @@
                         <label class="form-label">Residence</label>
                         <select id="residence" class="select2 form-select">
                             <option value="">Select residence</option>
-                            @foreach(\App\Models\Residence::all() as $residence)
+                            @foreach($residences as $residence)
                                 <option value="{{ $residence->id }}">{{ $residence->name }}</option>
                             @endforeach
                         </select>

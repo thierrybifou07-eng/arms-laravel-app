@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
@@ -51,5 +52,14 @@ class Payment extends Model implements AuditableContract
             && now()->gt($this->due_date)
             && $this->status?->code !== 'validated'
             && $this->status?->code !== 'cancelled';
+    }
+
+    public function scopeForManager(Builder $query, User $user): Builder
+    {
+        if (! $user->isResidenceScoped()) {
+            return $query;
+        }
+
+        return $query->whereHas('contract.room.floor.building.residence.users', fn (Builder $builder) => $builder->whereKey($user->id));
     }
 }

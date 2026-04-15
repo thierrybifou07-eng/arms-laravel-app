@@ -23,9 +23,8 @@ class PaymentHistoryPolicy
      */
     public function view(User $user, PaymentHistory $model): bool
     {
-        // Super Admin, Admin, Staff can view all payment histories
         if ($this->isStaff($user)) {
-            return true;
+            return $user->canAccessResidence($model->payment?->contract?->room?->floor?->building?->residence_id);
         }
 
         // Student can view their own payment histories

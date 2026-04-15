@@ -13,7 +13,11 @@ class PaymentController extends Controller
 {
     public function index()
     {
-        $query = Payment::with(['contract.user', 'status', 'method']);
+        $this->authorize('viewAny', Payment::class);
+
+        $query = Payment::query()
+            ->with(['contract.user', 'status', 'method'])
+            ->forManager(auth()->user());
 
         // Filtre par statut
         if (request('status')) {
@@ -48,6 +52,8 @@ class PaymentController extends Controller
 
     public function payForm(Payment $payment)
     {
+        $this->authorize('view', $payment);
+
         if ($payment->status->code === 'validated') {
             return redirect()->route('payments.show.pay', $payment)->withErrors('Ce paiement est déjà validé');
         }
@@ -58,6 +64,8 @@ class PaymentController extends Controller
 
     public function showPay(Payment $payment)
     {
+        $this->authorize('view', $payment);
+
         $payment->load(['contract', 'status', 'method']);
         $paymentMethods = \App\Models\PaymentMethod::all();
 
@@ -66,6 +74,8 @@ class PaymentController extends Controller
 
     public function pay(Request $request, Payment $payment)
     {
+        $this->authorize('view', $payment);
+
         $validated = $request->validate([
             'paid_amount' => 'nullable|numeric|min:0',
             'payment_method_id' => 'required|exists:payment_methods,id',
@@ -92,6 +102,8 @@ class PaymentController extends Controller
 
     public function validatePayment(Payment $payment)
     {
+        $this->authorize('validatePayment', $payment);
+
         if ($payment->payment_status_id === PaymentStatus::getIdByCodeOrFail('validated')) {
             return back()->withErrors(['payment' => 'Already validated.']);
         }
@@ -130,6 +142,8 @@ class PaymentController extends Controller
 
     public function cancel(Payment $payment)
     {
+        $this->authorize('view', $payment);
+
         if ($payment->paid_amount > 0) {
             return back()->withErrors(['payment' => 'Cannot cancel a payment that has been paid.']);
         }

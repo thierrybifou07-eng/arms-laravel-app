@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
@@ -45,5 +46,14 @@ class PaymentHistory extends Model implements AuditableContract
     public function recordedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'recorded_by');
+    }
+
+    public function scopeForManager(Builder $query, User $user): Builder
+    {
+        if (! $user->isResidenceScoped()) {
+            return $query;
+        }
+
+        return $query->whereHas('payment.contract.room.floor.building.residence.users', fn (Builder $builder) => $builder->whereKey($user->id));
     }
 }

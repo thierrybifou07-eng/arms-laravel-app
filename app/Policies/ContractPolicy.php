@@ -23,9 +23,8 @@ class ContractPolicy
      */
     public function view(User $user, Contract $model): bool
     {
-        // Super Admin, Admin, Staff can view all contracts
         if ($this->isStaff($user)) {
-            return true;
+            return $user->canAccessResidence($model->room?->floor?->building?->residence_id);
         }
 
         // Student can view their own contracts
@@ -54,14 +53,8 @@ class ContractPolicy
             return false;
         }
 
-        // Super Admin, Admin can update any contract
-        if ($this->isSuperAdmin($user)) {
-            return true;
-        }
-
-        // Staff can update contracts
-        if ($user->hasRole(Role::STAFF)) {
-            return true;
+        if ($this->isStaff($user)) {
+            return $user->canAccessResidence($model->room?->floor?->building?->residence_id);
         }
 
         // Student can only update their own contract
@@ -85,7 +78,8 @@ class ContractPolicy
      */
     public function archive(User $user, Contract $model): bool
     {
-        return $this->isSuperAdmin($user);
+        return $this->isStaff($user)
+            && $user->canAccessResidence($model->room?->floor?->building?->residence_id);
     }
 
     /**
@@ -117,9 +111,8 @@ class ContractPolicy
      */
     public function viewPaymentHistory(User $user, Contract $model): bool
     {
-        // Staff can view payment history
         if ($this->isStaff($user)) {
-            return true;
+            return $user->canAccessResidence($model->room?->floor?->building?->residence_id);
         }
 
         // Student can view their own contract's payment history

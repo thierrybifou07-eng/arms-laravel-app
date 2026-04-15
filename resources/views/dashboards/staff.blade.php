@@ -8,6 +8,14 @@
                 <p class="mb-3">You are logged in as
                     <strong>{{ Auth::user()->roles->first()->label }}</strong>
                 </p>
+                @if (!empty($dashboardData['managedResidence']))
+                    <p class="mb-3">
+                        Assigned residence:
+                        <strong>{{ $dashboardData['managedResidence']->name }}</strong>
+                    </p>
+                @elseif (!empty($dashboardData['message']))
+                    <div class="alert alert-warning py-2 mb-3">{{ $dashboardData['message'] }}</div>
+                @endif
                 <a href="{{ route('profile.show') }}" class="btn btn-sm btn-outline-primary">
                     <i class="icon-base bx bx-user me-1"></i> View Profile
                 </a>
