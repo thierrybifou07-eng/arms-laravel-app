@@ -133,31 +133,27 @@
 
     <script>
         const input = document.querySelector("#phone");
-        const iti = window.intlTelInput(input, {
-            // Options de configuration
-            initialCountry: "auto",
-            geoIpLookup: callback => {
-                fetch("https://ipapi.co/json")
-                    .then(res => res.json())
-                    .then(data => callback(data.country_code))
-                    .catch(() => callback("fr"));
-            },
-            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js",
-        });
         const form = document.querySelector("#formAccountSetting");
 
-        form.addEventListener("submit", function(e) {
-            // 1. Récupérer les données de la bibliothèque
-            const countryData = iti.getSelectedCountryData(); // Contient l'indicatif (dialCode)
-            const nationalNumber = input.value; // Le numéro tapé par l'utilisateur
+        if (input && form) {
+            const iti = window.intlTelInput(input, {
+                initialCountry: "auto",
+                geoIpLookup: callback => {
+                    fetch("https://ipapi.co/json")
+                        .then(res => res.json())
+                        .then(data => callback(data.country_code))
+                        .catch(() => callback("fr"));
+                },
+                utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js",
+            });
 
-            // 2. Créer le format : (+Indicatif) Numéro
-            const formattedNumber = `(+${countryData.dialCode}) ${nationalNumber}`;
+            form.addEventListener("submit", function() {
+                const countryData = iti.getSelectedCountryData();
+                const nationalNumber = input.value;
 
-            // 3. Mettre à jour la valeur de l'input phone avant que Laravel ne le reçoive
-            // On peut soit utiliser un champ caché, soit écraser la valeur de l'input actuel
-            input.value = formattedNumber;
-        });
+                input.value = `(+${countryData.dialCode}) ${nationalNumber}`;
+            });
+        }
     </script>
     <!-- Core JS -->
 
