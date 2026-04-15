@@ -59,7 +59,7 @@
 
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
-            <div class="authentication-inner" style="max-width: 800px;">
+            <div class="authentication-inner">
                 <!-- Register -->
                 <div class="card px-5">
                     <div class="card-body">
