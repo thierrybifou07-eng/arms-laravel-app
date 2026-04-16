@@ -6,9 +6,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia, AuditableContract
 {
+    use Auditable;
+    use InteractsWithMedia;
+
+    public function avatar()
+    {
+        return $this->getFirstMediaUrl('avatars') ?:
+        asset('images/default-avatar.png');
+    }
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -18,7 +31,8 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'firstname',
+        'lastname',
         'email',
         'phone',
         'password',
@@ -46,5 +60,63 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public static function getIdByName(string $name): ?int
+    {
+        return static::where('name', $name)->value('id');
+    }
+
+    public static function getIdByNameOrFail(string $name): int
+    {
+        $id = static::where('name', $name)->value('id');
+        if ($id) {
+            throw new \Exception("name[$name] not found in".static::class);
+        }
+
+        return $id;
+    }
+
+    //  belongs to 'cause the fk is in the users table
+    public function userStatus()
+    {
+        return $this->belongsTo(\App\Models\UserStatus::class, 'user_status_id');
+    }
+
+    // Assigning role to many users
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class)->withTimestamps();
+    }
+
+    // Relationship with contracts (user can have many contracts)
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class);
+    }
+
+    // Relationship with residences (admin can manage many residences)
+    public function residences()
+    {
+        return $this->belongsToMany(Residence::class);
+    }
+
+    // create the hasRole method for the middleware
+    public function hasRole(string $roleName): bool
+    {
+        return $this->roles()->where('name', $roleName)->exists();
+    }
+
+    // create the hasPermission method for the middleware
+    public function hasPermission(string $permissionName): bool
+    {
+        if ($this->hasRole(Role::SUPER_ADMIN)) {
+            return true;
+        }
+
+        return $this->roles()
+            ->whereHas('permissions', function ($query) use ($permissionName) {
+                $query->where('name', $permissionName);
+            })->exists();
     }
 }

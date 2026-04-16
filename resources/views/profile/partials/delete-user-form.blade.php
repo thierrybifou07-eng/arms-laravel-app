@@ -1,55 +1,83 @@
-<section class="space-y-6">
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Delete Account') }}
-        </h2>
+<div class="card h-100">
 
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
-        </p>
-    </header>
+    <h5 class="card-header">Delete Account</h5>
 
-    <x-danger-button
-        x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-    >{{ __('Delete Account') }}</x-danger-button>
+    <div class="card-body">
 
-    <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-        <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
+        <div class="mb-6 col-12 mb-0">
+            <div class="alert alert-warning">
+                <h5 class="alert-heading mb-1">
+                    Are you sure you want to delete your account?
+                </h5>
+                <p class="mb-0">
+                    Once you delete your account, there is no going back.
+                    Please be certain.
+                </p>
+            </div>
+        </div>
+        <form id="deleteAccountForm" method="POST" action="{{ route('profile.destroy') }}">
+
             @csrf
-            @method('delete')
+            @method('DELETE')
 
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Are you sure you want to delete your account?') }}
-            </h2>
+            <!-- Checkbox -->
+            <div class="form-check my-4">
+                <input class="form-check-input" type="checkbox" id="accountActivation">
 
-            <p class="mt-1 text-sm text-gray-600">
-                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
-            </p>
-
-            <div class="mt-6">
-                <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
-
-                <x-text-input
-                    id="password"
-                    name="password"
-                    type="password"
-                    class="mt-1 block w-3/4"
-                    placeholder="{{ __('Password') }}"
-                />
-
-                <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                <label class="form-check-label" for="accountActivation">
+                    I confirm I want to delete my account
+                </label>
             </div>
 
-            <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
+            <!-- PASSWORD FIELD (hidden) -->
 
-                <x-danger-button class="ms-3">
-                    {{ __('Delete Account') }}
-                </x-danger-button>
+
+
+            <div class="col-lg-12 d-none" id="passwordContainer">
+                <label for="deletePassword" class="form-label">Confirm your password</label>
+
+                <input type="password" name="password"
+                    class="form-control @error('password', 'userDeletion') is-invalid @enderror" id="deletePassword"
+                    placeholder="Enter your password" required>
+                @error('password', 'userDeletion')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+                <div class="invalid-feedback" id="passwordError"></div>
             </div>
         </form>
-    </x-modal>
-</section>
+
+        <div class="col-lg-6 d-flex align-items-end mt-2"> <!-- Align the button to the bottom -->
+            <button type="submit" form="deleteAccountForm" class="btn btn-danger deactivate-account mb-1" id="deleteBtn"
+                disabled>
+                Delete Account
+            </button>
+        </div>
+
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const checkbox = document.getElementById("accountActivation");
+            const passwordBox = document.getElementById("passwordContainer");
+            const deleteBtn = document.getElementById("deleteBtn");
+            if (!checkbox) return;
+
+            checkbox.addEventListener("change", function () {
+
+                if (checkbox.checked) {
+                    passwordContainer.classList.remove("d-none")
+                    deleteBtn.disabled = false;
+
+                } else {
+                    passwordContainer.classList.add("d-none")
+                    deleteBtn.disabled = true;
+
+                }
+
+            });
+
+        });
+    </script>
+</div>
