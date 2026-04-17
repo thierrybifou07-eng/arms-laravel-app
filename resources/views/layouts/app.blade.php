@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en" class="layout-menu-fixed layout-compact" data-assets-path="{{ asset('admin-template/assets') }}/"
     data-template="vertical-menu-template-free">
 

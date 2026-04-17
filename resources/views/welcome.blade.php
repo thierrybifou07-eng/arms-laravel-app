@@ -3,9 +3,9 @@
     <!-- Hero Section -->
     <div class="hero">
         <div class="hero-slide">
-            <div class="img overlay" style="background-image: url('{{ asset('property/images') }}/hero_bg_3.jpg')"></div>
-            <div class="img overlay" style="background-image: url('{{ asset('property/images') }}/hero_bg_2.jpg')"></div>
-            <div class="img overlay" style="background-image: url('{{ asset('property/images') }}/hero_bg_1.jpg')"></div>
+            <div class="img overlay" style="background-image: url('{{ asset('property/images') }}/university_4k.jpeg')"></div>
+            <div class="img overlay" style="background-image: url('{{ asset('property/images') }}/residence_2.JPG')"></div>
+            <div class="img overlay" style="background-image: url('{{ asset('property/images') }}/residence_1.jpg')"></div>
         </div>
 
         <div class="container">
@@ -239,25 +239,25 @@
             <div class="row section-counter">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
                     <div class="counter-wrap mb-5 mb-lg-0">
-                        <span class="number"><span class="countup text-primary">25+</span></span>
+                        <span class="number"><span class="countup text-primary">30+</span></span>
                         <span class="caption text-black-50">Database Tables</span>
                     </div>
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
                     <div class="counter-wrap mb-5 mb-lg-0">
-                        <span class="number"><span class="countup text-primary">21</span></span>
+                        <span class="number"><span class="countup text-primary">15+</span></span>
                         <span class="caption text-black-50">Authorization Policies</span>
                     </div>
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="500">
                     <div class="counter-wrap mb-5 mb-lg-0">
-                        <span class="number"><span class="countup text-primary">5</span></span>
+                        <span class="number"><span class="countup text-primary">4</span></span>
                         <span class="caption text-black-50">Role-Based Dashboards</span>
                     </div>
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="600">
                     <div class="counter-wrap mb-5 mb-lg-0">
-                        <span class="number"><span class="countup text-primary">100%</span></span>
+                        <span class="number text-primary"><span class="countup">100</span>%</span>
                         <span class="caption text-black-50">Secure & Audited</span>
                     </div>
                 </div>
