@@ -136,26 +136,41 @@
                                 </td>
                                 <td>{{ number_format($payment->expected_amount ?? 0, 0, ',', ' ') }} FCFA</td>
                                 <td><span
-                                        class="badge @if ($payment->status?->code === 'validated') bg-success @elseif($payment->status?->code === 'processing') bg-info @elseif($payment->status?->code === 'cancelled') bg-info bg-danger @elseif($payment->status?->code === 'overdue') bg-danger text-black @else bg-warning @endif">{{ $payment->status?->label ?? 'Unknown' }}</span>                                </td>
+                                        class="badge @if ($payment->status?->code === 'validated') bg-success @elseif($payment->status?->code === 'processing') bg-info @elseif($payment->status?->code === 'cancelled') bg-info bg-danger @elseif($payment->status?->code === 'overdue') bg-danger text-black @else bg-warning @endif">{{ $payment->status?->label ?? 'Unknown' }}</span>
+                                </td>
                                 <td>
-                                    @if ($payment->status->code === 'pending' || $payment->status->code === 'overdue')
-                                        <form method="POST" action="{{ route('payments.cancel', $payment) }}">
-                                            @csrf
-                                            <button class="btn btn-xs btn-danger" type="submit">
-                                                <i class="icon-base bx bx-x me-1"></i>Cancel
-                                            </button>
-                                        </form>
-                                    @elseif ($payment->status->code === 'processing')
-                                        <form method="POST" action="{{ route('payments.validate', $payment) }}">
-                                            @csrf
-                                            <button class="btn btn-xs btn-info" type="submit">
-                                                <i class="icon-base bx bx-check me-1"></i>Validate
-                                            </button>
-                                        </form>
+                                    @if ($payment->status->code === 'cancelled' || $payment->status->code === 'validated')
+                                        <span class="text-muted">#</span>
                                     @else
-                                        #
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                                data-bs-toggle="dropdown">
+                                                <i class="icon-base bx bx-dots-vertical-rounded"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                @if ($payment->status->code === 'pending' || $payment->status->code === 'overdue')
+                                                    <form method="POST"
+                                                        action="{{ route('payments.cancel', $payment) }}">
+                                                        @csrf
+                                                        <button class="dropdown-item text-danger" type="submit">
+                                                            <i class="icon-base bx bx-x me-1"></i>Cancel
+                                                        </button>
+                                                    </form>
+                                                @elseif ($payment->status->code === 'processing')
+                                                    <form method="POST"
+                                                        action="{{ route('payments.validate', $payment) }}">
+                                                        @csrf
+                                                        <button class="btn btn-xs btn-info" type="submit">
+                                                            <i class="icon-base bx bx-check me-1"></i>Validate
+                                                        </button>
+                                                    </form>
+                                                @endif
+
+                                            </div>
+                                        </div>
                                     @endif
                                 </td>
+
                             </tr>
                         @empty
                             <tr>

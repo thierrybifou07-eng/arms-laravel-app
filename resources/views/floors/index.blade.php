@@ -85,7 +85,19 @@
                                         {{ $floor->created_at }}
                                     </td>
                                     <td>
-                                        <span class="badge bg-label-primary me-1">{{ $floor->status->label }}</span>
+                                        @switch($floor->status->code ?? '')
+                                            @case('active')
+                                                <span class="badge bg-label-primary">{{ $floor->status->label ?? 'Open' }}</span>
+                                            @break
+
+                                            @case('closed')
+                                                <span
+                                                    class="badge bg-label-secondary">{{ $floor->status->label ?? 'Closed' }}</span>
+                                            @break
+
+                                            @default
+                                                <span class="badge bg-label-light">Unknown</span>
+                                        @endswitch
                                     </td>
                                     <td>
                                         <div class="dropdown">
@@ -94,12 +106,14 @@
                                                 <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item" onclick="openModal('floor-show-{{ $floor->id }}')">
+                                                <button type="button" class="dropdown-item"
+                                                    onclick="openModal('floor-show-{{ $floor->id }}')">
                                                     <i class="icon-base bx bx-show-alt me-1"></i> Show</button>
                                                 <a class="dropdown-item"
                                                     href="{{ route('floors.rooms.index', $floor) }}"><i
                                                         class="icon-base bx bx-folder me-1"></i> View Rooms</a>
-                                                <button type="button" class="dropdown-item" onclick="openModal('edit-floor-{{ $floor->id }}')">
+                                                <button type="button" class="dropdown-item"
+                                                    onclick="openModal('edit-floor-{{ $floor->id }}')">
                                                     <i class="icon-base bx bx-edit me-1"></i>Edit</button>
                                                 <hr class="dropdown-divider">
                                                 <form method="POST"
@@ -159,7 +173,8 @@
                                     @endforeach
 
                                     {{-- Next Button --}}
-                                    <li class="dt-paging-button page-item {{ $floors->hasMorePages() ? '' : 'disabled' }}">
+                                    <li
+                                        class="dt-paging-button page-item {{ $floors->hasMorePages() ? '' : 'disabled' }}">
                                         <a class="page-link next" href="{{ $floors->nextPageUrl() }}"
                                             {{ !$floors->hasMorePages() ? 'aria-disabled=true' : '' }}>
                                             <i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>
@@ -184,7 +199,11 @@
 
     {{-- Edit Modals --}}
     @foreach ($floors as $floor)
-        @include('floors.form-modal', ['building' => $building, 'floor' => $floor, 'statuses' => $statuses ?? \App\Models\FloorStatus::all()])
+        @include('floors.form-modal', [
+            'building' => $building,
+            'floor' => $floor,
+            'statuses' => $statuses ?? \App\Models\FloorStatus::all(),
+        ])
         @include('floors.show-modal', ['building' => $building, 'floor' => $floor])
     @endforeach
 

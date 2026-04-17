@@ -35,7 +35,18 @@
             <div class="mb-3">
                 <label class="form-label"><strong>Status</strong></label>
                 <p class="form-control-plaintext">
-                    <span class="badge bg-label-primary">{{ $residence->status->label ?? 'Unknown' }}</span>
+                    @switch($residence->status->code ?? '')
+                        @case('active')
+                            <span class="badge bg-label-primary">{{ $residence->status->label ?? 'Open' }}</span>
+                        @break
+
+                        @case('closed')
+                            <span class="badge bg-label-secondary">{{ $residence->status->label ?? 'Closed' }}</span>
+                        @break
+
+                        @default
+                            <span class="badge bg-label-light">Unknown</span>
+                    @endswitch
                 </p>
             </div>
 

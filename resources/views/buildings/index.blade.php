@@ -95,8 +95,20 @@
                                         {{ $building->updated_at }}
                                     </td>
                                     <td>
-                                        <span class="badge bg-label-primary me-1">{{ $building->status->label }}</span>
+                                        @switch($building->status->code ?? '')
+                                            @case('active')
+                                                <span
+                                                    class="badge bg-label-primary">{{ $building->status->label ?? 'Open' }}</span>
+                                            @break
 
+                                            @case('closed')
+                                                <span
+                                                    class="badge bg-label-secondary">{{ $building->status->label ?? 'Closed' }}</span>
+                                            @break
+
+                                            @default
+                                                <span class="badge bg-label-light">Unknown</span>
+                                        @endswitch
                                     </td>
                                     <td>
                                         <div class="dropdown">
@@ -105,12 +117,14 @@
                                                 <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item" onclick="openModal('building-show-{{ $building->id }}')">
+                                                <button type="button" class="dropdown-item"
+                                                    onclick="openModal('building-show-{{ $building->id }}')">
                                                     <i class="icon-base bx bx-show-alt me-1"></i> Show</button>
                                                 <a class="dropdown-item"
                                                     href="{{ route('buildings.floors.index', $building) }}"><i
                                                         class="icon-base bx bx-folder me-1"></i> View Floors</a>
-                                                <button type="button" class="dropdown-item" onclick="openModal('edit-building-{{ $building->id }}')">
+                                                <button type="button" class="dropdown-item"
+                                                    onclick="openModal('edit-building-{{ $building->id }}')">
                                                     <i class="icon-base bx bx-edit me-1"></i>Edit</button>
                                                 <hr class="dropdown-divider">
                                                 <form method="POST"
@@ -192,11 +206,19 @@
     </div>
 
     {{-- Create Modal --}}
-    @include('buildings.form-modal', ['residence' => $residence, 'building' => null, 'statuses' => $statuses])
+    @include('buildings.form-modal', [
+        'residence' => $residence,
+        'building' => null,
+        'statuses' => $statuses,
+    ])
 
     {{-- Edit Modals --}}
     @foreach ($buildings as $building)
-        @include('buildings.form-modal', ['residence' => $residence, 'building' => $building, 'statuses' => $statuses ?? \App\Models\BuildingStatus::all()])
+        @include('buildings.form-modal', [
+            'residence' => $residence,
+            'building' => $building,
+            'statuses' => $statuses ?? \App\Models\BuildingStatus::all(),
+        ])
         @include('buildings.show-modal', ['residence' => $residence, 'building' => $building])
     @endforeach
 

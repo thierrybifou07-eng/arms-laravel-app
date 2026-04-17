@@ -107,7 +107,7 @@ class ResidenceBuildingController extends Controller
         ]);
         $building->update($validated);
 
-        return redirect()->route('residences.buildings.index', $residence)->with('success', 'Le Bâtiment à bien été mis à jour');
+        return redirect()->route('residences.buildings.index', $residence)->with('success', 'The building has been successfully updated');
 
     }
 
@@ -121,6 +121,6 @@ class ResidenceBuildingController extends Controller
         }
         $building->delete();
 
-        return redirect()->route('residences.buildings.index', $residence)->with('success', 'Le Bâtiment à bien été supprimée');
+        return redirect()->route('residences.buildings.index', $residence)->with('success', 'The building has been successfully deleted');
     }
 }

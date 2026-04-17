@@ -92,8 +92,24 @@
                                         {{ $room->created_at }}
                                     </td>
                                     <td>
-                                        <span class="badge bg-label-primary me-1">{{ $room->status->label }}</span>
+                                        @switch($room->status->code ?? '')
+                                            @case('busy')
+                                                <span class="badge bg-label-primary">{{ $room->status->label ?? 'Busy' }}</span>
+                                            @break
 
+                                            @case('available')
+                                                <span
+                                                    class="badge bg-label-success">{{ $room->status->label ?? 'Available' }}</span>
+                                            @break
+
+                                            @case('closed')
+                                                <span
+                                                    class="badge bg-label-secondary">{{ $room->status->label ?? 'Closed' }}</span>
+                                            @break
+
+                                            @default
+                                                <span class="badge bg-label-light">Unknown</span>
+                                        @endswitch
                                     </td>
                                     <td>
                                         <div class="dropdown">
@@ -102,9 +118,11 @@
                                                 <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item" onclick="openModal('room-show-{{ $room->id }}')">
+                                                <button type="button" class="dropdown-item"
+                                                    onclick="openModal('room-show-{{ $room->id }}')">
                                                     <i class="icon-base bx bx-show-alt me-1"></i> Show</button>
-                                                <button type="button" class="dropdown-item" onclick="openModal('edit-room-{{ $room->id }}')">
+                                                <button type="button" class="dropdown-item"
+                                                    onclick="openModal('edit-room-{{ $room->id }}')">
                                                     <i class="icon-base bx bx-edit me-1"></i>Edit</button>
                                                 <hr class="dropdown-divider">
                                                 <form method="POST"
@@ -193,7 +211,11 @@
 
     {{-- Edit Modals --}}
     @foreach ($rooms as $room)
-        @include('rooms.form-modal', ['floor' => $floor, 'room' => $room, 'statuses' => $statuses ?? \App\Models\RoomStatus::all()])
+        @include('rooms.form-modal', [
+            'floor' => $floor,
+            'room' => $room,
+            'statuses' => $statuses ?? \App\Models\RoomStatus::all(),
+        ])
         @include('rooms.show-modal', ['floor' => $floor, 'room' => $room])
     @endforeach
 

@@ -107,7 +107,7 @@ class FloorRoomController extends Controller
         ]);
         $room->update($validated);
 
-        return redirect()->route('floors.rooms.index', $floor)->with('success', 'Le studio à bien été mis à jour');
+        return redirect()->route('floors.rooms.index', $floor)->with('success', 'The room has been successfully updated');
 
     }
 
@@ -121,7 +121,7 @@ class FloorRoomController extends Controller
         }
         $room->delete();
 
-        return redirect()->route('floors.rooms.index', $floor)->with('success', 'Le studio à bien été supprimée');
+        return redirect()->route('floors.rooms.index', $floor)->with('success', 'The room has been successfully deleted');
 
     }
 }

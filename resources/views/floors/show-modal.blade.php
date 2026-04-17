@@ -14,7 +14,7 @@
         @if ($floor)
             <div class="mb-3">
                 <label class="form-label"><strong>Building</strong></label>
-                <p class="form-control-plaintext">{{ $building?->name ?? $floor->building?->name ?? 'N/A' }}</p>
+                <p class="form-control-plaintext">{{ $building?->name ?? ($floor->building?->name ?? 'N/A') }}</p>
             </div>
 
             <div class="mb-3">
@@ -30,7 +30,18 @@
             <div class="mb-3">
                 <label class="form-label"><strong>Status</strong></label>
                 <p class="form-control-plaintext">
-                    <span class="badge bg-label-primary">{{ $floor->status->label ?? 'Unknown' }}</span>
+                    @switch($floor->status->code ?? '')
+                        @case('active')
+                            <span class="badge bg-label-primary">{{ $floor->status->label ?? 'Open' }}</span>
+                        @break
+
+                        @case('closed')
+                            <span class="badge bg-label-secondary">{{ $floor->status->label ?? 'Closed' }}</span>
+                        @break
+
+                        @default
+                            <span class="badge bg-label-light">Unknown</span>
+                    @endswitch
                 </p>
             </div>
 

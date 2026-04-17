@@ -82,8 +82,20 @@
                                     <td> {{ $residence->capacity }}
                                     </td>
                                     <td>
-                                        <span class="badge bg-label-primary me-1">{{ $residence->status->label }}</span>
+                                        @switch($residence->status->code ?? '')
+                                            @case('active')
+                                                <span
+                                                    class="badge bg-label-primary">{{ $residence->status->label ?? 'Open' }}</span>
+                                            @break
 
+                                            @case('closed')
+                                                <span
+                                                    class="badge bg-label-secondary">{{ $residence->status->label ?? 'Closed' }}</span>
+                                            @break
+
+                                            @default
+                                                <span class="badge bg-label-light">Unknown</span>
+                                        @endswitch
                                     </td>
                                     <td>
                                         <div class="dropdown">
@@ -92,7 +104,8 @@
                                                 <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item" onclick="openModal('residence-show-{{ $residence->id }}')">
+                                                <button type="button" class="dropdown-item"
+                                                    onclick="openModal('residence-show-{{ $residence->id }}')">
                                                     <i class="icon-base bx bx-show-alt me-1"></i>View</button>
                                                 <a class="dropdown-item"
                                                     href="{{ route('residences.buildings.index', $residence) }}">

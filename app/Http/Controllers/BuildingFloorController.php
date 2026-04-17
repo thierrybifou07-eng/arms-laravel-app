@@ -108,7 +108,7 @@ class BuildingFloorController extends Controller
         ]);
         $floor->update($validated);
 
-        return redirect()->route('buildings.floors.index', $building)->with('success', 'Le palier à bien été mis à jour');
+        return redirect()->route('buildings.floors.index', $building)->with('success', 'The floor has been successfully updated');
 
     }
 
@@ -122,7 +122,7 @@ class BuildingFloorController extends Controller
             }
         $floor->delete();
 
-        return redirect()->route('buildings.floors.index', $building)->with('success', 'Le palier à bien été supprimée');
+        return redirect()->route('buildings.floors.index', $building)->with('success', 'The floor has been successfully deleted');
 
     }
 }

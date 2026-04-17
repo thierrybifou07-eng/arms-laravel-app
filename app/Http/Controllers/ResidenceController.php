@@ -61,7 +61,7 @@ class ResidenceController extends Controller
 
         Residence::create($validated);
 
-        return redirect()->route('residences.index')->with('success', 'La residence à bien été créée');
+        return redirect()->route('residences.index')->with('success', 'The residence has been created successfully');
     }
 
     /**
@@ -99,7 +99,7 @@ class ResidenceController extends Controller
         ]);
         $residence->update($validated);
 
-        return redirect()->route('residences.index')->with('success', 'La residence à bien été mise à jour');
+        return redirect()->route('residences.index')->with('success', 'The residence has been successfully updated');
 
     }
 

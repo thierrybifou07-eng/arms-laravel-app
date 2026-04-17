@@ -131,7 +131,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia, Auditab
 
     public function canAccessResidence(Residence|int|null $residence): bool
     {
-        if ($this->hasRole(Role::SUPER_ADMIN)) {
+        if ($this->hasRole(Role::ADMIN)) {
             return true;
         }
 

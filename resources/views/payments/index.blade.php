@@ -12,9 +12,6 @@
             <div class="d-flex justify-content-start">
                 <h5 class="m-1">Payments</h5>
             </div>
-            {{--             <div class="d-flex justify-content-end">
-                <a href="{{ route('contracts.create') }}" class="btn rounded-pill btn-primary">New Contract</a>
-            </div> --}}
         </div>
         <div class="card">
             <div class="row m-3 gap-3">
