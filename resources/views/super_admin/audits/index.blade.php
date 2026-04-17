@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="col-xxl col-lg-12 col-md-12 flex-grow-1 container-p-y">
+    <div class="col-xxl col-lg-12 col-md-12 flex-grow-1">
         <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-1">
             <h3 class="mb-0">
                 <i class="bx bx-list-check me-2"></i>Audit Logs
             </h3>
@@ -26,7 +26,7 @@
             </div>
         @endif
         <!-- Filters Card -->
-        <div class="card mb-4">
+        <div class="card mb-2">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Filters</h5>
                 <a href="{{ route('super_adminaudits.index') }}" class="btn btn-sm btn-link">Clear All</a>
