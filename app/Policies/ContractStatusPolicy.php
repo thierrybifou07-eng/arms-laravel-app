@@ -14,7 +14,7 @@ class ContractStatusPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $this->isStaff($user) || $this->isTeller($user);
+        return $this->isStaff($user);
     }
 
     /**
@@ -22,7 +22,7 @@ class ContractStatusPolicy
      */
     public function view(User $user, ContractStatus $model): bool
     {
-        return $this->isStaff($user) || $this->isTeller($user);
+        return $this->isStaff($user);
     }
 
     /**

@@ -14,7 +14,7 @@ class PaymentMethodPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $this->isTeller($user);
+        return $this->isStaff($user);
     }
 
     /**
@@ -22,7 +22,7 @@ class PaymentMethodPolicy
      */
     public function view(User $user, PaymentMethod $model): bool
     {
-        return $this->isTeller($user);
+        return $this->isStaff($user);
     }
 
     /**

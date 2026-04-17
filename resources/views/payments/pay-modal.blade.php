@@ -45,7 +45,7 @@
                 <div class="col-md-12">
                     <label class="form-label">Payment Method <span class="text-danger">*</span></label>
                     <select name="payment_method_id" class="form-select" required>
-                        <option value="">Select a payment method</option>
+                        <option value="">--Select a payment method--</option>
                         @foreach ($paymentMethods as $method)
                             <option value="{{ $method->id }}">{{ $method->label }}</option>
                         @endforeach

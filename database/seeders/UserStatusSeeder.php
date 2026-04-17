@@ -13,15 +13,15 @@ class UserStatusSeeder extends Seeder
     {
         $statuses = [
             ['code' => 'pending',
-                'label' => 'Pending Activation',
+                'label' => 'Pending',
                 'created_at' => now(),
                 'updated_at' => now()],
             ['code' => 'active',
-                'label' => 'Active Account',
+                'label' => 'Active',
                 'created_at' => now(),
                 'updated_at' => now()],
             ['code' => 'disabled',
-                'label' => 'Disabled Account',
+                'label' => 'Disabled',
                 'created_at' => now(),
                 'updated_at' => now()],
         ];

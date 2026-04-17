@@ -15,7 +15,7 @@ class PaymentPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $this->isStaff($user) || $this->isTeller($user);
+        return $this->isStaff($user);
     }
 
     /**
@@ -23,9 +23,8 @@ class PaymentPolicy
      */
     public function view(User $user, Payment $model): bool
     {
-        // Super Admin, Admin, Staff, Teller can view all payments
-        if ($this->isStaff($user) || $this->isTeller($user)) {
-            return true;
+        if ($this->isStaff($user)) {
+            return $user->canAccessResidence($model->contract?->room?->floor?->building?->residence_id);
         }
 
         // Student can view their own payments
@@ -41,7 +40,7 @@ class PaymentPolicy
      */
     public function create(User $user): bool
     {
-        return $this->isTeller($user);
+        return $this->isStaff($user);
     }
 
     /**
@@ -49,14 +48,8 @@ class PaymentPolicy
      */
     public function update(User $user, Payment $model): bool
     {
-        // Super Admin, Admin can update any payment
-        if ($this->isSuperAdmin($user)) {
-            return true;
-        }
-
-        // Teller can update payments
-        if ($this->isTeller($user)) {
-            return true;
+        if ($this->isStaff($user)) {
+            return $user->canAccessResidence($model->contract?->room?->floor?->building?->residence_id);
         }
 
         return false;
@@ -91,7 +84,8 @@ class PaymentPolicy
      */
     public function validatePayment(User $user, Payment $model): bool
     {
-        return $this->isTeller($user);
+        return $this->isStaff($user)
+            && $user->canAccessResidence($model->contract?->room?->floor?->building?->residence_id);
     }
 
     /**
@@ -99,7 +93,8 @@ class PaymentPolicy
      */
     public function cancelPayment(User $user, Payment $model): bool
     {
-        return $this->isStaff($user);
+        return $this->isStaff($user)
+            && $user->canAccessResidence($model->contract?->room?->floor?->building?->residence_id);
     }
 
     /**
@@ -107,7 +102,8 @@ class PaymentPolicy
      */
     public function processPayment(User $user, Payment $model): bool
     {
-        return $this->isTeller($user);
+        return $this->isStaff($user)
+            && $user->canAccessResidence($model->contract?->room?->floor?->building?->residence_id);
     }
 
     /**
@@ -115,7 +111,8 @@ class PaymentPolicy
      */
     public function manageStatus(User $user, Payment $model): bool
     {
-        return $this->isTeller($user);
+        return $this->isStaff($user)
+            && $user->canAccessResidence($model->contract?->room?->floor?->building?->residence_id);
     }
 
     /**
@@ -123,6 +120,7 @@ class PaymentPolicy
      */
     public function checkOverdue(User $user, Payment $model): bool
     {
-        return $this->isStaff($user) || $this->isTeller($user);
+        return $this->isStaff($user)
+            && $user->canAccessResidence($model->contract?->room?->floor?->building?->residence_id);
     }
 }

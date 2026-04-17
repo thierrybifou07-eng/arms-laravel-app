@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResidenceBuildingController;
 use App\Http\Controllers\ResidenceController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,11 +37,11 @@ $authVerifiedStatus = ['auth', 'verified', 'checkUserStatus'];
 $superAdminOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin'];
 $adminOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:admin'];
 $superAdminAdmin = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,admin'];
-$adminTellerOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:admin,teller'];
+$adminStaffOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:admin,staff'];
 $student = ['auth', 'verified', 'checkUserStatus', 'checkRole:student'];
-$staffAdminSuperAdminTeller = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,teller,admin'];
-$every = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,teller,admin,student'];
-$profileAccess = ['auth', 'verified', 'checkUserStatus', 'checkRole:student,super_admin,staff,teller,admin'];
+$staffAdminSuperAdmin = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,admin'];
+$every = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,admin,student'];
+$profileAccess = ['auth', 'verified', 'checkUserStatus', 'checkRole:student,super_admin,staff,admin'];
 $eventPaymentTypeAccess = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,admin'];
 
 /*
@@ -63,6 +64,11 @@ Route::middleware($superAdminOnly)
         Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
         Route::get('roles/{role}', [RoleController::class, 'show'])->name('roles.show');
         Route::get('permissions', [PermissionController::class, 'index'])->name('permissions.index');
+    });
+Route::middleware($superAdminAdmin)
+    ->prefix('super-admin')
+    ->name('super_admin.')
+    ->group(function () {
         Route::get('users/{user}/roles', [UserRoleController::class, 'edit'])->name('user.roles.edit');
         Route::put('users/{user}/roles', [UserRoleController::class, 'update'])->name('user.roles.update');
     });
@@ -82,7 +88,7 @@ Route::middleware($superAdminAdmin)
 | Contract creation helpers
 |-----------------------------------------------------------------------
 */
-Route::middleware($adminTellerOnly)->group(function () {
+Route::middleware($adminStaffOnly)->group(function () {
     Route::get('/buildings/{residence}', [ContractController::class, 'getBuildings']);
     Route::get('/floors/{building}', [ContractController::class, 'getFloors']);
     Route::get('/rooms/{floor}', [ContractController::class, 'getRooms']);
@@ -101,6 +107,10 @@ Route::get('/super_admin/dashboard', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware($every)
     ->name('dashboard');
+
+Route::get('/search', SearchController::class)
+    ->middleware($every)
+    ->name('search');
 
 /*
 |-----------------------------------------------------------------------
@@ -124,11 +134,11 @@ Route::middleware($adminOnly)->resource('residences', ResidenceController::class
 Route::middleware($adminOnly)->resource('residences.buildings', ResidenceBuildingController::class)->scoped();
 Route::middleware($adminOnly)->resource('buildings.floors', BuildingFloorController::class)->scoped();
 Route::middleware($adminOnly)->resource('floors.rooms', FloorRoomController::class)->scoped();
-Route::middleware($superAdminAdmin)->resource('contracts', ContractController::class)->scoped();
+Route::middleware($adminStaffOnly)->resource('contracts', ContractController::class)->scoped();
 
-Route::middleware($superAdminOnly)->resource('users', UserController::class)->only(['index', 'show', 'update', 'destroy'])->scoped();
-Route::middleware($superAdminOnly)->put('users/{user}/change-status', [UserController::class, 'changeStatus'])->name('users.changeStatus');
-Route::middleware($superAdminOnly)->resource('roles', RoleController::class)->scoped();
+Route::middleware($superAdminAdmin)->resource('users', UserController::class)->only(['index', 'show', 'update', 'destroy'])->scoped();
+Route::middleware($superAdminAdmin)->put('users/{user}/change-status', [UserController::class, 'changeStatus'])->name('users.changeStatus');
+Route::middleware($superAdminAdmin)->resource('roles', RoleController::class)->scoped();
 Route::middleware($superAdminOnly)->resource('permissions', PermissionController::class)->scoped();
 
 /*
@@ -143,7 +153,7 @@ Route::middleware($eventPaymentTypeAccess)->resource('event_payment_types', Even
 | Payment history
 |-----------------------------------------------------------------------
 */
-Route::middleware($staffAdminSuperAdminTeller)->group(function () {
+Route::middleware($staffAdminSuperAdmin)->group(function () {
     Route::resource('payment_histories', PaymentHistoryController::class)->scoped();
     Route::post('payment_histories/export', [PaymentHistoryController::class, 'export'])->name('payment_histories.export');
 });
@@ -153,15 +163,11 @@ Route::middleware($staffAdminSuperAdminTeller)->group(function () {
 | Payments
 |-----------------------------------------------------------------------
 */
-Route::middleware($staffAdminSuperAdminTeller)->group(function () {
+Route::middleware($staffAdminSuperAdmin)->group(function () {
     Route::resource('payments', PaymentController::class)->only('index');
-    Route::get('/payments/{payment}', [PaymentController::class, 'payForm'])->name('payments.pay.form');
-    Route::get('/payments/{payment}/pay', [PaymentController::class, 'showPay'])->name('payments.show.pay');
-    Route::post('/payments/{payment}/pay', [PaymentController::class, 'pay'])->name('payments.pay');
     Route::post('/payments/{payment}/validate', [PaymentController::class, 'validatePayment'])->name('payments.validate');
-    Route::post('/payments/{payment}/cancel', [PaymentController::class, 'cancel'])->name('payments.cancel');
 });
-Route::middleware($student)->group(function () {
+Route::middleware($every)->group(function () {
     Route::get('/payments/{payment}', [PaymentController::class, 'payForm'])->name('payments.pay.form');
     Route::get('/payments/{payment}/pay', [PaymentController::class, 'showPay'])->name('payments.show.pay');
     Route::post('/payments/{payment}/pay', [PaymentController::class, 'pay'])->name('payments.pay');

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
@@ -51,5 +52,14 @@ class Residence extends Model implements AuditableContract
     public function users()
     {
         return $this->belongsToMany(User::class)->withTimestamps();
+    }
+
+    public function scopeForManager(Builder $query, User $user): Builder
+    {
+        if (! $user->isResidenceScoped()) {
+            return $query;
+        }
+
+        return $query->whereHas('users', fn (Builder $builder) => $builder->whereKey($user->id));
     }
 }

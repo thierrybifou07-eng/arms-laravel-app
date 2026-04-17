@@ -15,7 +15,6 @@ class RolePermissionSeeder extends Seeder
     {
         $superAdmin = Role::where('name', 'super_admin')->first();
         $admin = Role::where('name', 'admin')->first();
-        $teller = Role::where('name', 'teller')->first();
         $staff = Role::where('name', 'staff')->first();
         $student = Role::where('name', 'student')->first();
         $allPermissions = Permission::all();
@@ -61,25 +60,6 @@ class RolePermissionSeeder extends Seeder
                 ])->pluck('id')
         );
 
-        // Assign specific permissions to Teller
-
-        $teller->permissions()->sync(
-            Permission::whereIn('name',
-                [     // Rooms
-                    'view_rooms',
-                    'update_room',
-                    'assign_room',
-                    // payments
-                    'record_payments',
-                    'validate_payment',
-                    'cancel_payment',
-                    // Contracts
-                    'view_contracts',
-                    'create_contract',
-                    'update_contract',
-                    'terminate_contract',
-                ])->pluck('id')
-        );
         // Assign specific permissions to Staff
 
         $staff->permissions()->sync(
@@ -88,7 +68,15 @@ class RolePermissionSeeder extends Seeder
                     'view_residences',
                     'view_buidingss',
                     'view_rooms',
+                    'update_room',
+                    'assign_room',
                     'view_contracts',
+                    'create_contract',
+                    'update_contract',
+                    'terminate_contract',
+                    'record_payments',
+                    'validate_payment',
+                    'cancel_payment',
                     ])->pluck('id')
         );
 

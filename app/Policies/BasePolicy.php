@@ -10,8 +10,7 @@ use App\Models\User;
  * Organizes authorization methods by role hierarchy:
  * - super_admin: Full access to all actions
  * - admin: Full access to all actions
- * - staff: Can manage most resources (view, create, update)
- * - teller: Limited to payment-related operations
+ * - staff: Can manage most resources, including payment-related operations
  * - student: View-only/limited to personal resources
  */
 trait BasePolicy
@@ -30,14 +29,6 @@ trait BasePolicy
     public function isStaff(User $user): bool
     {
         return $user->hasRole(Role::STAFF) || $this->isSuperAdmin($user);
-    }
-
-    /**
-     * Check if user is Teller or above
-     */
-    public function isTeller(User $user): bool
-    {
-        return $user->hasRole(Role::TELLER) || $this->isStaff($user);
     }
 
     /**

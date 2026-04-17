@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="col-xxl col-lg-12 col-md-12 col-sm-12 py-4">
-    <h1 class="h4 mb-3">Active the user</h1>
+    <h1 class="h4 mb-3">Activate the user</h1>
 
     <div class="card shadow-sm p-4 mb-4">
         <p class="mb-1"><strong>Name :</strong> {{ $user->firstname }} {{ $user->lastname }}</p>
@@ -16,18 +16,23 @@
         @method('PUT')
 
         <div class="mb-3">
-            <label class="form-label d-block">Assign at least a role</label>
+            <label class="form-label d-block">Select a role</label>
 
             <div class="row">
                 @foreach($roles as $role)
                     <div class="col-md-4 mb-2">
                         <div class="form-check">
+                            @php
+                                $userRole = $user->getRole();
+                                $isSelected = $userRole && $userRole->id === $role->id;
+                            @endphp
                             <input class="form-check-input"
-                                   type="checkbox"
-                                   name="roles[]"
+                                   type="radio"
+                                   name="role"
                                    value="{{ $role->id }}"
                                    id="role_{{ $role->id }}"
-                                   @checked($user->roles->contains($role->id))>
+                                   @checked($isSelected)
+                                   required>
                             <label class="form-check-label" for="role_{{ $role->id }}">
                                 {{ $role->label }}
                             </label>
@@ -36,14 +41,14 @@
                 @endforeach
             </div>
 
-            @error('roles')
+            @error('role')
                 <div class="text-danger small">{{ $message }}</div>
             @enderror
         </div>
 
         <div class="d-flex gap-2">
             <button type="submit" class="btn btn-success">
-                Active
+                Activate
             </button>
             <a href="{{ route('activate_accountpending_users.index') }}" class="btn btn-secondary">
                 Cancel

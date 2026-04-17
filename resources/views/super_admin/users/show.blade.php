@@ -6,8 +6,8 @@
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
-                        <a href="{{ route('users.index') }}" class="btn btn-sm btn-outline-secondary mb-2">
-                            <i class="bx bx-arrow-back me-1"></i>Back to Users
+                        <a href="{{ route('users.index') }}" class="btn btn-sm btn-secondary mb-2">
+                            Back to Users
                         </a>
                         <h3 class="mb-0">User Details</h3>
                     </div>
@@ -37,38 +37,10 @@
                             width="100">
                         <h5 class="card-title">{{ $user->firstname }}</h5>
                         <p class="text-muted mb-3">{{ $user->email }}</p>
-
-{{--                         <!-- Status Badge -->
-                        <div class="mb-3">
-                            @if ($user->userStatus)
-                                @switch($user->userStatus->code)
-                                    @case('active')
-                                        <span class="badge bg-success">
-                                            <i class="bx bx-check-circle me-1"></i>{{ $user->userStatus->label }}
-                                        </span>
-                                    @break
-
-                                    @case('pending')
-                                        <span class="badge bg-warning">
-                                            <i class="bx bx-time me-1"></i>{{ $user->userStatus->label }}
-                                        </span>
-                                    @break
-
-                                    @case('disabled')
-                                        <span class="badge bg-danger">
-                                            <i class="bx bx-block me-1"></i>{{ $user->userStatus->label }}
-                                        </span>
-                                    @break
-
-                                    @default
-                                        <span class="badge bg-secondary">{{ $user->userStatus->label }}</span>
-                                @endswitch
-                            @endif
-                        </div> --}}
                         <!-- Action Buttons -->
                         <div class="gap-2 d-flex flex-column mt-4">
                             @if (auth()->id() !== $user->id)
-                                <a href="{{ route('super_adminuser.roles.edit', $user) }}"
+                                <a href="{{ route('super_admin.user.roles.edit', $user) }}"
                                     class="btn btn-sm btn-outline-primary">
                                     <i class="bx bx-edit me-1"></i>Manage Roles
                                 </a>
@@ -124,41 +96,51 @@
                             <i class="bx bx-crown me-2"></i>Roles
                         </h6>
                         @if (auth()->id() !== $user->id)
-                            <a href="{{ route('super_adminuser.roles.edit', $user) }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('super_admin.user.roles.edit', $user) }}" class="btn btn-sm btn-primary">
                                 <i class="bx bx-edit me-1"></i>Edit
                             </a>
                         @endif
                     </div>
                     <div class="card-body">
-                        @if ($user->roles->isNotEmpty())
+                        @php
+                            $userRole = $user->getRole();
+                        @endphp
+
+                        @if ($userRole)
                             <div class="table-responsive">
                                 <table class="table table-sm">
                                     <thead class="table-light">
                                         <tr>
                                             <th>Role</th>
+                                            <th>Residence</th>
                                             <th>Assigned Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($user->roles as $role)
-                                            <tr>
-                                                <td>
-                                                    <strong>{{ $role->label }}</strong>
-                                                </td>
-                                                <td>
-                                                    <small class="text-muted">
-                                                        {{ $role->pivot->created_at?->format('M d, Y H:i') ?? 'N/A' }}
-                                                    </small>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                        <tr>
+                                            <td>
+                                                <strong>{{ $userRole->label }}</strong>
+                                            </td>
+                                            <td>
+                                                @if ($user->residences->isNotEmpty())
+                                                    {{ $user->residences->pluck('name')->join(', ') }}
+                                                @else
+                                                    <span class="text-muted">Not assigned</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">
+                                                    {{ $userRole->pivot->created_at?->format('M d, Y H:i') ?? 'N/A' }}
+                                                </small>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                         @else
                             <div class="alert alert-info" role="alert">
                                 <i class="bx bx-info-circle me-2"></i>
-                                This user has no roles assigned.
+                                This user has no role assigned.
                             </div>
                         @endif
                     </div>

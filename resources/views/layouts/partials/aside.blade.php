@@ -1,3 +1,8 @@
+@php
+    $role = auth()->user()?->getRoleName() ?? 'student';
+    $asideView = "layouts.partials.asides.{$role}";
+@endphp
+
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
         <a href="{{ url('/') }}" class="app-brand-link">
@@ -29,13 +34,11 @@
                                         <use fill="currentColor" xlink:href="#path-1"></use>
                                         <g id="Path-3" mask="url(#mask-2)">
                                             <use fill="currentColor" xlink:href="#path-3"></use>
-                                            <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-3">
-                                            </use>
+                                            <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-3"></use>
                                         </g>
                                         <g id="Path-4" mask="url(#mask-2)">
                                             <use fill="currentColor" xlink:href="#path-4"></use>
-                                            <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-4">
-                                            </use>
+                                            <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-4"></use>
                                         </g>
                                     </g>
                                     <g id="Triangle"
@@ -58,140 +61,7 @@
     </div>
 
     <div class="menu-divider mt-0"></div>
-
     <div class="menu-inner-shadow"></div>
 
-    <ul class="menu-inner py-1">
-        <!-- Dashboards -->
-        <li class="menu-item active">
-            <a href="{{ route('dashboard') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-pie-chart-alt-2"></i>
-                <div class="text-truncate" data-i18n="Dashboards">Dashboard</div>
-            </a>
-        </li>
-        <!-- Residences -->
-        <!-- Academy menu start -->
-        <li class="menu-item">
-            <a href="{{ route('residences.index') }}" class="menu-link">
-                <i class="menu-icon icon-base bx bx-home"></i>
-                <div data-i18n="Academy">Residences</div>
-            </a>
-        </li>
-
-        <!-- Contracts payments menu -->
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base bx bx-food-menu"></i>
-                <div data-i18n="Invoice">Contracts</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ route('contracts.index') }}" class="menu-link">
-                        <div data-i18n="List">List</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{ route('contracts.create') }}" class="menu-link">
-                        <div data-i18n="Preview">Create</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <!-- Finance Section -->
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base bx bx-money"></i>
-                <div data-i18n="Finance">Finance</div>
-            </a>
-            <ul class="menu-sub">
-                @can('viewAny', App\Models\Payment::class)
-                    <li class="menu-item">
-                        <a href="{{ route('payments.index') }}" class="menu-link">
-                            <div data-i18n="Edit">Payments</div>
-                        </a>
-                    </li>
-                @endcan
-                @can('viewAny', App\Models\PaymentHistory::class)
-                    <li class="menu-item">
-                        <a href="{{ route('payment_histories.index') }}" class="menu-link">
-                            <div data-i18n="Payment Histories">Payments Histories</div>
-                        </a>
-                    </li>
-                @endcan
-                @can('viewAny', App\Models\EventPaymentType::class)
-                    <li class="menu-item">
-                        <a href="{{ route('event_payment_types.index') }}" class="menu-link">
-                            <div data-i18n="Event Payment Types">Event Payment Types</div>
-                        </a>
-                    </li>
-                @endcan
-            </ul>
-        </li>
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base bx bx-user"></i>
-                <div data-i18n="Users">Users</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ route('users.index') }}" class="menu-link">
-                        <div data-i18n="List">List</div>
-                    </a>
-                </li>
-
-                <li class="menu-item">
-                    <a href="{{ route('activate_accountpending_users.index') }}" class="menu-link">
-                        <div data-i18n="View">Edit status</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base bx bx-check-shield"></i>
-                <div data-i18n="Roles &amp; Permissions">Roles &amp; Permissions</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ route('roles.index') }}" class="menu-link">
-                        <div data-i18n="Roles">Roles</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{ route('permissions.index') }}" class="menu-link">
-                        <div data-i18n="Permission">Permission</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base bx bx-lock-open-alt"></i>
-                <div data-i18n="Authentications">Authentications</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ route('verification.send') }}" class="menu-link">
-                        <div data-i18n="Verify Email">Verify Email</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{ route('password.request') }};" class="menu-link">
-                        <div data-i18n="Forgot Password">Forgot Password</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <!-- Audit Logs (Super Admin Only) -->
-
-        @can('view-audit-logs')
-            <li class="menu-divider my-2"></li>
-            <li class="menu-item">
-                <a href="{{ route('super_adminaudits.index') }}" class="menu-link">
-                    <i class="menu-icon icon-base bx bx-history"></i>
-                    <div data-i18n="Audit Logs">Audit Logs</div>
-                </a>
-            </li>
-        @endcan
-    </ul>
+    @includeIf($asideView)
 </aside>

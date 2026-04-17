@@ -24,16 +24,7 @@ class FloorPolicy
     public function view(User $user, Floor $model): bool
     {
         // Super Admin, Admin, Staff can view all floors
-        if ($this->isStaff($user)) {
-            return true;
-        }
-
-        // Teller can view floors
-        if ($this->isTeller($user)) {
-            return true;
-        }
-
-        return false;
+        return $this->isStaff($user);
     }
 
     /**

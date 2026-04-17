@@ -15,8 +15,6 @@ class Role extends Model
 
     public const STAFF = 'staff';
 
-    public const TELLER = 'teller';
-
     public const STUDENT = 'student';
 
     // create the function(undefinded here) to call in the dbseeder
@@ -40,6 +38,27 @@ class Role extends Model
     public function users()
     {
         return $this->belongsToMany(User::class)->withTimestamps();
+    }
+
+    // Get users with this role
+    public function getUsersWithThisRole()
+    {
+        return $this->users();
+    }
+
+    // Check if this is the super_admin role
+    public function isSuperAdmin(): bool
+    {
+        return $this->name === self::SUPER_ADMIN;
+    }
+
+    // Get the super_admin user (if this is the super_admin role)
+    public function getSuperAdminUser(): ?User
+    {
+        if ($this->isSuperAdmin()) {
+            return $this->users()->first();
+        }
+        return null;
     }
 
     public function permissions()

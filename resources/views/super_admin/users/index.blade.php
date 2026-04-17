@@ -43,8 +43,6 @@
                                     <option value="">All Roles</option>
                                     <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin
                                     </option>
-                                    <option value="teller" {{ request('role') === 'teller' ? 'selected' : '' }}>Teller
-                                    </option>
                                     <option value="staff" {{ request('role') === 'staff' ? 'selected' : '' }}>Staff
                                     </option>
                                     <option value="student" {{ request('role') === 'student' ? 'selected' : '' }}>Student
@@ -82,7 +80,7 @@
                             <th class="text-center" style="width: 7%">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="table-border-bottom-0">
+                    <tbody>
                         @foreach ($users as $user)
                             <tr>
                                 <td class="text-center">
@@ -122,35 +120,33 @@
                                     @endswitch
                                 </td>
                                 <td class="text-start">
-                                    @if ($user->roles->count() > 0)
-                                        @foreach ($user->roles as $role)
-                                            @switch($role->name)
-                                                @case('super_admin')
-                                                    <span class="badge bg-label-success me-1">{{ $role->label }}</span>
-                                                @break
+                                    @php
+                                        $userRole = $user->getRole();
+                                    @endphp
 
-                                                @case('admin')
-                                                    <span class="badge bg-label-primary me-1">{{ $role->label }}</span>
-                                                @break
+                                    @if ($userRole)
+                                        @switch($userRole->name)
+                                            @case('super_admin')
+                                                <span class="badge bg-label-success">{{ $userRole->label }}</span>
+                                            @break
 
-                                                @case('staff')
-                                                    <span class="badge bg-label-danger me-1">{{ $role->label }}</span>
-                                                @break
+                                            @case('admin')
+                                                <span class="badge bg-label-primary">{{ $userRole->label }}</span>
+                                            @break
 
-                                                @case('teller')
-                                                    <span class="badge bg-label-warning me-1">{{ $role->label }}</span>
-                                                @break
+                                            @case('staff')
+                                                <span class="badge bg-label-danger">{{ $userRole->label }}</span>
+                                            @break
 
-                                                @case('student')
-                                                    <span class="badge bg-label-info me-1">{{ $role->label }}</span>
-                                                @break
+                                            @case('student')
+                                                <span class="badge bg-label-info">{{ $userRole->label }}</span>
+                                            @break
 
-                                                @default
-                                                    <span class="badge bg-label-light me-1">{{ $role->label }}</span>
-                                            @endswitch
-                                        @endforeach
+                                            @default
+                                                <span class="badge bg-label-light">{{ $userRole->label }}</span>
+                                        @endswitch
                                     @else
-                                        <span class="badge bg-label-secondary">No roles</span>
+                                        <span class="badge bg-label-secondary">No role</span>
                                     @endif
                                 </td>
                                 <td class="text-center">
@@ -169,7 +165,7 @@
                                             <a class="dropdown-item" href="{{ route('users.show', $user) }}">
                                                 <i class="bx bx-show-alt me-1"></i>View</a>
                                             <a class="dropdown-item"
-                                                href="{{ route('super_adminuser.roles.edit', $user) }}">
+                                                href="{{ route('super_admin.user.roles.edit', $user) }}">
                                                 <i class="bx bx-user-check me-1"></i>Assign Role</a>
                                             <a class="dropdown-item"
                                                 href="{{ route('activate_accountpending_users.edit', $user) }}">
@@ -191,7 +187,6 @@
                     </tbody>
                 </table>
             </div>
-            <hr>
             <!-- Pagination -->
             <div class="row mx-3 justify-content-between">
                 <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">

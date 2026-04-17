@@ -12,12 +12,10 @@ class RoomStatus extends Model
 
     public const BUSY = 'busy';
 
-    public const RENEW = 'renew';
-
     public const CLOSED = 'closed';
 
-    //create the function(undefinded here) to call in the dbseeder
-    
+    // create the function(undefinded here) to call in the dbseeder
+
     public static function getIdByCode(string $code): ?int
     {
         return static::where('code', $code)->value('id');

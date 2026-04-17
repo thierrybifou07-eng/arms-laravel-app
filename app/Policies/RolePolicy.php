@@ -40,7 +40,7 @@ class RolePolicy
     public function update(User $user, Role $model): bool
     {
         // Prevent modification of core system roles
-        $systemRoles = [Role::SUPER_ADMIN, Role::ADMIN, Role::STAFF, Role::TELLER, Role::STUDENT];
+        $systemRoles = [Role::SUPER_ADMIN, Role::ADMIN, Role::STAFF, Role::STUDENT];
         
         if (in_array($model->name, $systemRoles)) {
             return false;
@@ -55,7 +55,7 @@ class RolePolicy
     public function delete(User $user, Role $model): bool
     {
         // Prevent deletion of core system roles
-        $systemRoles = [Role::SUPER_ADMIN, Role::ADMIN, Role::STAFF, Role::TELLER, Role::STUDENT];
+        $systemRoles = [Role::SUPER_ADMIN, Role::ADMIN, Role::STAFF, Role::STUDENT];
         
         if (in_array($model->name, $systemRoles)) {
             return false;
@@ -77,7 +77,7 @@ class RolePolicy
      */
     public function forceDelete(User $user, Role $model): bool
     {
-        $systemRoles = [Role::SUPER_ADMIN, Role::ADMIN, Role::STAFF, Role::TELLER, Role::STUDENT];
+        $systemRoles = [Role::SUPER_ADMIN, Role::ADMIN, Role::STAFF, Role::STUDENT];
         
         if (in_array($model->name, $systemRoles)) {
             return false;

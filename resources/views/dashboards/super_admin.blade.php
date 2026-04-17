@@ -25,11 +25,11 @@
 <!-- Main KPIs Row -->
 <div class="row">
     <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card h-100 border-start border-primary border-5">
+        <div class="card h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <h3 class="mb-0 text-primary fw-bold">{{ $dashboardData['totalStudents'] ?? 0 }}</h3>
+                        <h3 class="mb-0">{{ $dashboardData['totalStudents'] ?? 0 }}</h3>
                         <p class="text-muted mb-0 small">Total Students</p>
                     </div>
                     <div class="avatar bg-primary bg-opacity-10 rounded-circle p-3">
@@ -40,11 +40,11 @@
         </div>
     </div>
     <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card h-100 border-start border-success border-5">
+        <div class="card h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <h3 class="mb-0 text-success fw-bold">{{ $dashboardData['totalContracts'] ?? 0 }}</h3>
+                        <h3 class="mb-0">{{ $dashboardData['totalContracts'] ?? 0 }}</h3>
                         <p class="text-muted mb-0 small">Total Contracts</p>
                         <small class="text-success"><i class="bx bx-check-circle me-1"></i>{{ $dashboardData['activeContracts'] ?? 0 }} Active</small>
                     </div>
@@ -56,11 +56,11 @@
         </div>
     </div>
     <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card h-100 border-start border-info border-5">
+        <div class="card h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <h3 class="mb-0 text-info fw-bold">{{ $dashboardData['totalPayments'] ?? 0 }}</h3>
+                        <h3 class="mb-0">{{ $dashboardData['totalPayments'] ?? 0 }}</h3>
                         <p class="text-muted mb-0 small">Total Payments</p>
                         <small class="text-info"><i class="bx bx-check-circle me-1"></i>{{ $dashboardData['validatedPayments'] ?? 0 }} Valid</small>
                     </div>
@@ -72,11 +72,11 @@
         </div>
     </div>
     <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card h-100 border-start border-warning border-5">
+        <div class="card h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <h3 class="mb-0 text-warning fw-bold">{{ $dashboardData['totalAudits'] ?? 0 }}</h3>
+                        <h3 class="mb-0">{{ $dashboardData['totalAudits'] ?? 0 }}</h3>
                         <p class="text-muted mb-0 small">Audit Records</p>
                         <small class="text-warning"><i class="bx bx-calendar me-1"></i>{{ $dashboardData['todayAudits'] ?? 0 }} Today</small>
                     </div>
@@ -104,7 +104,7 @@
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-md-3">
-                        <div class="bg-light p-3 rounded text-center">
+                        <div class="p-3 rounded text-center">
                             <div class="mb-2">
                                 <i class="bx bx-plus-circle text-success" style="font-size: 2rem;"></i>
                             </div>
@@ -114,7 +114,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="bg-light p-3 rounded text-center">
+                        <div class="p-3 rounded text-center">
                             <div class="mb-2">
                                 <i class="bx bx-edit text-info" style="font-size: 2rem;"></i>
                             </div>
@@ -124,7 +124,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="bg-light p-3 rounded text-center">
+                        <div class="p-3 rounded text-center">
                             <div class="mb-2">
                                 <i class="bx bx-trash text-danger" style="font-size: 2rem;"></i>
                             </div>
@@ -134,7 +134,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="bg-light p-3 rounded text-center">
+                        <div class="p-3 rounded text-center">
                             <div class="mb-2">
                                 <i class="bx bx-refresh text-warning" style="font-size: 2rem;"></i>
                             </div>
@@ -160,7 +160,7 @@
             <div class="table-responsive">
                 <table class="table table-sm mb-0">
                     <thead>
-                        <tr class="table-light">
+                        <tr class="table-dark">
                             <th>ID</th>
                             <th>Student</th>
                             <th>Amount</th>
@@ -268,7 +268,7 @@
             <div class="table-responsive">
                 <table class="table table-sm mb-0">
                     <thead>
-                        <tr class="table-light">
+                        <tr class="table-dark">
                             <th>Student</th>
                             <th>Room</th>
                             <th>Status</th>

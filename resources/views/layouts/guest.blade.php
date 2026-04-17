@@ -52,14 +52,17 @@
     <script src="{{ asset('admin-template/assets') }}/js/config.js"></script>
     <!-- Additional CSS for phone input -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/css/intlTelInput.css">
+    @stack('styles')
 </head>
 
 <body>
     <!-- Content -->
 
+    @php($authInnerClass = trim($__env->yieldContent('auth_inner_class')))
+
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
-            <div class="authentication-inner" style="max-width: 800px;">
+            <div class="authentication-inner {{ $authInnerClass ? ' '.$authInnerClass : '' }}">
                 <!-- Register -->
                 <div class="card px-5">
                     <div class="card-body">
@@ -132,32 +135,40 @@
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/intlTelInput.min.js"></script>
 
     <script>
-        const input = document.querySelector("#phone");
-        const iti = window.intlTelInput(input, {
-            // Options de configuration
-            initialCountry: "auto",
-            geoIpLookup: callback => {
-                fetch("https://ipapi.co/json")
-                    .then(res => res.json())
-                    .then(data => callback(data.country_code))
-                    .catch(() => callback("fr"));
-            },
-            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js",
-        });
-        const form = document.querySelector("#formAccountSetting");
+        const input = document.querySelector("[data-phone-input]");
+        const form = document.querySelector("[data-phone-form]");
+        const hiddenPhoneInput = document.querySelector("[data-phone-hidden]");
+        const countryInput = document.querySelector("[data-phone-country]");
 
-        form.addEventListener("submit", function(e) {
-            // 1. Récupérer les données de la bibliothèque
-            const countryData = iti.getSelectedCountryData(); // Contient l'indicatif (dialCode)
-            const nationalNumber = input.value; // Le numéro tapé par l'utilisateur
+        if (input && form && hiddenPhoneInput) {
+            const initialCountry = input.dataset.initialCountry;
+            const iti = window.intlTelInput(input, {
+                initialCountry: initialCountry || "auto",
+                geoIpLookup: initialCountry ? null : (callback => {
+                    fetch("https://ipapi.co/json")
+                        .then(res => res.json())
+                        .then(data => callback(data.country_code))
+                        .catch(() => callback("fr"));
+                }),
+                utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js",
+            });
 
-            // 2. Créer le format : (+Indicatif) Numéro
-            const formattedNumber = `(+${countryData.dialCode}) ${nationalNumber}`;
+            const stripDialCode = value => value.replace(/^\(\+\d+\)\s*/, "").trim();
 
-            // 3. Mettre à jour la valeur de l'input phone avant que Laravel ne le reçoive
-            // On peut soit utiliser un champ caché, soit écraser la valeur de l'input actuel
-            input.value = formattedNumber;
-        });
+            input.value = stripDialCode(input.value);
+
+            form.addEventListener("submit", function() {
+                const countryData = iti.getSelectedCountryData();
+                const nationalNumber = stripDialCode(input.value);
+
+                input.value = nationalNumber;
+                hiddenPhoneInput.value = nationalNumber ? `(+${countryData.dialCode}) ${nationalNumber}` : '';
+
+                if (countryInput) {
+                    countryInput.value = countryData.iso2 || '';
+                }
+            });
+        }
     </script>
     <!-- Core JS -->
 
@@ -182,6 +193,7 @@
 
     <!-- Place this tag before closing body tag for github widget button. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    @stack('scripts')
 </body>
 
 </html>

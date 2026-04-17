@@ -13,15 +13,11 @@ class ResidenceStatusSeeder extends Seeder
     {
         $statuses = [
             ['code' => 'active',
-                'label' => 'Active',
+                'label' => 'Open',
                 'created_at' => now(),
                 'updated_at' => now()],
             ['code' => 'closed',
                 'label' => 'Closed',
-                'created_at' => now(),
-                'updated_at' => now()],
-            ['code' => 'renew',
-                'label' => 'Renovation',
                 'created_at' => now(),
                 'updated_at' => now()],
         ];

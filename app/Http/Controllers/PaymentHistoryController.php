@@ -18,7 +18,9 @@ class PaymentHistoryController extends Controller
         $this->authorize('viewAny', PaymentHistory::class);
         
         $user = auth()->user();
-        $query = PaymentHistory::with(['payment' => function ($q) {
+        $query = PaymentHistory::query()
+            ->forManager($user)
+            ->with(['payment' => function ($q) {
             $q->with(['contract' => function ($q2) {
                 $q2->with(['user', 'room.floor.building.residence']);
             }]);
@@ -27,14 +29,6 @@ class PaymentHistoryController extends Controller
         // Filter based on user role
         if ($user->hasRole('super_admin')) {
             // Super admin sees all payment histories
-        } elseif ($user->hasRole('admin') || $user->hasRole('teller')) {
-            // Admin/Teller sees payment histories for residences they manage
-            $query->whereHas('payment.contract.room.floor.building.residence', fn ($q) =>
-                $q->whereHas('users', fn ($q2) => $q2->where('users.id', $user->id))
-            );
-        } elseif ($user->hasRole('staff')) {
-            // Staff sees payment histories they recorded
-            $query->where('recorded_by', $user->id);
         } elseif ($user->hasRole('student')) {
             // Student sees only their own payment histories
             $query->whereHas('payment.contract', fn ($q) => $q->where('user_id', $user->id));
@@ -147,7 +141,10 @@ class PaymentHistoryController extends Controller
     {
         $this->authorize('export', PaymentHistory::class);
 
-        $histories = PaymentHistory::with('payment')->get();
+        $histories = PaymentHistory::query()
+            ->forManager($request->user())
+            ->with('payment')
+            ->get();
         
         $csv = "ID,Paiement ID,Montant,Ancien Solde,Nouveau Solde,Date\n";
         foreach ($histories as $history) {

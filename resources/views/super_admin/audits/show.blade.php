@@ -5,7 +5,7 @@
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <a href="{{ route('super_admin.audits.index') }}" class="btn btn-sm btn-outline-secondary mb-2">
+            <a href="{{ route('super_adminaudits.index') }}" class="btn btn-sm btn-outline-secondary mb-2">
                 <i class="bx bx-arrow-back me-1"></i>Back to Audits
             </a>
             <h3 class="mb-0">Audit Record #{{ $audit->id }}</h3>
@@ -101,11 +101,14 @@
                                 <strong>{{ $audit->user->email }}</strong>
                                 <br>Name: 
                                 {{ $audit->user->firstname }} {{ $audit->user->lastname }}
-                                <br>Roles:
-                                @if ($audit->user->roles->isNotEmpty())
-                                    @foreach ($audit->user->roles as $role)
-                                        <span class="badge bg-primary">{{ $role->label }}</span>
-                                    @endforeach
+                                <br>Role:
+                                @php
+                                    $userRole = $audit->user->getRole();
+                                @endphp
+                                @if ($userRole)
+                                    <span class="badge bg-primary">{{ $userRole->label }}</span>
+                                @else
+                                    <span class="text-muted">No role assigned</span>
                                 @endif
                             </p>
                         </div>

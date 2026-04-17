@@ -37,20 +37,30 @@ class UserService
     }
 
     /**
-     * Assign role to user
+     * Assign role to user (replaces any existing role)
      */
     public function assignRole(User $user, string $role): void
     {
-        $user->roles()->sync([\App\Models\Role::where('name', $role)->value('id')]);
+        $roleId = \App\Models\Role::where('name', $role)->value('id');
+        if (!$roleId) {
+            throw new \Exception("Role [$role] not found");
+        }
+        $user->roles()->sync([$roleId]);
     }
 
     /**
-     * Assign multiple roles to user
+     * Assign roles to user - For backward compatibility, takes only the first role
+     * since each user can now only have one role
      */
     public function assignRoles(User $user, array $roles): void
     {
-        $roleIds = \App\Models\Role::whereIn('name', $roles)->pluck('id')->toArray();
-        $user->roles()->sync($roleIds);
+        if (empty($roles)) {
+            $user->roles()->detach();
+            return;
+        }
+
+        // Take the first role from the array for single-role assignment
+        $this->assignRole($user, $roles[0]);
     }
 
     /**
@@ -130,7 +140,6 @@ class UserService
             'pending_users' => $this->getPendingUsers()->count(),
             'admins' => $this->getUsersByRole('admin')->count(),
             'staff' => $this->getUsersByRole('staff')->count(),
-            'tellers' => $this->getUsersByRole('teller')->count(),
             'students' => $this->getUsersByRole('student')->count(),
         ];
     }

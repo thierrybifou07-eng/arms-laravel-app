@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\PaymentStatus;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class PaymentStatusSeeder extends Seeder
@@ -13,13 +12,13 @@ class PaymentStatusSeeder extends Seeder
      */
     public function run(): void
     {
-       $statuses = [
+        $statuses = [
             ['code' => 'pending', 'label' => 'Pending'],
             ['code' => 'paid', 'label' => 'Paid'],
             ['code' => 'validated', 'label' => 'Validated'],
             ['code' => 'cancelled', 'label' => 'Cancelled'],
             ['code' => 'processing', 'label' => 'Processing'],
-['code' => 'overdue', 'label' => 'Overdue'],
+            ['code' => 'overdue', 'label' => 'Overdue'],
         ];
 
         foreach ($statuses as $status) {
@@ -29,5 +28,4 @@ class PaymentStatusSeeder extends Seeder
             );
         }
     }
-    
 }

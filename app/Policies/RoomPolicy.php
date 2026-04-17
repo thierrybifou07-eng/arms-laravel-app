@@ -28,11 +28,6 @@ class RoomPolicy
             return true;
         }
 
-        // Teller can view rooms
-        if ($this->isTeller($user)) {
-            return true;
-        }
-
         // Students can view rooms they're interested in
         if ($user->hasRole(Role::STUDENT)) {
             return true;

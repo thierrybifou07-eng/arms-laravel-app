@@ -113,39 +113,47 @@
                                 </td>
 
                                 <td>
-                                    @if ($payment->status->code === 'validated')
-                                        <a class="btn btn-sm btn-info" href="{{ route('payments.show.pay', $payment) }}">
-                                            <i class="icon-base bx bx-check me-1"></i>Show
-                                        </a>
+                                    @if ($payment->status->code === 'cancelled')
+                                        <span class="text-muted">#</span>
                                     @else
-                                        <div class="dropdown">
-                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                                data-bs-toggle="dropdown">
-                                                <i class="icon-base bx bx-dots-vertical-rounded"></i>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                @if ($payment->status->code === 'pending' || $payment->status->code === 'overdue')
-                                                    <button type="button" class="dropdown-item text-primary"
-                                                        onclick="openModal('pay-modal-{{ $payment->id }}')">
-                                                        <i class="icon-base bx bx-money me-1"></i>Pay</button>
-                                                    <hr class="dropdown-divider">
-                                                    <form method="POST" action="{{ route('payments.cancel', $payment) }}">
-                                                        @csrf
-                                                        <button class="dropdown-item text-danger" type="submit">
-                                                            <i class="icon-base bx bx-x me-1"></i>Cancel
-                                                        </button>
-                                                    </form>
-                                                @elseif ($payment->status->code === 'processing')
-                                                    <form method="POST"
-                                                        action="{{ route('payments.validate', $payment) }}">
-                                                        @csrf
-                                                        <button class="dropdown-item text-success" type="submit">
-                                                            <i class="icon-base bx bx-check me-1"></i>Validate
-                                                        </button>
-                                                    </form>
-                                                @endif
+                                        @if ($payment->status->code === 'validated')
+                                            {{--  <a class="btn btn-sm btn-info" href="{{ route('payments.show.pay', $payment) }}">
+                                            <i class="icon-base bx bx-check me-1"></i>Show
+                                        </a> --}}
+                                            <button type="button" class="btn btn-sm btn-info"
+                                                onclick="openModal('payment-show-{{ $payment->id }}')">
+                                                <i class="icon-base bx bx-show-alt me-1"></i>Show</button>
+                                        @else
+                                            <div class="dropdown">
+                                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                                    data-bs-toggle="dropdown">
+                                                    <i class="icon-base bx bx-dots-vertical-rounded"></i>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    @if ($payment->status->code === 'pending' || $payment->status->code === 'overdue')
+                                                        <button type="button" class="dropdown-item text-primary"
+                                                            onclick="openModal('pay-modal-{{ $payment->id }}')">
+                                                            <i class="icon-base bx bx-money me-1"></i>Pay</button>
+                                                        <hr class="dropdown-divider">
+                                                        <form method="POST"
+                                                            action="{{ route('payments.cancel', $payment) }}">
+                                                            @csrf
+                                                            <button class="dropdown-item text-danger" type="submit">
+                                                                <i class="icon-base bx bx-x me-1"></i>Cancel
+                                                            </button>
+                                                        </form>
+                                                    @elseif ($payment->status->code === 'processing')
+                                                        <form method="POST"
+                                                            action="{{ route('payments.validate', $payment) }}">
+                                                            @csrf
+                                                            <button class="dropdown-item text-success" type="submit">
+                                                                <i class="icon-base bx bx-check me-1"></i>Validate
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                </div>
                                             </div>
-                                        </div>
+                                        @endif
                                     @endif
                                 </td>
                             </tr>
@@ -205,8 +213,14 @@
             </div>
         </div>
     </div>
-
+    {{-- Show Modals --}}
     @foreach ($payments as $payment)
-        @include('payments.pay-modal', ['payment' => $payment, 'paymentMethods' => isset($paymentMethods) ? $paymentMethods : \App\Models\PaymentMethod::all()])
+        @include('payments.show-modal', ['payment' => $payment])
+    @endforeach
+    @foreach ($payments as $payment)
+        @include('payments.pay-modal', [
+            'payment' => $payment,
+            'paymentMethods' => isset($paymentMethods) ? $paymentMethods : \App\Models\PaymentMethod::all(),
+        ])
     @endforeach
 @endsection

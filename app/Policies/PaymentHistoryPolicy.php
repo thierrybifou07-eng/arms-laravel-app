@@ -15,7 +15,7 @@ class PaymentHistoryPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $this->isStaff($user) || $this->isTeller($user);
+        return $this->isStaff($user);
     }
 
     /**
@@ -23,9 +23,8 @@ class PaymentHistoryPolicy
      */
     public function view(User $user, PaymentHistory $model): bool
     {
-        // Super Admin, Admin, Staff, Teller can view all payment histories
-        if ($this->isStaff($user) || $this->isTeller($user)) {
-            return true;
+        if ($this->isStaff($user)) {
+            return $user->canAccessResidence($model->payment?->contract?->room?->floor?->building?->residence_id);
         }
 
         // Student can view their own payment histories
@@ -42,7 +41,7 @@ class PaymentHistoryPolicy
      */
     public function create(User $user): bool
     {
-        return $this->isTeller($user) || $this->isStaff($user);
+        return $this->isStaff($user);
     }
 
     /**

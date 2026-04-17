@@ -153,8 +153,7 @@
                                             <i class="bx bx-dots-vertical-rounded"></i>
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item"
-                                                href="{{ route('super_adminaudits.show', $audit) }}">
+                                            <a class="dropdown-item" href="{{ route('super_adminaudits.show', $audit) }}">
                                                 <i class="bx bx-show-alt me-1"></i>View</a>
                                             <hr class="dropdown-divider">
                                             <button type="button" data-audit-id="{{ $audit->id }}"
@@ -179,15 +178,57 @@
 
                 <!-- Pagination -->
                 @if ($audits->hasPages())
-                    <div class="card-footer d-flex justify-content-between align-items-center">
-                        <div>
-                            <small class="text-muted">
-                                Showing {{ $audits->firstItem() }} to {{ $audits->lastItem() }} of {{ $audits->total() }}
-                                records
-                            </small>
+                    <!-- Pagination -->
+                    <div class="row mx-3 justify-content-between">
+                        <div
+                            class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
+                            <div class="dt-info" aria-live="polite" role="status">Showing {{ $audits->firstItem() ?? 0 }}
+                                to {{ $audits->lastItem() ?? 0 }} of {{ $audits->total() }} audits</div>
                         </div>
-                        <div>
-                            {{ $audits->links() }}
+                        <div
+                            class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">
+                            <div class="dt-paging">
+                                <nav aria-label="pagination">
+                                    <ul class="pagination">
+                                        {{-- Previous Button --}}
+                                        <li class="dt-paging-button page-item {{ $audits->onFirstPage() ? 'disabled' : '' }}">
+                                            <a class="page-link previous" href="{{ $audits->previousPageUrl() }}"
+                                                {{ $audits->onFirstPage() ? 'aria-disabled=true' : '' }}>
+                                                <i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>
+                                            </a>
+                                        </li>
+
+                                        {{-- Pagination Elements --}}
+                                        @foreach ($audits->getUrlRange(1, $audits->lastPage()) as $page => $url)
+                                            @if ($page == $audits->currentPage())
+                                                <li class="dt-paging-button page-item active">
+                                                    <span class="page-link" aria-current="page">{{ $page }}</span>
+                                                </li>
+                                            @elseif (
+                                                $page == 1 ||
+                                                    $page == $audits->lastPage() ||
+                                                    ($page >= $audits->currentPage() - 2 && $page <= $audits->currentPage() + 2))
+                                                <li class="dt-paging-button page-item">
+                                                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                                </li>
+                                            @elseif ($page == 2 || $page == $audits->lastPage() - 1)
+                                                <li class="dt-paging-button page-item disabled">
+                                                    <span class="page-link ellipsis">…</span>
+                                                </li>
+                                            @endif
+                                        @endforeach
+
+                                        {{-- Next Button --}}
+                                        <li
+                                            class="dt-paging-button page-item {{ $audits->hasMorePages() ? '' : 'disabled' }}">
+                                            <a class="page-link next" href="{{ $audits->nextPageUrl() }}"
+                                                {{ !$audits->hasMorePages() ? 'aria-disabled=true' : '' }}>
+                                                <i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 @endif

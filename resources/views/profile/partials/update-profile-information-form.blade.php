@@ -57,19 +57,21 @@
                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 form-control-validation fv-plugins-icon-container">
                 <label class="form-label" for="phone">Phone Number</label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">(+237)</span>
-                    <input type="phone" id="phoneNumber" name="phone"
-                        class="form-control @error('phone') is-invalid @enderror"
-                        value="{{ old('phone', $user->phone) }}" required autocomplete="phone">
-                </div>
+                <input type="phone" id="phoneNumber" name="phone"
+                    class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone', $user->phone) }}"
+                    required autocomplete="phone">
+                @error('phone')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
             </div>
             <div class="col-md-6">
                 <label for="email" class="form-label">E-mail</label>
-                <input class="form-control @error('email') is-invalid @enderror" type="email" id="email" name="email"
-                    value="{{ old('email', $user->email) }}" required autocomplete="email">
+                <input class="form-control @error('email') is-invalid @enderror" type="email" id="email"
+                    name="email" value="{{ old('email', $user->email) }}" required autocomplete="email">
                 @error('email')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>

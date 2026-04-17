@@ -24,16 +24,7 @@ class ResidencePolicy
     public function view(User $user, Residence $model): bool
     {
         // Super Admin, Admin, Staff can view all residences
-        if ($this->isStaff($user)) {
-            return true;
-        }
-
-        // Teller can view residences
-        if ($this->isTeller($user)) {
-            return true;
-        }
-
-        return false;
+        return $this->isStaff($user);
     }
 
     /**
