@@ -39,7 +39,7 @@ class UserController extends Controller
         }
 
         // Pagination avec conservation des paramètres GET
-        $users = $query->latest()->paginate(15)->withQueryString();
+        $users = $query->latest()->paginate(10)->withQueryString();
         $roles = Role::all();
 
         return view('super_admin.users.index', compact('users', 'roles'));

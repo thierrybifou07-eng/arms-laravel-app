@@ -9,7 +9,8 @@
 
         <!-- Search -->
         <div class="navbar-nav align-items-center me-auto">
-            <form action="{{ route('search') }}" method="GET" class="nav-item d-flex align-items-center" role="search">
+            <form action="{{ route('search') }}" method="GET" class="nav-item d-flex align-items-center"
+                role="search">
                 <span class="w-px-22 h-px-22"><i class="icon-base bx bx-search icon-md"></i></span>
                 <input type="text" class="form-control border-0 shadow-none ps-1 ps-sm-2 d-md-block d-none"
                     placeholder="Search..." aria-label="Search..." name="q" id="searchInput"
@@ -82,7 +83,7 @@
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end p-0">
-                        <li class="dropdown-menu-header border-bottom">
+                        {{--   <li class="dropdown-menu-header border-bottom">
                             <div class="dropdown-header d-flex align-items-center py-3">
                                 <h6 class="mb-0 me-auto">Notification</h6>
                                 <div class="d-flex align-items-center h6 mb-0">
@@ -319,7 +320,7 @@
                                     <small class="align-middle">View all notifications</small>
                                 </a>
                             </div>
-                        </li>
+                        </li> --}}
                     </ul>
                 </li>
                 <!--/ Notification -->
@@ -338,8 +339,8 @@
                                 <div class="d-flex">
                                     <div class="flex-shrink-0 me-3">
                                         <div class="avatar avatar-online">
-                                            <img src="{{ auth()->user()->avatar() }}" width="35" height="35" alt=""
-                                                class="rounded-circle">
+                                            <img src="{{ auth()->user()->avatar() }}" width="35" height="35"
+                                                alt="" class="rounded-circle">
                                         </div>
                                     </div>
                                     <div class="flex-grow-1">
@@ -367,7 +368,8 @@
                             <div class="dropdown-divider my-1"></div>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
                                 <i class="icon-base bx bx-power-off icon-md me-3"></i><span>Log
                                     Out</span>

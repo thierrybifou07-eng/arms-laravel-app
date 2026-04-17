@@ -138,7 +138,7 @@ Route::middleware($adminStaffOnly)->resource('contracts', ContractController::cl
 
 Route::middleware($superAdminAdmin)->resource('users', UserController::class)->only(['index', 'show', 'update', 'destroy'])->scoped();
 Route::middleware($superAdminAdmin)->put('users/{user}/change-status', [UserController::class, 'changeStatus'])->name('users.changeStatus');
-Route::middleware($superAdminAdmin)->resource('roles', RoleController::class)->scoped();
+Route::middleware($superAdminOnly)->resource('roles', RoleController::class)->scoped();
 Route::middleware($superAdminOnly)->resource('permissions', PermissionController::class)->scoped();
 
 /*

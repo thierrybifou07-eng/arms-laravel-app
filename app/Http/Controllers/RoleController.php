@@ -10,7 +10,7 @@ class RoleController extends Controller
     {
         $roles = Role::with(['permissions', 'users'])
             ->orderBy('name')
-            ->paginate(15);
+            ->paginate(10);
 
         return view('super_admin.roles.index', compact('roles'));
     }

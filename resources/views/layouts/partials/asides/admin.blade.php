@@ -33,11 +33,11 @@
                     <div data-i18n="Payment Histories">Payment Histories</div>
                 </a>
             </li>
-            <li class="menu-item">
+{{--             <li class="menu-item">
                 <a href="{{ route('event_payment_types.index') }}" class="menu-link">
                     <div data-i18n="Event Payment Types">Event Payment Types</div>
                 </a>
-            </li>
+            </li> --}}
         </ul>
     </li>
     <li class="menu-item">
@@ -58,12 +58,12 @@
             </li>
         </ul>
     </li>
-    <li class="menu-item">
+{{--     <li class="menu-item">
         <a href="{{ route('roles.index') }}" class="menu-link">
             <i class="menu-icon icon-base bx bx-check-shield"></i>
             <div data-i18n="Roles">Roles</div>
         </a>
-    </li>
+    </li> --}}
     <li class="menu-item">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon icon-base bx bx-lock-open-alt"></i>

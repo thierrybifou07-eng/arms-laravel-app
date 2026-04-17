@@ -41,7 +41,7 @@ class DashboardController extends Controller
         return [
             'role' => 'super_admin',
             'totalStudents' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->count(),
-            'totalContracts' => Contract::count(),
+/*             'totalContracts' => Contract::count(),
             'activeContracts' => Contract::whereHas('status', fn ($q) => $q->where('code', 'active'))->count(),
             'pendingContracts' => Contract::whereHas('status', fn ($q) => $q->where('code', 'pending'))->count(),
             'totalPayments' => Payment::count(),
@@ -51,7 +51,7 @@ class DashboardController extends Controller
             'totalPaymentHistories' => PaymentHistory::count(),
             'recentHistories' => PaymentHistory::latest()->take(5)->get(),
             'recentPayments' => Payment::with(['contract.user', 'status'])->whereHas('status', fn ($q) => $q->where('code', 'validated'))->latest()->take(10)->get(),
-            'recentContracts' => Contract::with(['user', 'room', 'status'])->latest()->take(5)->get(),
+            'recentContracts' => Contract::with(['user', 'room', 'status'])->latest()->take(5)->get(), */
             // Audit statistics
             'totalAudits' => Audit::count(),
             'auditsByEvent' => [
@@ -123,7 +123,7 @@ class DashboardController extends Controller
                 ->with(['contract.user', 'status'])
                 ->whereHas('status', fn ($q) => $q->where('code', 'validated'))
                 ->latest()
-                ->take(10)
+                ->take(5)
                 ->get(),
             'recentContracts' => Contract::query()
                 ->forManager($user)
@@ -164,7 +164,7 @@ class DashboardController extends Controller
                 ->forManager($user)
                 ->with(['contract.user', 'status'])
                 ->latest()
-                ->take(10)
+                ->take(5)
                 ->get(),
         ];
     }

@@ -27,11 +27,11 @@
                     <div data-i18n="Payment Histories">Payment Histories</div>
                 </a>
             </li>
-            <li class="menu-item">
+{{--             <li class="menu-item">
                 <a href="{{ route('event_payment_types.index') }}" class="menu-link">
                     <div data-i18n="Event Payment Types">Event Payment Types</div>
                 </a>
-            </li>
+            </li> --}}
         </ul>
     </li>
     <li class="menu-item">

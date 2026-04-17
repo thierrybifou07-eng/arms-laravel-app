@@ -1,22 +1,22 @@
 @extends('layouts.app')
 @section('content')
     <h5 class="mb-3">Users Management</h5>
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="card my-5">
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
         <div class="card-header">
             <form method="GET" action="{{ route('users.index') }}" x-data>
                 <div class="row mx-3 my-0 justify-content-between align-items-end gap-3">
@@ -167,9 +167,6 @@
                                             <a class="dropdown-item"
                                                 href="{{ route('super_admin.user.roles.edit', $user) }}">
                                                 <i class="bx bx-user-check me-1"></i>Assign Role</a>
-                                            <a class="dropdown-item"
-                                                href="{{ route('activate_accountpending_users.edit', $user) }}">
-                                                <i class="bx bx-edit me-1"></i>Edit Status</a>
                                             <hr class="dropdown-divider">
                                             <form method="POST" action="{{ route('users.destroy', $user) }}"
                                                 style="display: inline;" onsubmit="return confirm('Are you sure?');">

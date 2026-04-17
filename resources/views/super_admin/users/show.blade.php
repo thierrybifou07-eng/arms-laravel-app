@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('content')
-    <div class="col-xxl  col-lg-12 col-md-12 flex-grow-1 container-p-y">
+    <div class="col-xxl  col-lg-12 col-md-12 flex-grow-1">
         <!-- Header -->
-        <div class="row mb-4">
+        <div class="row mb-2">
             <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
                     <div>
                         <a href="{{ route('users.index') }}" class="btn btn-sm btn-secondary mb-2">
                             Back to Users
