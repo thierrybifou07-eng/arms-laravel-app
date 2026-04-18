@@ -58,7 +58,7 @@
                     <table class="table">
                         <thead class="table-dark">
                             <tr>
-                                <th>Customer</th>
+                                <th>Student</th>
                                 <th>Rooms</th>
                                 <th>Status</th>
                                 <th>Billing Periods</th>
