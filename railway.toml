@@ -2,4 +2,4 @@
 builder = "NIXPACKS"
 
 [phases.setup]
-nixPkgs = ["php82", "php82Extensions.exif"]
+nixPkgs = ["nodejs-22_x", "php82", "php82Extensions.exif"]
