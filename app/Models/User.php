@@ -2,13 +2,28 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable
+class User extends Authenticatable implements AuditableContract, HasMedia, MustVerifyEmail
 {
+    use Auditable;
+    use InteractsWithMedia;
+    use MustVerifyEmailTrait;
+
+    public function avatar()
+    {
+        return $this->getFirstMediaUrl('avatars') ?:
+        asset('images/default-avatar.png');
+    }
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -18,9 +33,12 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'firstname',
+        'lastname',
         'email',
+        'phone',
         'password',
+        'user_status_id',
     ];
 
     /**
@@ -44,5 +62,126 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public static function getIdByName(string $name): ?int
+    {
+        return static::where('name', $name)->value('id');
+    }
+
+    public static function getIdByNameOrFail(string $name): int
+    {
+        $id = static::where('name', $name)->value('id');
+        if ($id) {
+            throw new \Exception("name[$name] not found in".static::class);
+        }
+
+        return $id;
+    }
+
+    //  belongs to 'cause the fk is in the users table
+    public function userStatus()
+    {
+        return $this->belongsTo(\App\Models\UserStatus::class, 'user_status_id');
+    }
+
+    // User has one role (many-to-one relationship via role_user pivot table)
+    public function role()
+    {
+        return $this->belongsToMany(Role::class)->withTimestamps();
+    }
+
+    // Alias for backward compatibility: roles() returns collection with single role
+    public function roles()
+    {
+        return $this->role();
+    }
+
+    // Relationship with contracts (user can have many contracts)
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class);
+    }
+
+    // Relationship with residences (admin can manage many residences)
+    public function residences()
+    {
+        return $this->belongsToMany(Residence::class);
+    }
+
+    public function managedResidence(): ?Residence
+    {
+        return $this->residences()
+            ->orderBy('residences.name')
+            ->first();
+    }
+
+    public function managedResidenceIds(): array
+    {
+        return $this->residences()
+            ->pluck('residences.id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
+    }
+
+    public function isResidenceScoped(): bool
+    {
+        return $this->hasRole(Role::ADMIN) || $this->hasRole(Role::STAFF);
+    }
+
+    public function canAccessResidence(Residence|int|null $residence): bool
+    {
+        if ($this->hasRole(Role::ADMIN)) {
+            return true;
+        }
+
+        if (! $this->isResidenceScoped()) {
+            return false;
+        }
+
+        $residenceId = $residence instanceof Residence ? $residence->getKey() : $residence;
+
+        if (! $residenceId) {
+            return false;
+        }
+
+        return in_array((int) $residenceId, $this->managedResidenceIds(), true);
+    }
+
+    // Get the user's single role
+    public function getRole(): ?Role
+    {
+        return $this->roles()->first();
+    }
+
+    // Get the user's role name
+    public function getRoleName(): ?string
+    {
+        return $this->getRole()?->name;
+    }
+
+    // Get the user's role label
+    public function getRoleLabel(): ?string
+    {
+        return $this->getRole()?->label;
+    }
+
+    // create the hasRole method for the middleware
+    public function hasRole(string $roleName): bool
+    {
+        return $this->roles()->where('name', $roleName)->exists();
+    }
+
+    // create the hasPermission method for the middleware
+    public function hasPermission(string $permissionName): bool
+    {
+        if ($this->hasRole(Role::SUPER_ADMIN)) {
+            return true;
+        }
+
+        return $this->roles()
+            ->whereHas('permissions', function ($query) use ($permissionName) {
+                $query->where('name', $permissionName);
+            })->exists();
     }
 }
