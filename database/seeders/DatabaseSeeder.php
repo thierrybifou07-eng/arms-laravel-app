@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $this->call([
             ResidenceInfrastructureSeeder::class,       // Create residences, buildings, floors, rooms
+            AdminResidenceSeeder::class,                 // Assign admins to all residences
         ]);
     }
 }

@@ -42,7 +42,7 @@
                                     id="basic-icon-default-email" class="form-control"
                                     placeholder="Enter the room's capacity" aria-label="Enter the room's capacity"
                                     aria-describedby="basic-icon-default-email2">
-                                <span id="basic-icon-default-email2" class="input-group-text">student(s)</span>
+                                <span id="basic-icon-default-email2" class="input-group-text">room(s)</span>
                             </div>
                             <div class="form-text">You can only use numbers</div>
                             @error('capacity')<span class="text-danger">{{ $message }}</span>@enderror

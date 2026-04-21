@@ -11,6 +11,12 @@
             <div data-i18n="Residences">Residences</div>
         </a>
     </li>
+{{--     <li class="menu-item">
+        <a href="{{ route('residences.rooms',$residence) }}" class="menu-link">
+            <i class="menu-icon icon-base bx bx-room"></i>
+            <div data-i18n="Rooms">Rooms</div>
+        </a>
+    </li> --}}
     <li class="menu-item">
         <a href="{{ route('contracts.index') }}" class="menu-link">
             <i class="menu-icon icon-base bx bx-food-menu"></i>

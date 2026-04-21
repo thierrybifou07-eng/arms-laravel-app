@@ -113,6 +113,9 @@
                                                 <a class="dropdown-item"
                                                     href="{{ route('residences.edit', $residence) }}"><i
                                                         class="icon-base bx bx-edit me-1"></i> Edit</a>
+                                                <a class="dropdown-item"
+                                                    href="{{ route('residences.rooms',$residence) }}"><i
+                                                        class="icon-base bx bx-room me-1"></i> Rooms</a>
                                                 <hr class="dropdown-divider">
                                                 <form method="POST"
                                                     action="{{ route('residences.destroy', $residence) }}">

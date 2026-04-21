@@ -131,6 +131,7 @@ Route::middleware($profileAccess)->group(function () {
 |-----------------------------------------------------------------------
 */
 Route::middleware($adminOnly)->resource('residences', ResidenceController::class)->scoped();
+Route::middleware($adminStaffOnly)->get('residences/{residence}/rooms', [ResidenceController::class, 'rooms'])->name('residences.rooms');
 Route::middleware($adminOnly)->resource('residences.buildings', ResidenceBuildingController::class)->scoped();
 Route::middleware($adminOnly)->resource('buildings.floors', BuildingFloorController::class)->scoped();
 Route::middleware($adminOnly)->resource('floors.rooms', FloorRoomController::class)->scoped();
@@ -163,15 +164,15 @@ Route::middleware($staffAdminSuperAdmin)->group(function () {
 | Payments
 |-----------------------------------------------------------------------
 */
-Route::middleware($staffAdminSuperAdmin)->group(function () {
+Route::middleware($adminStaffOnly)->group(function () {
     Route::resource('payments', PaymentController::class)->only('index');
     Route::post('/payments/{payment}/validate', [PaymentController::class, 'validatePayment'])->name('payments.validate');
+    Route::post('/payments/{payment}/cancel', [PaymentController::class, 'cancel'])->name('payments.cancel');
 });
 Route::middleware($every)->group(function () {
     Route::get('/payments/{payment}', [PaymentController::class, 'payForm'])->name('payments.pay.form');
     Route::get('/payments/{payment}/pay', [PaymentController::class, 'showPay'])->name('payments.show.pay');
     Route::post('/payments/{payment}/pay', [PaymentController::class, 'pay'])->name('payments.pay');
-    Route::post('/payments/{payment}/cancel', [PaymentController::class, 'cancel'])->name('payments.cancel');
 });
 
 require __DIR__.'/auth.php';

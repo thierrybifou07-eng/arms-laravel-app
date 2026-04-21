@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use OwenIt\Auditing\Auditable;
@@ -12,7 +12,7 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable implements MustVerifyEmail, HasMedia, AuditableContract
+class User extends Authenticatable implements AuditableContract, HasMedia, MustVerifyEmail
 {
     use Auditable;
     use InteractsWithMedia;
@@ -159,6 +159,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia, Auditab
     {
         return $this->getRole()?->name;
     }
+
     // Get the user's role label
     public function getRoleLabel(): ?string
     {

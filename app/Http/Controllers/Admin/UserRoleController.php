@@ -61,6 +61,10 @@ class UserRoleController extends Controller
 
         if ($role->name === Role::STAFF) {
             $user->residences()->sync([$validated['residence_id']]);
+        } elseif ($role->name === Role::ADMIN) {
+            // Attach admin to all residences
+            $residenceIds = Residence::pluck('id')->toArray();
+            $user->residences()->sync($residenceIds);
         } elseif ($role->name === Role::STUDENT) {
             $user->residences()->detach();
         }

@@ -12,16 +12,16 @@ class ResidenceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Residence $residence)
     {
         $query = Residence::with('status');
 
-        // Filtre par statut
+        // Filter by statut
         if (request('status')) {
             $query->whereHas('status', fn ($q) => $q->where('code', request('status')));
         }
 
-        // Recherche par nom ou ville
+        // Search city or name
         if (request('search')) {
             $search = request('search');
             $query->where('name', 'like', "%$search%")
@@ -101,6 +101,47 @@ class ResidenceController extends Controller
 
         return redirect()->route('residences.index')->with('success', 'The residence has been successfully updated');
 
+    }
+
+    /**
+     * Display all rooms for a residence
+     */
+    public function rooms(Residence $residence)
+    {
+        $user = auth()->user();
+
+        // Check if user can access this residence
+        if (!$user->canAccessResidence($residence)) {
+            abort(403, 'Unauthorized');
+        }
+
+        // Query to get all rooms from this residence
+        $query = \App\Models\Room::whereHas('floor.building', fn ($q) => $q->where('residence_id', $residence->id))
+            ->with(['status', 'floor.building']);
+
+        // Apply status filter
+        if (request('status')) {
+            $query->whereHas('status', fn ($q) => $q->where('code', request('status')));
+        } elseif ($user->hasRole('staff')) {
+            // For staff users without explicit status filter, show only busy/renew rooms
+            $query->whereHas('status', fn ($q) => $q->whereIn('code', ['busy', 'renew']));
+        }
+
+        // Apply search filter
+        if (request('search')) {
+            $search = request('search');
+            $query->where('number', 'like', "%$search%");
+        }
+
+        $rooms = $query->latest()->paginate(10)->withQueryString();
+        $statuses = \App\Models\RoomStatus::all();
+        $roomStatuses = [
+            'available' => 'Available',
+            'busy' => 'Busy',
+            'closed' => 'Closed'
+        ];
+
+        return view('residences.rooms', compact('residence', 'rooms', 'statuses', 'roomStatuses'));
     }
 
     /**

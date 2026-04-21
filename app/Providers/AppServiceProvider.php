@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use App\Models\Role;
+use App\Models\Residence;
+use App\Models\User;
+use App\Observers\ResidenceObserver;
+use App\Observers\UserObserver;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
@@ -23,6 +27,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Register model observers
+        Residence::observe(ResidenceObserver::class);
+        User::observe(UserObserver::class);
+
         Gate::before(function ($user, $ability) {
             if ($user->hasRole(Role::SUPER_ADMIN)) {
                 return true;
