@@ -5,4 +5,4 @@ builder = "NIXPACKS"
 nixPkgs = ["nodejs-22_x", "php82", "php82Extensions.exif"]
 
 [deploy]
-startCommand = "php artisan config:clear && php artisan cache:clear && php artisan migrate --force && php artisan storage:link && php -S 0.0.0.0:$PORT -t public"
+startCommand = "php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan view:clear && php artisan migrate --force && php artisan storage:link && php -S 0.0.0.0:$PORT -t public"
