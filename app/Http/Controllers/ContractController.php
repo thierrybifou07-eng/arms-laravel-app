@@ -117,7 +117,7 @@ class ContractController extends Controller
 
         return view('contracts.create', [
             'residences' => Residence::query()->forManager($user)->orderBy('name')->get(),
-            'students' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->get(),
+            'students' => User::whereHas('roles', fn ($q) => $q->where('name', 'student'))->whereHas('userStatus', fn ($q) => $q->where('code', 'active'))->get(),
             'rooms' => Room::query()
                 ->forManager($user)
                 ->whereHas('status', fn ($q) => $q->where('code', 'available'))
