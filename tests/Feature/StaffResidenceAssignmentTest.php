@@ -169,6 +169,24 @@ it('syncs exactly one residence when assigning the staff role', function () {
     expect($target->fresh()->residences->pluck('id')->all())->toBe([$secondResidence->id]);
 });
 
+it('assigns newly created residences to every admin automatically', function () {
+    $firstAdmin = makeScopedUser(Role::ADMIN, ['firstname' => 'FirstAdmin']);
+    $secondAdmin = makeScopedUser(Role::ADMIN, ['firstname' => 'SecondAdmin']);
+    $staff = makeScopedUser(Role::STAFF, ['firstname' => 'Staff']);
+
+    $residence = Residence::create([
+        'residence_status_id' => ResidenceStatus::where('code', 'open')->value('id'),
+        'name' => 'Residence Auto Linked',
+        'city' => 'Douala',
+        'address' => 'Auto linked address',
+        'capacity' => 20,
+    ]);
+
+    expect($firstAdmin->fresh()->residences->pluck('id')->all())->toBe([$residence->id]);
+    expect($secondAdmin->fresh()->residences->pluck('id')->all())->toBe([$residence->id]);
+    expect($staff->fresh()->residences)->toHaveCount(0);
+});
+
 it('limits staff contract, payment and history listings to the assigned residence', function () {
     $staff = makeScopedUser(Role::STAFF, ['firstname' => 'Scoped', 'lastname' => 'Staff']);
     $residentOne = makeScopedUser(Role::STUDENT, ['firstname' => 'ScopedResident', 'lastname' => 'One']);
