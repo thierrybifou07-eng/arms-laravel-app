@@ -72,6 +72,56 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <small class="text-muted d-block mb-1">Occupancy</small>
+                <div class="d-flex align-items-center justify-content-between">
+                    <h3 class="mb-0">{{ $dashboardData['occupancyRate'] ?? 0 }}%</h3>
+                    <i class="icon-base bx bx-bed text-primary" style="font-size: 2rem;"></i>
+                </div>
+                <div class="progress mt-3" style="height: 8px;">
+                    <div class="progress-bar" style="width: {{ $dashboardData['occupancyRate'] ?? 0 }}%;"
+                        role="progressbar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <small class="text-muted d-block mb-1">Rooms</small>
+                <h3 class="mb-0">{{ $dashboardData['roomStats']['total'] ?? 0 }}</h3>
+                <small class="text-muted">
+                    {{ $dashboardData['roomStats']['available'] ?? 0 }} available,
+                    {{ ($dashboardData['roomStats']['busy'] ?? 0) + ($dashboardData['roomStats']['renew'] ?? 0) }} occupied
+                </small>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <small class="text-muted d-block mb-1">Pending Payments</small>
+                <h3 class="mb-0">{{ $dashboardData['pendingPayments'] ?? 0 }}</h3>
+                <small class="text-muted">{{ $dashboardData['processingPayments'] ?? 0 }} processing</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <small class="text-muted d-block mb-1">Overdue Follow-up</small>
+                <div class="d-flex align-items-center justify-content-between">
+                    <h3 class="mb-0">{{ $dashboardData['overduePayments'] ?? 0 }}</h3>
+                    <i class="icon-base bx bx-error-circle text-danger" style="font-size: 2rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row mt-4">
     <div class="col-lg-6 mb-4">
         <div class="card">

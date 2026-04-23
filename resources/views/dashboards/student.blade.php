@@ -78,6 +78,40 @@
             </div>
         </div> --}}
     </div>
+    <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <small class="text-muted d-block mb-1">Current Residence</small>
+                    <h5 class="mb-1">{{ $dashboardData['currentResidence']?->name ?? 'Not assigned' }}</h5>
+                    <small class="text-muted">{{ $dashboardData['currentResidence']?->city ?? '' }}</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <small class="text-muted d-block mb-1">Outstanding Balance</small>
+                    <h3 class="mb-0">{{ number_format($dashboardData['outstandingBalance'] ?? 0, 0, ',', ' ') }}</h3>
+                    <small class="text-muted">FCFA still open</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-12 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <small class="text-muted d-block mb-1">Next Payment</small>
+                    @if (!empty($dashboardData['nextPayment']))
+                        <h5 class="mb-1">{{ number_format($dashboardData['nextPayment']->expected_amount, 0, ',', ' ') }} FCFA</h5>
+                        <small class="text-muted">Due {{ $dashboardData['nextPayment']->due_date?->format('d/m/Y') }}</small>
+                    @else
+                        <h5 class="mb-1">No open payment</h5>
+                        <small class="text-muted">All visible payments are settled or closed</small>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
     <h5 class="mb-0">My payments</h5>
     <div class="row mt-4">
         <div class="col-lg-12 mb-4">

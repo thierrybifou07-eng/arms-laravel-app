@@ -112,12 +112,12 @@ class AuthServiceProvider extends ServiceProvider
 
         // Gate for managing billing
         Gate::define('manage-billing', function (User $user) {
-            return $user->hasRole('staff') || $user->hasRole('super_admin') || $user->hasRole('admin');
+            return $user->hasRole('staff') || $user->hasRole('admin');
         });
 
         // Gate for managing payments
         Gate::define('manage-payments', function (User $user) {
-            return $user->hasRole('staff') || $user->hasRole('super_admin') || $user->hasRole('admin');
+            return $user->hasRole('staff') || $user->hasRole('admin');
         });
 
         // Gate for managing users
@@ -127,17 +127,17 @@ class AuthServiceProvider extends ServiceProvider
 
         // Gate for viewing reports
         Gate::define('view-reports', function (User $user) {
-            return $user->hasRole('admin') || $user->hasRole('super_admin') || $user->hasRole('staff');
+            return $user->hasRole('admin') || $user->hasRole('staff');
         });
 
         // Gate for exporting data
         Gate::define('export-data', function (User $user) {
-            return $user->hasRole('admin') || $user->hasRole('super_admin') || $user->hasRole('staff');
+            return $user->hasRole('admin') || $user->hasRole('staff');
         });
 
         // Gate for viewing financial data
         Gate::define('view-financial', function (User $user) {
-            return $user->hasRole('staff') || $user->hasRole('admin') || $user->hasRole('super_admin');
+            return $user->hasRole('staff') || $user->hasRole('admin');
         });
     }
 }

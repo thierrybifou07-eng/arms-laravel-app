@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Audit;
 use App\Models\Contract;
 use App\Models\Payment;
 use App\Models\PaymentHistory;
@@ -25,9 +26,7 @@ class SearchController extends Controller
             if ($user->hasRole(Role::SUPER_ADMIN)) {
                 $sections = collect([
                     $this->usersSection($query),
-                    $this->rolesSection($query),
-                    $this->paymentsSection($query, $user),
-                    $this->paymentHistoriesSection($query, $user),
+                    $this->auditsSection($query),
                 ])->filter();
             } elseif ($user->hasRole(Role::ADMIN)) {
                 $sections = collect([
@@ -76,21 +75,25 @@ class SearchController extends Controller
         return $this->makeSection('Users', 'bx-user', $items);
     }
 
-    private function rolesSection(string $query): ?array
+    private function auditsSection(string $query): ?array
     {
-        $items = Role::query()
-            ->where(fn (Builder $builder) => $this->applyBasicSearch($builder, $query, ['name', 'label']))
-            ->orderBy('label')
+        $items = Audit::query()
+            ->with('user')
+            ->where(function (Builder $builder) use ($query) {
+                $this->applyBasicSearch($builder, $query, ['event', 'auditable_type', 'auditable_id']);
+                $builder->orWhereHas('user', fn (Builder $userQuery) => $this->applyUserSearch($userQuery, $query));
+            })
+            ->latest()
             ->limit(8)
             ->get()
-            ->map(fn (Role $role) => [
-                'title' => $role->label,
-                'meta' => $role->name,
-                'description' => 'Role details',
-                'url' => route('roles.show', $role),
+            ->map(fn (Audit $audit) => [
+                'title' => $audit->event_label.' '.$audit->model_name,
+                'meta' => 'Audit #'.$audit->id,
+                'description' => trim(($audit->user?->firstname ?? 'System').' '.($audit->user?->lastname ?? '')),
+                'url' => route('super_adminaudits.show', $audit),
             ]);
 
-        return $this->makeSection('Roles', 'bx-check-shield', $items);
+        return $this->makeSection('Audit Logs', 'bx-history', $items);
     }
 
     private function residencesSection(string $query, User $user): ?array

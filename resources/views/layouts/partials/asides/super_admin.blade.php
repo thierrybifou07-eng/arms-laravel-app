@@ -7,29 +7,6 @@
     </li>
     <li class="menu-item">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <i class="menu-icon icon-base bx bx-money"></i>
-            <div data-i18n="Finance">Finance</div>
-        </a>
-        <ul class="menu-sub">
-            <li class="menu-item">
-                <a href="{{ route('payments.index') }}" class="menu-link">
-                    <div data-i18n="Payments">Payments</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{ route('payment_histories.index') }}" class="menu-link">
-                    <div data-i18n="Payment Histories">Payment Histories</div>
-                </a>
-            </li>
-{{--             <li class="menu-item">
-                <a href="{{ route('event_payment_types.index') }}" class="menu-link">
-                    <div data-i18n="Event Payment Types">Event Payment Types</div>
-                </a>
-            </li> --}}
-        </ul>
-    </li>
-    <li class="menu-item">
-        <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon icon-base bx bx-user"></i>
             <div data-i18n="Users">Users</div>
         </a>
@@ -42,24 +19,6 @@
             <li class="menu-item">
                 <a href="{{ route('activate_accountpending_users.index') }}" class="menu-link">
                     <div data-i18n="Pending Users">Pending Users</div>
-                </a>
-            </li>
-        </ul>
-    </li>
-    <li class="menu-item">
-        <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <i class="menu-icon icon-base bx bx-check-shield"></i>
-            <div data-i18n="Roles Permissions">Roles & Permissions</div>
-        </a>
-        <ul class="menu-sub">
-            <li class="menu-item">
-                <a href="{{ route('roles.index') }}" class="menu-link">
-                    <div data-i18n="Roles">Roles</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{ route('permissions.index') }}" class="menu-link">
-                    <div data-i18n="Permissions">Permissions</div>
                 </a>
             </li>
         </ul>

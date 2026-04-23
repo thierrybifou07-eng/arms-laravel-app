@@ -29,10 +29,10 @@
             <div class="row row-bordered overflow-visible g-0">
                 <div class="dropdown-shortcuts-item col">
                     <span class="dropdown-shortcuts-icon rounded-circle mb-3">
-                        <i class="icon-base bx bx-check-shield icon-26px text-heading"></i>
+                        <i class="icon-base bx bx-user-check icon-26px text-heading"></i>
                     </span>
-                    <a href="{{ route('roles.index') }}" class="stretched-link">Roles</a>
-                    <small>Access control</small>
+                    <a href="{{ route('activate_accountpending_users.index') }}" class="stretched-link">Pending Users</a>
+                    <small>Account activation</small>
                 </div>
                 <div class="dropdown-shortcuts-item col">
                     <span class="dropdown-shortcuts-icon rounded-circle mb-3">

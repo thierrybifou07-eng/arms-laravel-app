@@ -10,7 +10,6 @@ use App\Http\Controllers\EventPaymentTypeController;
 use App\Http\Controllers\FloorRoomController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentHistoryController;
-use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResidenceBuildingController;
 use App\Http\Controllers\ResidenceController;
@@ -39,10 +38,10 @@ $adminOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:admin'];
 $superAdminAdmin = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,admin'];
 $adminStaffOnly = ['auth', 'verified', 'checkUserStatus', 'checkRole:admin,staff'];
 $student = ['auth', 'verified', 'checkUserStatus', 'checkRole:student'];
-$staffAdminSuperAdmin = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,admin'];
+$paymentAccess = ['auth', 'verified', 'checkUserStatus', 'checkRole:staff,admin,student'];
 $every = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,admin,student'];
 $profileAccess = ['auth', 'verified', 'checkUserStatus', 'checkRole:student,super_admin,staff,admin'];
-$eventPaymentTypeAccess = ['auth', 'verified', 'checkUserStatus', 'checkRole:super_admin,staff,admin'];
+$eventPaymentTypeAccess = ['auth', 'verified', 'checkUserStatus', 'checkRole:staff,admin'];
 
 /*
 |-----------------------------------------------------------------------
@@ -59,11 +58,6 @@ Route::middleware($superAdminOnly)
         Route::delete('audits/{audit}', [AuditController::class, 'destroy'])->name('audits.destroy');
         Route::post('audits/delete-multiple', [AuditController::class, 'destroyMultiple'])->name('audits.destroyMultiple');
         Route::post('audits/export', [AuditController::class, 'export'])->name('audits.export');
-
-        // Role and permission routes
-        Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
-        Route::get('roles/{role}', [RoleController::class, 'show'])->name('roles.show');
-        Route::get('permissions', [PermissionController::class, 'index'])->name('permissions.index');
     });
 Route::middleware($superAdminAdmin)
     ->prefix('super-admin')
@@ -101,7 +95,7 @@ Route::middleware($adminStaffOnly)->group(function () {
 |-----------------------------------------------------------------------
 */
 Route::get('/super_admin/dashboard', function () {
-    return view('super_admin.dashboard');
+    return redirect()->route('dashboard');
 })->middleware($superAdminOnly)->name('super_admin.dashboard');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -139,9 +133,7 @@ Route::middleware($adminStaffOnly)->resource('contracts', ContractController::cl
 
 Route::middleware($superAdminAdmin)->resource('users', UserController::class)->only(['index', 'show', 'update', 'destroy'])->scoped();
 Route::middleware($superAdminAdmin)->put('users/{user}/change-status', [UserController::class, 'changeStatus'])->name('users.changeStatus');
-Route::middleware($superAdminOnly)->resource('roles', RoleController::class)->scoped();
-Route::middleware($superAdminOnly)->resource('permissions', PermissionController::class)->scoped();
-
+Route::middleware($adminOnly)->resource('roles', RoleController::class)->only(['index', 'show'])->scoped();
 /*
 |-----------------------------------------------------------------------
 | Event payment types
@@ -154,7 +146,7 @@ Route::middleware($eventPaymentTypeAccess)->resource('event_payment_types', Even
 | Payment history
 |-----------------------------------------------------------------------
 */
-Route::middleware($staffAdminSuperAdmin)->group(function () {
+Route::middleware($adminStaffOnly)->group(function () {
     Route::resource('payment_histories', PaymentHistoryController::class)->scoped();
     Route::post('payment_histories/export', [PaymentHistoryController::class, 'export'])->name('payment_histories.export');
 });
@@ -169,7 +161,7 @@ Route::middleware($adminStaffOnly)->group(function () {
     Route::post('/payments/{payment}/validate', [PaymentController::class, 'validatePayment'])->name('payments.validate');
     Route::post('/payments/{payment}/cancel', [PaymentController::class, 'cancel'])->name('payments.cancel');
 });
-Route::middleware($every)->group(function () {
+Route::middleware($paymentAccess)->group(function () {
     Route::get('/payments/{payment}', [PaymentController::class, 'payForm'])->name('payments.pay.form');
     Route::get('/payments/{payment}/pay', [PaymentController::class, 'showPay'])->name('payments.show.pay');
     Route::post('/payments/{payment}/pay', [PaymentController::class, 'pay'])->name('payments.pay');
