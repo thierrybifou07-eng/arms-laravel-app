@@ -72,7 +72,7 @@
             </div>
         @else
             <div class="alert alert-light mb-0">
-                <i class="bx bx-info-circle me-2"></i>No residence is currently linked to this super admin account.
+                <i class="bx bx-info-circle me-2"></i>No residence is currently linked to the super admin account.
             </div>
         @endif
     </div>

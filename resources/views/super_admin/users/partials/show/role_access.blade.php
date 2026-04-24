@@ -58,7 +58,7 @@
         @else
             <div class="alert alert-info mb-0" role="alert">
                 <i class="bx bx-info-circle me-2"></i>
-                This user has no role assigned yet. Assigning a role will unlock the right dashboard and actions.
+                This user has no role assigned yet. Assigning a role will unlock the right board and actions.
             </div>
         @endif
     </div>

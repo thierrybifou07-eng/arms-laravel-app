@@ -241,7 +241,7 @@ class UserController extends Controller
 
         return [
             'scope_label' => 'Residence portfolio manager',
-            'scope_description' => 'This admin supervises residences, resident contracts and payment flow inside the assigned portfolio.',
+            'scope_description' => 'This admin supervises users, residences, resident contracts and payment flow',
             'stats' => [
                 ['label' => 'Residences', 'value' => $managedResidences->count(), 'icon' => 'bx-building-house'],
                 ['label' => 'Managed students', 'value' => User::query()->whereHas('roles', fn ($query) => $query->where('name', Role::STUDENT))->whereIn('id', $managedStudentIds)->count(), 'icon' => 'bx-group'],
@@ -312,7 +312,7 @@ class UserController extends Controller
 
         return [
             'scope_label' => 'Resident account',
-            'scope_description' => 'This profile focuses on accommodation, billing milestones and upcoming payment obligations.',
+            'scope_description' => 'This profile focuses on accommodation and upcoming payment obligations.',
             'stats' => [
                 ['label' => 'Contracts', 'value' => $user->contracts->count(), 'icon' => 'bx-file'],
                 ['label' => 'Open payments', 'value' => $openPayments->count(), 'icon' => 'bx-credit-card'],
