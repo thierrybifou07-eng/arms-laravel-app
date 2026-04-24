@@ -25,7 +25,7 @@
                                 <td>{{ $audit->model_name }}</td>
                                 <td><small class="text-muted">{{ $audit->created_at?->format('M d, Y H:i') }}</small></td>
                                 <td class="text-end">
-                                    <a href="{{ route('audits.show', $audit) }}" class="btn btn-sm btn-outline-primary">
+                                    <a href="{{ route('super_adminaudits.show', $audit) }}" class="btn btn-sm btn-outline-primary">
                                         View
                                     </a>
                                 </td>

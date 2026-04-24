@@ -18,7 +18,6 @@
                 </ul>
             </div>
         @endif
-
         <div class="row mb-2">
             <div class="col-12">
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-2">
@@ -26,14 +25,6 @@
                         <a href="{{ route('users.index') }}" class="btn btn-sm btn-secondary mb-2">
                             Back to Users
                         </a>
-                        <div class="d-flex flex-wrap align-items-center gap-2">
-                            <h3 class="mb-0">User Details</h3>
-                            @include('super_admin.users.partials.show.badges.role', ['role' => $userRole])
-                            @include('super_admin.users.partials.show.badges.status', ['status' => $user->userStatus])
-                        </div>
-                        <p class="text-muted mb-0 mt-1">
-                            Tailored overview for {{ $user->firstname }} {{ $user->lastname }} based on the assigned role.
-                        </p>
                     </div>
                     <div class="btn-group" role="group">
                         @if (auth()->id() !== $user->id && !$user->hasRole(\App\Models\Role::SUPER_ADMIN))
@@ -70,7 +61,7 @@
                     'user' => $user,
                 ])
 
-                @include("super_admin.users.partials.show.role_panels.{$rolePanelView}", [
+                @include('super_admin.users.partials.show.role_panels.' . $rolePanelView, [
                     'user' => $user,
                     'userRole' => $userRole,
                     'roleInsights' => $roleInsights,

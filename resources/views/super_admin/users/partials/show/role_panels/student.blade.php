@@ -1,5 +1,13 @@
 @include('super_admin.users.partials.show.stats_grid', ['stats' => $roleInsights['stats'] ?? []])
 
+@php
+    /** @var \App\Models\Contract|null $activeContract */
+    $activeContract = $roleInsights['active_contract'] ?? null;
+
+    /** @var \App\Models\Payment|null $nextPayment */
+    $nextPayment = $roleInsights['next_payment'] ?? null;
+@endphp
+
 <div class="row">
     <div class="col-lg-6 mb-4">
         <div class="card h-100">
@@ -9,29 +17,29 @@
                 </h6>
             </div>
             <div class="card-body">
-                @if (!empty($roleInsights['active_contract']))
+                @if ($activeContract)
                     <div class="mb-3">
                         <small class="text-muted d-block">Residence</small>
                         <h5 class="mb-0">
-                            {{ $roleInsights['active_contract']->room?->floor?->building?->residence?->name ?? 'N/A' }}
+                            {{ $activeContract->room?->floor?->building?->residence?->name ?? 'N/A' }}
                         </h5>
                     </div>
                     <div class="mb-3">
                         <small class="text-muted d-block">Room</small>
                         <span>
-                            {{ $roleInsights['active_contract']->room?->floor?->building?->name ?? 'N/A' }}
-                            / F{{ $roleInsights['active_contract']->room?->floor?->number ?? 'N/A' }}
-                            / R{{ $roleInsights['active_contract']->room?->number ?? 'N/A' }}
+                            {{ $activeContract->room?->floor?->building?->name ?? 'N/A' }}
+                            / F{{ $activeContract->room?->floor?->number ?? 'N/A' }}
+                            / R{{ $activeContract->room?->number ?? 'N/A' }}
                         </span>
                     </div>
                     <div class="mb-3">
                         <small class="text-muted d-block">Contract period</small>
                         <span>
-                            {{ $roleInsights['active_contract']->start_date?->format('M d, Y') ?? 'N/A' }} -
-                            {{ $roleInsights['active_contract']->end_date?->format('M d, Y') ?? 'N/A' }}
+                            {{ $activeContract->start_date?->format('M d, Y') ?? 'N/A' }} -
+                            {{ $activeContract->end_date?->format('M d, Y') ?? 'N/A' }}
                         </span>
                     </div>
-                    <a href="{{ route('contracts.show', $roleInsights['active_contract']) }}"
+                    <a href="{{ route('contracts.show', ['contract' => $activeContract->getKey()]) }}"
                         class="btn btn-sm btn-outline-primary">
                         Open contract
                     </a>
@@ -52,23 +60,23 @@
                 </h6>
             </div>
             <div class="card-body">
-                @if (!empty($roleInsights['next_payment']))
+                @if ($nextPayment)
                     <div class="mb-3">
                         <small class="text-muted d-block">Due date</small>
-                        <h5 class="mb-0">{{ $roleInsights['next_payment']->due_date?->format('M d, Y') ?? 'N/A' }}</h5>
+                        <h5 class="mb-0">{{ $nextPayment->due_date?->format('M d, Y') ?? 'N/A' }}</h5>
                     </div>
                     <div class="mb-3">
                         <small class="text-muted d-block">Expected amount</small>
-                        <span>{{ number_format($roleInsights['next_payment']->expected_amount ?? 0, 0, ',', ' ') }} FCFA</span>
+                        <span>{{ number_format($nextPayment->expected_amount ?? 0, 0, ',', ' ') }} FCFA</span>
                     </div>
                     <div class="mb-3">
                         <small class="text-muted d-block">Remaining balance</small>
                         <span>
-                            {{ number_format(max(0, ($roleInsights['next_payment']->expected_amount ?? 0) - ($roleInsights['next_payment']->paid_amount ?? 0)), 0, ',', ' ') }}
+                            {{ number_format(max(0, ($nextPayment->expected_amount ?? 0) - ($nextPayment->paid_amount ?? 0)), 0, ',', ' ') }}
                             FCFA
                         </span>
                     </div>
-                    <a href="{{ route('payments.show.pay', $roleInsights['next_payment']) }}"
+                    <a href="{{ route('payments.show.pay', ['payment' => $nextPayment->getKey()]) }}"
                         class="btn btn-sm btn-outline-primary">
                         Open payment
                     </a>
