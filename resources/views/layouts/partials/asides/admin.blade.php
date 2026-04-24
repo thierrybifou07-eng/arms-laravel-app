@@ -1,11 +1,11 @@
 <ul class="menu-inner py-1">
-    <li class="menu-item active">
+    <li class="{{ $menuItemClass('dashboard') }}">
         <a href="{{ route('dashboard') }}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-pie-chart-alt-2"></i>
             <div data-i18n="Dashboard">Dashboard</div>
         </a>
     </li>
-    <li class="menu-item">
+    <li class="{{ $menuItemClass('residences.*', 'residences.buildings.*', 'buildings.floors.*', 'floors.rooms.*') }}">
         <a href="{{ route('residences.index') }}" class="menu-link">
             <i class="menu-icon icon-base bx bx-home"></i>
             <div data-i18n="Residences">Residences</div>
@@ -17,24 +17,24 @@
             <div data-i18n="Rooms">Rooms</div>
         </a>
     </li> --}}
-    <li class="menu-item">
+    <li class="{{ $menuItemClass('contracts.*') }}">
         <a href="{{ route('contracts.index') }}" class="menu-link">
             <i class="menu-icon icon-base bx bx-food-menu"></i>
             <div data-i18n="Contracts">Contracts</div>
         </a>
     </li>
-    <li class="menu-item">
+    <li class="{{ $menuTreeClass('payments.*', 'payment_histories.*') }}">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon icon-base bx bx-money"></i>
             <div data-i18n="Finance">Finance</div>
         </a>
         <ul class="menu-sub">
-            <li class="menu-item">
+            <li class="{{ $menuItemClass('payments.*') }}">
                 <a href="{{ route('payments.index') }}" class="menu-link">
                     <div data-i18n="Payments">Payments</div>
                 </a>
             </li>
-            <li class="menu-item">
+            <li class="{{ $menuItemClass('payment_histories.*') }}">
                 <a href="{{ route('payment_histories.index') }}" class="menu-link">
                     <div data-i18n="Payment Histories">Payment Histories</div>
                 </a>
@@ -46,18 +46,18 @@
             </li> --}}
         </ul>
     </li>
-    <li class="menu-item">
+    <li class="{{ $menuTreeClass('users.*', 'activate_accountpending_users.*') }}">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon icon-base bx bx-user"></i>
             <div data-i18n="Users">Users</div>
         </a>
         <ul class="menu-sub">
-            <li class="menu-item">
+            <li class="{{ $menuItemClass('users.*') }}">
                 <a href="{{ route('users.index') }}" class="menu-link">
                     <div data-i18n="Users List">Users List</div>
                 </a>
             </li>
-            <li class="menu-item">
+            <li class="{{ $menuItemClass('activate_accountpending_users.*') }}">
                 <a href="{{ route('activate_accountpending_users.index') }}" class="menu-link">
                     <div data-i18n="Pending Users">Pending Users</div>
                 </a>
@@ -70,18 +70,18 @@
             <div data-i18n="Roles">Roles</div>
         </a>
     </li> --}}
-    <li class="menu-item">
+    <li class="{{ $menuTreeClass('profile.show', 'profile.edit', 'profile.update') }}">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon icon-base bx bx-lock-open-alt"></i>
             <div data-i18n="Account">Account</div>
         </a>
         <ul class="menu-sub">
-            <li class="menu-item">
+            <li class="{{ $menuItemClass('profile.show') }}">
                 <a href="{{ route('profile.show') }}" class="menu-link">
                     <div data-i18n="My Profile">My Profile</div>
                 </a>
             </li>
-            <li class="menu-item">
+            <li class="{{ $menuItemClass('profile.edit', 'profile.update') }}">
                 <a href="{{ route('profile.edit') }}" class="menu-link">
                     <div data-i18n="Settings">Settings</div>
                 </a>

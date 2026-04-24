@@ -1,6 +1,9 @@
 @php
     $role = auth()->user()?->getRoleName() ?? 'student';
     $asideView = "layouts.partials.asides.{$role}";
+    $routeIs = fn (...$patterns) => request()->routeIs(...$patterns);
+    $menuItemClass = fn (...$patterns) => $routeIs(...$patterns) ? 'menu-item active' : 'menu-item';
+    $menuTreeClass = fn (...$patterns) => $routeIs(...$patterns) ? 'menu-item active open' : 'menu-item';
 @endphp
 
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
