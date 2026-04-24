@@ -108,7 +108,7 @@ class UserController extends Controller
         // Prevent deletion of active users
         if ($user->userStatus?->code === UserStatus::ACTIVE) {
             throw ValidationException::withMessages([
-                'status' => 'Cannot delete users with active status. Change their status to pending or disabled first.',
+                'status' => 'Cannot delete users with active status. Change their status to disabled first.',
             ]);
         }
 

@@ -78,7 +78,7 @@
                                 <th class="text-center">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="table-border-bottom-0">
+                        <tbody>
                             @foreach ($rooms as $room)
                                 <tr>
                                     <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
@@ -140,7 +140,6 @@
                         </tbody>
                     </table>
                 </div>
-                <hr>
                 <!-- Pagination -->
                 <div class="row mx-3 justify-content-between mt-3">
                     <div

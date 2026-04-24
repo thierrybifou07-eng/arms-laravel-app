@@ -48,8 +48,9 @@
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
-                        <h3 class="mb-0">{{ $dashboardData['totalContracts'] ?? 0 }}</h3>
-                        <p class="text-muted mb-0">Contracts</p>
+                        <h3 class="mb-0">{{ $dashboardData['activeContracts'] ?? 0 }}</h3>
+                        <p class="text-muted mb-0">Contracts <span
+                                class="badge bg-warning ms-2">{{ $dashboardData['pendingContracts'] ?? 0 }}</span></p>
                     </div>
                     <i class="icon-base bx bx-receipt text-success" style="font-size: 2rem;"></i>
                 </div>
@@ -61,8 +62,9 @@
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
-                        <h3 class="mb-0">{{ $dashboardData['totalPayments'] ?? 0 }}</h3>
+                        <h3 class="mb-0">{{ $dashboardData['pendingPayments'] ?? 0 }}</h3>
                         <p class="text-muted mb-0">Payments <span
+                                class="badge bg-info ms-2">{{ $dashboardData['processingPayments'] ?? 0 }}</span><span
                                 class="badge bg-success ms-2">{{ $dashboardData['validatedPayments'] ?? 0 }}</span></p>
                     </div>
                     <i class="icon-base bx bx-money text-success" style="font-size: 2rem;"></i>
@@ -73,7 +75,7 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-3 col-md-6 mb-4">
+    <div class="col-lg-4 col-md-6 mb-4">
         <div class="card h-100">
             <div class="card-body">
                 <small class="text-muted d-block mb-1">Occupancy</small>
@@ -88,19 +90,20 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-3 col-md-6 mb-4">
+    <div class="col-lg-4 col-md-6 mb-4">
         <div class="card h-100">
             <div class="card-body">
                 <small class="text-muted d-block mb-1">Rooms</small>
-                <h3 class="mb-0">{{ $dashboardData['roomStats']['total'] ?? 0 }}</h3>
+                <h3 class="mb-0">
+                    {{ ($dashboardData['roomStats']['busy'] ?? 0) + ($dashboardData['roomStats']['renew'] ?? 0) }}</h3>
                 <small class="text-muted">
                     {{ $dashboardData['roomStats']['available'] ?? 0 }} available,
-                    {{ ($dashboardData['roomStats']['busy'] ?? 0) + ($dashboardData['roomStats']['renew'] ?? 0) }} occupied
+                    {{ $dashboardData['roomStats']['total'] ?? 0 }} rooms
                 </small>
             </div>
         </div>
     </div>
-    <div class="col-lg-3 col-md-6 mb-4">
+    {{--     <div class="col-lg-3 col-md-6 mb-4">
         <div class="card h-100">
             <div class="card-body">
                 <small class="text-muted d-block mb-1">Pending Payments</small>
@@ -108,8 +111,8 @@
                 <small class="text-muted">{{ $dashboardData['processingPayments'] ?? 0 }} processing</small>
             </div>
         </div>
-    </div>
-    <div class="col-lg-3 col-md-6 mb-4">
+    </div> --}}
+    <div class="col-lg-4 col-md-6 mb-4">
         <div class="card h-100">
             <div class="card-body">
                 <small class="text-muted d-block mb-1">Overdue Follow-up</small>
@@ -210,7 +213,7 @@
                                                     <form method="POST"
                                                         action="{{ route('payments.validate', $payment) }}">
                                                         @csrf
-                                                        <button class="btn btn-xs btn-info" type="submit">
+                                                        <button class="dropdown-item text-info" type="submit">
                                                             <i class="icon-base bx bx-check me-1"></i>Validate
                                                         </button>
                                                     </form>

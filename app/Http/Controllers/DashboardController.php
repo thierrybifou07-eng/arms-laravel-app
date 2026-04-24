@@ -94,7 +94,8 @@ class DashboardController extends Controller
         $user = Auth::user();
         $residences = $user->residences()->orderBy('name')->get();
 
-        $totalStudents = $this->countManagedStudents($user);
+        $totalStudents = User::whereHas('userStatus', fn ($q) => $q->where('code', UserStatus::ACTIVE))->whereHas('roles', fn ($q) => $q->where('name', Role::STUDENT))->count();
+        $pendingStudents = User::whereHas('userStatus', fn ($q) => $q->where('code', UserStatus::PENDING))->whereHas('roles', fn ($q) => $q->where('name', Role::STUDENT))->count();
         $activeStudents = $this->countManagedStudents($user, 'active');
         $totalContracts = Contract::query()->forManager($user)->count();
         $contractsByStatus = [
@@ -138,6 +139,7 @@ class DashboardController extends Controller
             'message' => $residences->isEmpty() ? 'No residence assigned yet.' : null,
             'totalStudents' => $totalStudents,
             'activeStudents' => $activeStudents,
+            'pendingStudents' => $pendingStudents,
             'totalContracts' => $totalContracts,
             'contractsByStatus' => $contractsByStatus,
             'activeContracts' => $contractsByStatus['active'],
@@ -257,8 +259,8 @@ class DashboardController extends Controller
 
         $payments = Payment::with(['method', 'status', 'contract.room.floor.building.residence'])
             ->whereHas('contract', fn ($q) => $q->where('user_id', $user->id))
-            ->orderByDesc('due_date')
-            ->get();
+            ->orderBy('due_date')
+            ->paginate(5);
         $openPayments = $payments->filter(fn (Payment $payment) => ! in_array($payment->status?->code, ['validated', 'cancelled'], true));
         $nextPayment = $openPayments->sortBy('due_date')->first();
         $activeContract = $contracts->first(fn (Contract $contract) => $contract->status?->code === 'active');
@@ -270,7 +272,6 @@ class DashboardController extends Controller
             'activeContracts' => $contracts->filter(fn ($c) => $c->status->code === 'active')->count(),
             'totalPayments' => $payments->count(),
             'paidPayments' => $payments->filter(fn ($p) => $p->status->code === 'validated')->count(),
-            'PaidPayments' => $payments->filter(fn ($p) => $p->status->code === 'validated')->count(),
             'pendingPayments' => $payments->filter(fn ($p) => $p->status->code === 'pending')->count(),
             'processingPayments' => $payments->filter(fn ($p) => $p->status->code === 'processing')->count(),
             'overduePayments' => $payments->filter(fn (Payment $payment) => $payment->isOverdue())->count(),
@@ -305,7 +306,6 @@ class DashboardController extends Controller
             'total' => (clone $rooms)->count(),
             'available' => (clone $rooms)->whereHas('status', fn ($query) => $query->where('code', 'available'))->count(),
             'busy' => (clone $rooms)->whereHas('status', fn ($query) => $query->where('code', 'busy'))->count(),
-            'renew' => (clone $rooms)->whereHas('status', fn ($query) => $query->where('code', 'renew'))->count(),
             'closed' => (clone $rooms)->whereHas('status', fn ($query) => $query->where('code', 'closed'))->count(),
         ];
     }
@@ -316,7 +316,7 @@ class DashboardController extends Controller
             return 0;
         }
 
-        return (int) round((($roomStats['busy'] ?? 0) + ($roomStats['renew'] ?? 0)) / $roomStats['total'] * 100);
+        return (int) round(($roomStats['busy'] ?? 0) / $roomStats['total'] * 100);
     }
 
     private function countOverduePayments(User $user): int

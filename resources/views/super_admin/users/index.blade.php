@@ -164,18 +164,20 @@
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item" href="{{ route('users.show', $user) }}">
                                                 <i class="bx bx-show-alt me-1"></i>View</a>
-                                            <a class="dropdown-item"
-                                                href="{{ route('super_admin.user.roles.edit', $user) }}">
-                                                <i class="bx bx-user-check me-1"></i>Assign Role</a>
-                                            <hr class="dropdown-divider">
-                                            <form method="POST" action="{{ route('users.destroy', $user) }}"
-                                                style="display: inline;" onsubmit="return confirm('Are you sure?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="dropdown-item text-danger">
-                                                    <i class="bx bx-trash me-1"></i>Delete
-                                                </button>
-                                            </form>
+                                            @if (auth()->id() !== $user->id)
+                                                <a class="dropdown-item"
+                                                    href="{{ route('super_admin.user.roles.edit', $user) }}">
+                                                    <i class="bx bx-user-check me-1"></i>Assign Role</a>
+                                                <hr class="dropdown-divider">
+                                                <form method="POST" action="{{ route('users.destroy', $user) }}"
+                                                    style="display: inline;" onsubmit="return confirm('Are you sure?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="dropdown-item text-danger">
+                                                        <i class="bx bx-trash me-1"></i>Delete
+                                                    </button>
+                                                </form>
+                                            @endif
                                         </div>
                                     </div>
                                 </td>
@@ -185,7 +187,7 @@
                 </table>
             </div>
             <!-- Pagination -->
-            <div class="row mx-3 justify-content-between">
+            <div class="row m-3 justify-content-between">
                 <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
                     <div class="dt-info" aria-live="polite" role="status">Showing {{ $users->firstItem() ?? 0 }}
                         to {{ $users->lastItem() ?? 0 }} of {{ $users->total() }} users</div>

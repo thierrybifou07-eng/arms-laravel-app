@@ -1,10 +1,9 @@
-<!-- Student Dashboard -->
 @if (isset($dashboardData['message']))
     <div class="alert alert-info">{{ $dashboardData['message'] }}</div>
 @else
     <div class="row">
         <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card">
+            <div class="card h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">
@@ -18,20 +17,56 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card">
+            <div class="card h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">
                             <h3 class="mb-0">{{ $dashboardData['totalPayments'] ?? 0 }}</h3>
                             <p class="text-muted mb-0">My Payments <span
-                                    class="badge bg-success ms-2">{{ $dashboardData['PaidPayments'] ?? 0 }}</span></p>
+                                    class="badge bg-success ms-2">{{ $dashboardData['paidPayments'] ?? 0 }}</span></p>
                         </div>
                         <i class="icon-base bx bx-money text-success" style="font-size: 2rem;"></i>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-6 mb-4">
+                <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <small class="text-muted d-block mb-1">Current Residence</small>
+                    <h5 class="mb-1">{{ $dashboardData['currentResidence']?->name ?? 'Not assigned' }}</h5>
+                    <small class="text-muted">{{ $dashboardData['currentResidence']?->city ?? '' }}</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <small class="text-muted d-block mb-1">Outstanding Balance</small>
+                    <h3 class="mb-0">{{ number_format($dashboardData['outstandingBalance'] ?? 0, 0, ',', ' ') }}</h3>
+                    <small class="text-muted">FCFA still open</small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-4 col-md-12 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <small class="text-muted d-block mb-1">Next Payment</small>
+                    @if (!empty($dashboardData['nextPayment']))
+                        <h5 class="mb-1">
+                            {{ number_format($dashboardData['nextPayment']->expected_amount, 0, ',', ' ') }} FCFA</h5>
+                        <small class="text-muted">Due
+                            {{ $dashboardData['nextPayment']->due_date?->format('d/m/Y') }}</small>
+                    @else
+                        <h5 class="mb-1">No open payment on this page</h5>
+                        <small class="text-muted">All visible payments are settled or closed, try the next</small>
+                    @endif
+                </div>
+            </div>
+        </div>        <div class="col-lg-8 mb-4">
             <div class="card">
                 <div class="table-responsive">
                     <table class="table table-sm mb-0">
@@ -61,53 +96,6 @@
                             @endforelse
                         </tbody>
                     </table>
-                </div>
-            </div>
-        </div>
-        {{--         <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">
-                            <h3 class="mb-0">{{ $dashboardData['pendingPayments'] ?? 0 }}</h3>
-                            <p class="text-muted mb-0">Pending Payments</p>
-                        </div>
-                        <i class="icon-base bx bx-time-five text-warning" style="font-size: 2rem;"></i>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-    </div>
-    <div class="row">
-        <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <small class="text-muted d-block mb-1">Current Residence</small>
-                    <h5 class="mb-1">{{ $dashboardData['currentResidence']?->name ?? 'Not assigned' }}</h5>
-                    <small class="text-muted">{{ $dashboardData['currentResidence']?->city ?? '' }}</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <small class="text-muted d-block mb-1">Outstanding Balance</small>
-                    <h3 class="mb-0">{{ number_format($dashboardData['outstandingBalance'] ?? 0, 0, ',', ' ') }}</h3>
-                    <small class="text-muted">FCFA still open</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-12 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <small class="text-muted d-block mb-1">Next Payment</small>
-                    @if (!empty($dashboardData['nextPayment']))
-                        <h5 class="mb-1">{{ number_format($dashboardData['nextPayment']->expected_amount, 0, ',', ' ') }} FCFA</h5>
-                        <small class="text-muted">Due {{ $dashboardData['nextPayment']->due_date?->format('d/m/Y') }}</small>
-                    @else
-                        <h5 class="mb-1">No open payment</h5>
-                        <small class="text-muted">All visible payments are settled or closed</small>
-                    @endif
                 </div>
             </div>
         </div>
@@ -178,6 +166,62 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+                <!-- Pagination -->
+                <div class="row mx-3 mt-3 justify-content-between">
+                    <div
+                        class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
+                        <div class="dt-info" aria-live="polite" role="status">Showing
+                            {{ $payments->firstItem() ?? 0 }}
+                            to {{ $payments->lastItem() ?? 0 }} of {{ $payments->total() }} payments</div>
+                    </div>
+                    <div
+                        class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">
+                        <div class="dt-paging">
+                            <nav aria-label="pagination">
+                                <ul class="pagination">
+                                    {{-- Previous Button --}}
+                                    <li
+                                        class="dt-paging-button page-item {{ $payments->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link previous" href="{{ $payments->previousPageUrl() }}"
+                                            {{ $payments->onFirstPage() ? 'aria-disabled=true' : '' }}>
+                                            <i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>
+                                        </a>
+                                    </li>
+
+                                    {{-- Pagination Elements --}}
+                                    @foreach ($payments->getUrlRange(1, $payments->lastPage()) as $page => $url)
+                                        @if ($page == $payments->currentPage())
+                                            <li class="dt-paging-button page-item active">
+                                                <span class="page-link" aria-current="page">{{ $page }}</span>
+                                            </li>
+                                        @elseif (
+                                            $page == 1 ||
+                                                $page == $payments->lastPage() ||
+                                                ($page >= $payments->currentPage() - 2 && $page <= $payments->currentPage() + 2))
+                                            <li class="dt-paging-button page-item">
+                                                <a class="page-link"
+                                                    href="{{ $url }}">{{ $page }}</a>
+                                            </li>
+                                        @elseif ($page == 2 || $page == $payments->lastPage() - 1)
+                                            <li class="dt-paging-button page-item disabled">
+                                                <span class="page-link ellipsis">…</span>
+                                            </li>
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Next Button --}}
+                                    <li
+                                        class="dt-paging-button page-item {{ $payments->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link next" href="{{ $payments->nextPageUrl() }}"
+                                            {{ !$payments->hasMorePages() ? 'aria-disabled=true' : '' }}>
+                                            <i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
