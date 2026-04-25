@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 test('profile page is displayed', function () {
     $user = User::factory()->create();
@@ -87,4 +89,26 @@ test('correct password must be provided to delete account', function () {
         ->assertRedirect('/profile');
 
     $this->assertNotNull($user->fresh());
+});
+
+test('profile page renders avatar urls on the current host', function () {
+    config()->set('app.url', 'http://arms-app.railway.app');
+    config()->set('filesystems.disks.public.url', 'http://arms-app.railway.app/storage');
+
+    Storage::fake('public');
+
+    $user = User::factory()->create();
+
+    $user->addMedia(UploadedFile::fake()->create('avatar.png', 10, 'image/png'))
+        ->toMediaCollection('avatars');
+
+    $relativePath = $user->getFirstMedia('avatars')->getPathRelativeToRoot();
+
+    $response = $this
+        ->actingAs($user)
+        ->get('http://localhost/profile');
+
+    $response
+        ->assertOk()
+        ->assertSee('http://localhost/storage/' . $relativePath, false);
 });

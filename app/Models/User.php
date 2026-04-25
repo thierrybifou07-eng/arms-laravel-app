@@ -18,10 +18,19 @@ class User extends Authenticatable implements AuditableContract, HasMedia/* , Mu
     use InteractsWithMedia;
 /*     use MustVerifyEmailTrait; */
 
-    public function avatar()
+    public function avatar(): string
     {
-        return $this->getFirstMediaUrl('avatars') ?:
-        asset('images/default-avatar.png');
+        $avatar = $this->getFirstMedia('avatars');
+
+        if (! $avatar) {
+            return asset('images/default-avatar.png');
+        }
+
+        if ($avatar->disk === 'public') {
+            return asset('storage/' . ltrim($avatar->getPathRelativeToRoot(), '/'));
+        }
+
+        return $avatar->getUrl();
     }
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
