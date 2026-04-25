@@ -4,7 +4,7 @@
     <div class="hero">
         <div class="hero-slide">
             <div class="img overlay" style="background-image: url('{{ asset('property/images') }}/university_4k.jpeg')"></div>
-            <div class="img overlay" style="background-image: url('{{ asset('property/images') }}/residence_2.JPG')"></div>
+            <div class="img overlay" style="background-image: url('{{ asset('property/images') }}/file_0000000018e8720c9bbee667c8edf65d.png')"></div>
             <div class="img overlay" style="background-image: url('{{ asset('property/images') }}/residence_1.jpg')"></div>
         </div>
 
