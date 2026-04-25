@@ -18,6 +18,7 @@ class Contract extends Model implements AuditableContract
         'contract_status_id',
         'billing_period_id',
         'rent_amount',
+        'contract_amount',
         'start_date',
         'end_date',
     ];
@@ -25,6 +26,7 @@ class Contract extends Model implements AuditableContract
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
+        'contract_amount' => 'decimal:2',
     ];
 
     // relationship with user
@@ -116,6 +118,13 @@ class Contract extends Model implements AuditableContract
         $months = $this->start_date->diffInMonths($this->end_date) + 1;
 
         return $this->rent_amount * $months;
+    }
+
+    public function syncContractAmount(): void
+    {
+        $this->forceFill([
+            'contract_amount' => $this->payments()->sum('expected_amount'),
+        ])->saveQuietly();
     }
 
     public function scopeForManager(Builder $query, User $user): Builder

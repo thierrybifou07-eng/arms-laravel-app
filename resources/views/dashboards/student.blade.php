@@ -73,6 +73,7 @@
                         <thead>
                             <tr class="table-dark">
                                 <th>Room</th>
+                                <th>Amount</th>
                                 <th>Statut</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
@@ -83,6 +84,7 @@
                                 <tr>
                                     <td>{{ $contract->room?->floor?->building?->name ?? 'N/A' }}/F{{ $contract->room?->floor?->number ?? 'N/A' }}/R{{ $contract->room?->number ?? 'N/A' }}
                                     </td>
+                                    <td>{{ number_format($contract->contract_amount ?? 0, 0, ',', ' ') }} FCFA</td>
                                     <td><span
                                             class="badge bg-success">{{ $contract->status?->label ?? 'Unknown' }}</span>
                                     </td>
@@ -91,7 +93,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="text-center text-muted">No contrat</td>
+                                    <td colspan="5" class="text-center text-muted">No contrat</td>
                                 </tr>
                             @endforelse
                         </tbody>

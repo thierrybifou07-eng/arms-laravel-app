@@ -320,6 +320,7 @@
                             <tr class="table-dark">
                                 <th>Student</th>
                                 <th>Room</th>
+                                <th>Amount</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -330,6 +331,7 @@
                                     </td>
                                     <td>{{ $contract->room?->floor?->building?->name ?? 'N/A' }}/F{{ $contract->room?->floor?->number ?? 'N/A' }}/R{{ $contract->room?->number ?? 'N/A' }}
                                     </td>
+                                    <td>{{ number_format($contract->contract_amount ?? 0, 0, ',', ' ') }} FCFA</td>
                                     <td>
                                         @php $status = $contract->status->code ?? '' @endphp
                                         @if ($status === 'pending')
@@ -347,7 +349,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="text-center text-muted">No contract</td>
+                                    <td colspan="4" class="text-center text-muted">No contract</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -1712,6 +1714,7 @@
                             <tr class="table-dark">
                                 <th>Student</th>
                                 <th>Room</th>
+                                <th>Amount</th>
                                 <th>Statut</th>
                             </tr>
                         </thead>
@@ -1722,6 +1725,7 @@
                                     </td>
                                     <td>{{ $contract->room?->floor?->building?->name ?? 'N/A' }}/F{{ $contract->room?->floor?->number ?? 'N/A' }}/R{{ $contract->room?->number ?? 'N/A' }}
                                     </td>
+                                    <td>{{ number_format($contract->contract_amount ?? 0, 0, ',', ' ') }} FCFA</td>
                                     <td><i class="icon-base fab fa-angular icon-md text-danger me-4"></i>
                                         @switch($contract->status->code)
                                             @case('pending')
@@ -1752,7 +1756,7 @@
                                 </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="text-center text-muted">No contract</td>
+                                        <td colspan="4" class="text-center text-muted">No contract</td>
                                     </tr>
                                 @endforelse
                             </tbody>

@@ -134,13 +134,14 @@
             </div>
             <div class="table-responsive">
                 <table class="table table-sm mb-0">
-                    <thead>
-                        <tr class="table-dark">
-                            <th>Student</th>
-                            <th>Room</th>
-                            <th>Status</th>
-                            <th>Start Date</th>
-                        </tr>
+                        <thead>
+                            <tr class="table-dark">
+                                <th>Student</th>
+                                <th>Room</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Start Date</th>
+                            </tr>
                     </thead>
                     <tbody>
                         @forelse($dashboardData['recentContracts'] ?? [] as $contract)
@@ -149,13 +150,14 @@
                                 </td>
                                 <td>{{ $contract->room?->floor?->building?->name ?? 'N/A' }}/F{{ $contract->room?->floor?->number ?? 'N/A' }}/R{{ $contract->room?->number ?? 'N/A' }}
                                 </td>
+                                <td>{{ number_format($contract->contract_amount ?? 0, 0, ',', ' ') }} FCFA</td>
                                 <td><span class="badge bg-success">{{ $contract->status?->label ?? 'Unknown' }}</span>
                                 </td>
                                 <td>{{ optional($contract->start_date)->format('d/m/Y') ?? 'N/A' }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center text-muted">No contracts found</td>
+                                <td colspan="5" class="text-center text-muted">No contracts found</td>
                             </tr>
                         @endforelse
                     </tbody>

@@ -72,6 +72,7 @@
                                 <th>Status</th>
                                 <th>Billing Periods</th>
                                 <th>Rent Amount(FCFA)</th>
+                                <th>Contract Amount(FCFA)</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
                                 <th class="text-center">Actions</th>
@@ -121,6 +122,9 @@
                                     </td>
                                     <td>
                                         {{ $contract->rent_amount }}
+                                    </td>
+                                    <td>
+                                        {{ number_format($contract->contract_amount, 0, ',', ' ') }}
                                     </td>
                                     <td>
                                         {{ $contract->start_date }}

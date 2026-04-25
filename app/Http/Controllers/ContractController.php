@@ -72,6 +72,7 @@ class ContractController extends Controller
                     ->orWhereHas('room', fn ($r) => $r->where('number', 'like', "%$search%")
                       ->orWhere('rent_amount', 'like', "%$search%")
                     );
+                $q->orWhere('contract_amount', 'like', "%$search%");
             });
         }
 

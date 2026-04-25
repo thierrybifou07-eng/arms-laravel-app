@@ -13,6 +13,24 @@ class Payment extends Model implements AuditableContract
     use \OwenIt\Auditing\Auditable;
     use HasFactory;
 
+    protected static function booted(): void
+    {
+        $syncContractAmounts = function (Payment $payment): void {
+            collect([
+                $payment->contract_id,
+                $payment->getOriginal('contract_id'),
+            ])
+                ->filter()
+                ->unique()
+                ->each(function (int $contractId): void {
+                    Contract::query()->find($contractId)?->syncContractAmount();
+                });
+        };
+
+        static::saved($syncContractAmounts);
+        static::deleted($syncContractAmounts);
+    }
+
     protected $fillable = [
         'contract_id',
         'payment_method_id',
