@@ -24,7 +24,7 @@
 
             <div class="mb-3">
                 <label class="form-label"><strong>Capacity</strong></label>
-                <p class="form-control-plaintext">{{ $room->capacity }} person(s)</p>
+                <p class="form-control-plaintext">{{ $room->capacity }} room(s)</p>
             </div>
 
             <div class="mb-3">

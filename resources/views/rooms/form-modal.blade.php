@@ -30,7 +30,7 @@
             </div>
 
             <div class="row mb-3">
-                <label class="form-label">Capacity (persons) <span class="text-danger">*</span></label>
+                <label class="form-label">Capacity (rooms) <span class="text-danger">*</span></label>
                 <input type="number" name="capacity" class="form-control @error('capacity') is-invalid @enderror"
                     value="{{ old('capacity', $room?->capacity ?? '') }}" placeholder="Number of persons" required>
                 @error('capacity')<span class="invalid-feedback">{{ $message }}</span>@enderror

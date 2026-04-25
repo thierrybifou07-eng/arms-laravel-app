@@ -48,9 +48,9 @@ class RegisteredUserController extends Controller
 
         $validated = $validator->validated();
 
-        $activeId = UserStatus::firstOrCreate(
-            ['code' => UserStatus::ACTIVE],
-            ['label' => 'Active']
+        $pendingId = UserStatus::firstOrCreate(
+            ['code' => UserStatus::PENDING],
+            ['label' => 'Pending']
         )->id;
         $user = User::create([
             'firstname' => $validated['firstname'] ?? null,
@@ -58,7 +58,7 @@ class RegisteredUserController extends Controller
             'email' => $validated['email'],
             'phone' => $validated['phone'],
             'password' => Hash::make($validated['password']),
-            'user_status_id' => $activeId, // Assuming active is the default status
+            'user_status_id' => $pendingId, // Assuming active is the default status
         ]);
 
         $studentRoleId = Role::firstOrCreate(
