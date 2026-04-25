@@ -149,7 +149,7 @@
                     <div
                         class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
                         <div class="dt-info" aria-live="polite" role="status">Showing {{ $rooms->firstItem() ?? 0 }}
-                            to {{ $rooms->lastItem() ?? 0 }} of {{ $rooms->total() }} entries</div>
+                            to {{ $rooms->lastItem() ?? 0 }} of {{ $rooms->total() }} rooms</div>
                     </div>
                     <div
                         class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">
