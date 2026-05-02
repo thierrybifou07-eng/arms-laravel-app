@@ -3,9 +3,9 @@
     <!-- Hero Section -->
     <div class="hero">
         <div class="hero-slide">
-            <div class="img overlay" style="background-image: url('{{ asset('property/images') }}/university_4k.jpeg')"></div>
-            <div class="img overlay" style="background-image: url('{{ asset('property/images') }}/file_0000000018e8720c9bbee667c8edf65d.png')"></div>
             <div class="img overlay" style="background-image: url('{{ asset('property/images') }}/residence_1.jpg')"></div>
+            <div class="img overlay" style="background-image: url('{{ asset('property/images') }}/file_0000000018e8720c9bbee667c8edf65d.png')"></div>
+            <div class="img overlay" style="background-image: url('{{ asset('property/images') }}/university_4k0.jpeg')"></div>
         </div>
 
         <div class="container">
@@ -182,7 +182,7 @@
             <div class="row justify-content-between mb-5">
                 <div class="col-lg-7 mb-5 mb-lg-0 order-lg-2">
                     <div class="img-about dots">
-                        <img src="{{ asset('property/images') }}/hero_bg_3.jpg" alt="Management Dashboard" class="img-fluid rounded" />
+                        <img src="{{ asset('property/images') }}/university_4k.jpeg" alt="Management Dashboard" class="img-fluid rounded" />
                     </div>
                 </div>
                 <div class="col-lg-4">

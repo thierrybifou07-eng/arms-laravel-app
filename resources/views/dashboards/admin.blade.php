@@ -48,7 +48,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">
-                            <h3 class="mb-0">{{ $dashboardData['totalContracts'] ?? 0 }}</h3>
+                            <h3 class="mb-0">{{ $dashboardData['pendingContracts'] ?? 0 }}</h3>
                             <p class="text-muted mb-0">Contracts <span
                                     class="badge bg-success ms-2">{{ $dashboardData['activeContracts'] ?? 0 }}</span></p>
                         </div>
@@ -62,7 +62,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">
-                            <h3 class="mb-0">{{ $dashboardData['totalPayments'] ?? 0 }}</h3>
+                            <h3 class="mb-0">{{ $dashboardData['pendingPayments'] ?? 0 }}</h3>
                             <p class="text-muted mb-0">Payments
                                 <span class="badge bg-success ms-2">{{ $dashboardData['validatedPayments'] ?? 0 }}</span>
                             </p>
