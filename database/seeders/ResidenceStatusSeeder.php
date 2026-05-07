@@ -22,7 +22,10 @@ class ResidenceStatusSeeder extends Seeder
                 'updated_at' => now()],
         ];
         foreach ($statuses as $status) {
-            \App\Models\ResidenceStatus::create($status);
+            \App\Models\ResidenceStatus::updateOrCreate(
+                ['code' => $status['code']],
+                ['label' => $status['label']]
+            );
         }
     }
 }

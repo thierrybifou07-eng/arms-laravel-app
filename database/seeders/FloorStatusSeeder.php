@@ -23,7 +23,10 @@ class FloorStatusSeeder extends Seeder
                 'updated_at' => now()],
         ];
         foreach ($statuses as $status) {
-            \App\Models\FloorStatus::create($status);
+            \App\Models\FloorStatus::updateOrCreate(
+                ['code' => $status['code']],
+                ['label' => $status['label']]
+            );
         }
     }
 }

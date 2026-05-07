@@ -26,7 +26,10 @@ class UserStatusSeeder extends Seeder
                 'updated_at' => now()],
         ];
         foreach ($statuses as $status) {
-            \App\Models\UserStatus::create($status);
+            \App\Models\UserStatus::updateOrCreate(
+                ['code' => $status['code']],
+                ['label' => $status['label']]
+            );
         }
     }
 }

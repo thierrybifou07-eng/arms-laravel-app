@@ -27,7 +27,10 @@ class RoomStatusSeeder extends Seeder
                 'updated_at' => now()],
         ];
         foreach ($statuses as $status) {
-            \App\Models\RoomStatus::create($status);
+            \App\Models\RoomStatus::updateOrCreate(
+                ['code' => $status['code']],
+                ['label' => $status['label']]
+            );
         }
     }
 }

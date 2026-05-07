@@ -56,3 +56,75 @@ php artisan storage:link --force
 run_migrations
 
 exec php -S 0.0.0.0:"${PORT:-8000}" -t public
+
+#!/usr/bin/env bash
+set -euo pipefail
+
+configure_database_url() {
+    if [ -n "${DB_URL:-}" ]; then
+        echo "Using DB_URL for the database connection."
+        return
+    fi
+
+    for variable in DATABASE_PUBLIC_URL MYSQL_PUBLIC_URL DATABASE_URL MYSQL_URL; do
+        value="${!variable:-}"
+
+        if [ -n "$value" ]; then
+            export DB_URL="$value"
+            echo "Using $variable as DB_URL for the database connection."
+            return
+        fi
+    done
+}
+
+run_migrations() {
+    if [ "${RUN_MIGRATIONS:-true}" != "true" ]; then
+        echo "Skipping migrations because RUN_MIGRATIONS is not true."
+        return
+    fi
+
+    local attempts="${DB_MIGRATION_ATTEMPTS:-12}"
+    local delay="${DB_MIGRATION_SLEEP_SECONDS:-5}"
+    local seed_option=""
+
+    if [ "${RUN_SEEDERS:-true}" = "true" ]; then
+        seed_option="--seed"
+    fi
+
+    for attempt in $(seq 1 "$attempts"); do
+        echo "Running database migrations${seed_option:+ and seeders} (attempt $attempt/$attempts)..."
+
+        if [ -n "$seed_option" ]; then
+            php artisan migrate --force "$seed_option" && return
+        else
+            php artisan migrate --force && return
+        fi
+
+        if [ "$attempt" -lt "$attempts" ]; then
+            echo "Database is not reachable yet; retrying in ${delay}s..."
+            sleep "$delay"
+        fi
+    done
+
+    echo "ERROR: Database migrations failed after $attempts attempts."
+    echo "Verify that the app and MySQL services are in the same Railway project/environment,"
+    echo "or set DB_URL to the MySQL public connection URL if private DNS is unavailable."
+
+    if [ "${ALLOW_START_WITHOUT_DB:-false}" = "true" ]; then
+        echo "ALLOW_START_WITHOUT_DB=true, so the web server will start anyway."
+        return
+    fi
+
+    exit 1
+}
+
+configure_database_url
+
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan storage:link --force
+
+run_migrations
+
+exec php -S 0.0.0.0:"${PORT:-8000}" -t public

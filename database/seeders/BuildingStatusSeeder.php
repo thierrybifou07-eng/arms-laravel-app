@@ -23,7 +23,10 @@ class BuildingStatusSeeder extends Seeder
                 'updated_at' => now()],
         ];
         foreach ($statuses as $status) {
-            \App\Models\BuildingStatus::create($status);
+            \App\Models\BuildingStatus::updateOrCreate(
+                ['code' => $status['code']],
+                ['label' => $status['label']]
+            );
         }
     }
 }

@@ -19,6 +19,12 @@ class ResidenceInfrastructureSeeder extends Seeder
      */
     public function run(): void
     {
+        if (Residence::query()->exists()) {
+            $this->command->info('✓ Residence infrastructure already exists; skipping');
+
+            return;
+        }
+
         $residenceStatusId = ResidenceStatus::where('code', ResidenceStatus::ACTIVE)->first()?->id ?? 1;
         $buildingStatusId = BuildingStatus::where('code', BuildingStatus::ACTIVE)->first()?->id ?? 1;
         $floorStatusId = FloorStatus::where('code', FloorStatus::ACTIVE)->first()?->id ?? 1;
